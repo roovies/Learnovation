@@ -1,0 +1,221 @@
+@font-face {
+    font-family: 'GowunBatang-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+    font-family: 'GowunBatang-Regular';
+}
+/* 네비게이터 및 배경색 */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #eeeeee;
+    display: flex;
+}
+
+.side-nav {
+    display: flex;
+    flex-direction: column;
+    background-color: #191b1f;
+    width: 230px;
+    padding-top: 5vh;
+}
+
+.menu {
+    margin-left: 15px;
+    font-size: 120%;
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: #e7e7e7;
+    padding: 0 20px;
+    border-bottom: 1px solid rgb(97, 94, 94);
+}
+
+a:hover {
+    background-color: rgb(19, 18, 18);
+    background-color: rgb(26, 109, 255);
+    color: #e7e7e7;
+}
+
+.nav-li{
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    margin: 15px auto;
+}
+
+header {
+    font-size: 25px;
+    margin: 0;
+    padding: 10px;
+    border-bottom: 1px solid rgb(97, 94, 94);
+    text-align: center;
+    color: white;
+    user-select: none;
+}
+
+
+
+/* 메인 컨텐츠 */
+.main{
+    background-color: white;
+    width: 1000px;
+    height: 100%;
+    margin: 50px;
+    box-shadow: 0px 5px 10px gray;
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+#title{
+    width: 920px;
+    height: 30px;
+    font-size: 130%;
+    border: none;
+    border-bottom: 0.5px solid #dfdfdf;
+    padding-left: 5px;
+    margin-bottom: 20px;
+}
+#title:focus{
+    outline: none;
+}
+
+#email{
+    width: 250px;
+    font-size: 110%;
+    border: none;
+    border-bottom: 0.5px solid #dfdfdf;
+    padding-left: 5px;
+    margin-right: 460px;
+}
+#email:focus{
+    outline: none;
+}
+
+#category{
+    font-size: 110%;
+    height: 23px;
+    border: none;
+    border-bottom: 0.5px solid #dfdfdf;
+    margin-right: 20px;
+}
+#category:focus{
+    outline: none;
+}
+
+
+#level{
+    font-size: 110%;
+    height: 23px;
+    border: none;
+    border-bottom: 0.5px solid #dfdfdf;
+}
+#level:focus{
+    outline: none;
+}
+
+#price-area{
+    display: flex;
+}
+
+#price{
+    font-size: 110%;
+    height: 23px;
+    border: none;
+    border-bottom: 0.5px solid #dfdfdf;
+    padding-left: 5px;
+}
+#price:focus{
+    outline: none;
+}
+#price-alert{
+    margin-left: 20px;
+    padding-top: 20px;
+    color: red;
+    display: none;
+}
+#chapter-add{
+    background-color: rgb(26, 109, 255);
+    text-align: center;
+    display: inline-block;
+    margin:20px 0px 10px 0px;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0px 0px 5px black;
+}
+#chapter-add:hover{
+    background-color: rgb(19, 70, 157);
+}
+#dynamic-area{
+    display: flex;
+
+    flex-direction: column;
+}
+.chapter-input{
+    display: flex;
+    margin-bottom: 5px;
+}
+.chapter{
+    width: 800px;
+    height: 30px;
+    padding-left: 10px;
+    font-size: 110%;
+    font-weight: bold;
+    border: none;
+    background-color: #dddddd63;
+    border-radius: 5px;
+}
+.chapter:focus{
+    outline: none;
+}
+.lesson-add{
+    cursor: pointer;
+    text-align: center;
+    font-size: 20px;
+    width: 50px;
+}
+
+.lesson-input{
+    display: flex;
+}
+.lesson{
+    font-size: 100%;
+    width: 600px;
+    height: 30px;
+    border: 1px solid #dfdfdf;
+    border-radius: 5px;
+    margin: 0px 10px 20px 0px;
+    padding-left: 10px;
+}
+.lesson:focus{
+    outline: none;
+}
+[type=file]:focus{
+    outline: none;
+}
+[type=submit]{
+    border: none;
+    border-radius: 5px;
+    padding: 10px 0px 10px 0px;
+    cursor: pointer;
+    background-color: #191b1f;
+    color: white;
+    font-size: 1.3em;
+    width: 100%;
+}
