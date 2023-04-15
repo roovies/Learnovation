@@ -22,13 +22,13 @@ public class ReviewComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @Column(name="parent_id")
+    @JoinColumn(name="parent_id")
     private ReviewComment parentComment;
     @ManyToOne
-    @Column(name="review_id", nullable = false)
+    @JoinColumn(name="review_id", nullable = false)
     private CourseReview courseReview;
     @ManyToOne
-    @Column(name="user_id", nullable = false)
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
     @Column(name="content", nullable = false, length = 500)
     private String content;
