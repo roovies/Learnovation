@@ -56,25 +56,50 @@ var chapterAdd = ()=>{
     lesson = 0;
     let tags = `<div id="area`+chapter+`">
                             <div class='chapter-input'>
-                                <input type='text' name='chapter[`+chapter+`]' class='chapter' placeholder='`+(chapter+1)+`번째 목차를 입력하세요.'>
+                                <input type='text' name='chapter' class='chapter' placeholder='`+(chapter+1)+`번째 목차를 입력하세요.'>
                                 <span class='lesson-add' onclick="lessonAdd(`+chapter+`)">➕</span>
+                                <span class="lesson-add" onclick="lessonRemove(`+chapter+`)">➖</span>
                             </div>
                             <div class='lesson-input'>
-                                <input type='text' name='chater[`+chapter+`][`+lesson+`]' class='lesson' placeholder='강의명을 입력하세요.'>
-                                <input type='file' name="uploadFile">
+                                <input type='text' name='lesson[`+chapter+`][`+lesson+`]' class='lesson' placeholder='강의명을 입력하세요.'>
+<!--                                <input type='file' name="uploadFile[`+chapter+`][`+lesson+`]">-->
+                                <input type='file' name="videoFile">
                             </div>
                         </div>`;
     $("#dynamic-area").append(tags);
 }
+
+// 목차 제거 (마지막으로 추가된 순으로)
+var chapterRemove = ()=>{
+    if(chapter<1){
+        alert("최소 하나 이상의 목차를 작성해야 합니다.")
+        return false;
+    }
+    document.querySelector("#dynamic-area").lastChild.remove();
+    chapter -= 1;
+}
+
 
 // 강의 추가
 var lessonAdd = (chapter)=>{
     let lessonTags = document.querySelectorAll("#area"+chapter+" .lesson");
     let count = lessonTags.length;
     let tags = `<div class='lesson-input'>
-                            <input type='text' name='chater[`+chapter+`][`+count+`]' class='lesson' placeholder='강의명을 입력하세요.'>
-                            <input type='file' name="uploadFile">
+                            <input type='text' name='lesson[`+chapter+`][`+count+`]' class='lesson' placeholder='강의명을 입력하세요.'>
+<!--                            <input type='file' name="uploadFile[`+chapter+`][`+count+`]">-->
+                            <input type='file' name="videoFile">
                         </div>
                         `;
     $("#area"+chapter).append(tags);
+}
+
+// 강의 제거 (마지막에 추가된 순으로)
+var lessonRemove = (chapter)=>{
+    let lessonTags = document.querySelectorAll("#area"+chapter+" .lesson");
+    let count = lessonTags.length;
+    if(count===1){
+        alert("최소 하나 이상의 강의를 작성해야 합니다.")
+        return false;
+    }
+    document.querySelector("#area"+chapter).lastChild.remove();
 }

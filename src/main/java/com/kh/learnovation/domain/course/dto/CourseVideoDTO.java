@@ -17,6 +17,6 @@ public class CourseVideoDTO {
     private String originalVideoName;
     private String savedVideoName;
     private String savedPath;
-    private int videoSize;
+    private Long videoSize;
     private Timestamp createdAt;
 }

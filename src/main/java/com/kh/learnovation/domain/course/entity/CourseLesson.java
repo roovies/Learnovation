@@ -1,9 +1,6 @@
 package com.kh.learnovation.domain.course.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -25,4 +22,10 @@ public class CourseLesson {
     @Column(name="lesson_order", nullable = false)
     private int lessonOrder;
 
+    @Builder
+    public CourseLesson(CourseChapter courseChapter, String title, int lessonOrder){
+        this.courseChapter = courseChapter;
+        this.title = title;
+        this.lessonOrder = lessonOrder;
+    }
 }

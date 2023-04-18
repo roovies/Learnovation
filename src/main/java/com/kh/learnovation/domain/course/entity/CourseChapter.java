@@ -1,9 +1,6 @@
 package com.kh.learnovation.domain.course.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -24,4 +21,11 @@ public class CourseChapter {
     private String title;       // 목차명
     @Column(name="chapter_order", nullable = false)
     private int chapterOrder;   // 목차 순서
+
+    @Builder
+    public CourseChapter(Course course, String title, int chapterOrder){
+        this.course = course;
+        this.title = title;
+        this.chapterOrder = chapterOrder;
+    }
 }
