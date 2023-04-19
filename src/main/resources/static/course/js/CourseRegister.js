@@ -1,3 +1,26 @@
+// 이메일 검증
+document.querySelector("#email").addEventListener("focusout", ()=>{
+    let email = document.querySelector("#email").value;
+    $.ajax({
+        type: 'POST',
+        url: '/course/register/checkemail',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            'email': email
+        }),
+        success: function(user){
+            if(user.length != 0){
+                document.querySelector("#email-alert").innerHTML = "["+user.name+"] 회원님 확인되었습니다.";
+                document.querySelector("#email-alert").style.color = "green";
+            }
+            else{
+                document.querySelector("#email-alert").innerHTML = "존재하지 않는 회원입니다.";
+                document.querySelector("#email-alert").style.color = "red";
+            }
+        }
+    })
+});
+
 // 가격 콤마 메소드
 document.querySelector("#price").addEventListener("input", (event) =>{
     var price = document.querySelector("#price").value;
@@ -63,7 +86,7 @@ var chapterAdd = ()=>{
                             <div class='lesson-input'>
                                 <input type='text' name='lesson[`+chapter+`][`+lesson+`]' class='lesson' placeholder='강의명을 입력하세요.'>
 <!--                                <input type='file' name="uploadFile[`+chapter+`][`+lesson+`]">-->
-                                <input type='file' name="videoFile">
+                                <input type='file' name="videoFile" accept="video/*">
                             </div>
                         </div>`;
     $("#dynamic-area").append(tags);
@@ -87,7 +110,7 @@ var lessonAdd = (chapter)=>{
     let tags = `<div class='lesson-input'>
                             <input type='text' name='lesson[`+chapter+`][`+count+`]' class='lesson' placeholder='강의명을 입력하세요.'>
 <!--                            <input type='file' name="uploadFile[`+chapter+`][`+count+`]">-->
-                            <input type='file' name="videoFile">
+                            <input type='file' name="videoFile" accept="video/*">
                         </div>
                         `;
     $("#area"+chapter).append(tags);
@@ -102,4 +125,87 @@ var lessonRemove = (chapter)=>{
         return false;
     }
     document.querySelector("#area"+chapter).lastChild.remove();
+}
+
+// 유효성 체크
+var validCheck = ()=>{
+    if(document.querySelector("#title").value === ""){
+        alert("강의명을 입력하세요.")
+        document.querySelector("#title").focus();
+        return false;
+    }
+    else if(document.querySelector("#email").value === ""){
+        alert("이메일을 입력하세요.");
+        document.querySelector("#email").focus();
+        return false;
+    }
+    else if(document.querySelector("#category").value === "default"){
+        alert("강의 분류를 선택하세요.");
+        document.querySelector("#category").focus();
+        return false;
+    }
+    else if(document.querySelector("#level").value === "default"){
+        alert("난이도를 선택하세요.");
+        document.querySelector("#level").focus();
+        return false;
+    }
+    else if(document.querySelector("#price").value === ""){
+        alert("가격을 입력하세요.");
+        document.querySelector("#price").focus();
+        return false;
+    }
+    else if(document.querySelector("#summernote").value === ""){
+        alert("강의 상세정보를 입력하세요.");
+        document.querySelector("#summernote").focus();
+        return false;
+    }
+    else if(!checkChapter()){
+        return false;
+    }
+    else if(!checkLesson()){
+        return false;
+    }
+    else if(!checkFileType()){
+        return false;
+    }
+    alert("모든 조건 클리어");
+    return false;
+}
+
+// 목차 체크
+var checkChapter = () =>{
+    let chapterTags = document.querySelectorAll(".chapter");
+    for (let i = 0; i<chapterTags.length; i++){
+        if(chapterTags[i].value===""){
+            alert((i+1)+"번째 목차를 입력하세요.");
+            chapterTags[i].focus();
+            return false;
+        }
+    }
+    return true;
+}
+
+// 강의명 체크
+var checkLesson = () =>{
+    let lessonTags = document.querySelectorAll(".lesson");
+    for (let i = 0; i<lessonTags.length; i++){
+        if(lessonTags[i].value===""){
+            alert((i+1)+"번째 강의를 입력하세요.");
+            lessonTags[i].focus();
+            return false;
+        }
+    }
+    return true;
+}
+
+// 파일 확장자 체크
+var checkFileType = ()=> {
+    const file = document.querySelector("[type=file]").files[0];
+    const allowedTypes = ['video/mp4', 'video/mov', 'video/wmv', 'video/avi'];
+    if (!allowedTypes.includes(file.type)) {
+        alert('동영상 파일만 업로드 가능합니다.');
+        document.querySelector("[type=file]").value = null;
+        return false;
+    }
+    return true;
 }

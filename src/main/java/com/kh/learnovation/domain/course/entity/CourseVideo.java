@@ -20,7 +20,7 @@ public class CourseVideo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
-    @JoinColumn(name="lesson_id", nullable = false)
+    @JoinColumn(name="lesson_id")
     private CourseLesson courseLesson;
     @Column(name="original_video_name", nullable = false)
     private String originalVideoName;

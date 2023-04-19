@@ -127,6 +127,10 @@ header {
 #level:focus{
     outline: none;
 }
+#email-alert{
+    color: red;
+    margin-left: 5px;
+}
 
 #price-area{
     display: flex;
