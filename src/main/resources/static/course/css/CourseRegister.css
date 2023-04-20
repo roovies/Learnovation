@@ -174,9 +174,30 @@ header {
     cursor: pointer;
     box-shadow: 0px 0px 5px black;
 }
-#chapter-add:hover{
-    background-color: rgb(19, 70, 157);
+
+#thumbnail-area{
+    margin-top: 20px;
 }
+        #thumbnail-area label{
+            background-color: rgb(114, 166, 80);
+            text-align: center;
+            display: inline-block;
+            padding: 5px 10px 5px 10px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0px 0px 5px black;
+        }
+
+        #file-name{
+            color: #868e96;
+            margin-left: 10px;
+            font-size: 90%;
+        }
+        #thumbnail-msg{
+            color: red;
+            font-size: 90%;
+        }
 #dynamic-area{
     display: flex;
 

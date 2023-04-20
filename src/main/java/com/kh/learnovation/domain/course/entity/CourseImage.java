@@ -29,7 +29,7 @@ public class CourseImage {
     @Column(name="saved_path", nullable = false)
     private String savedPath;
     @Column(name="image_size", nullable = false)
-    private int imageSize;
+    private Long imageSize;
     @CreationTimestamp
     @Column(name="created_at", nullable = false)
     private Timestamp createAt;

@@ -18,6 +18,6 @@ public class CourseImageDTO {
     private String originalImageName;
     private String savedImageName;
     private String savedPath;
-    private int imageSize;
+    private Long imageSize;
     private Timestamp createAt;
 }

@@ -81,8 +81,15 @@
                 <span id="price-alert">*숫자만 입력할 수 있습니다.</span>
             </div>
             <textarea id="summernote" name="content"></textarea>
-            <span id="chapterAdd-btn" onclick="chapterAdd()">목차추가</span>
-            <span id="chapterRemove-btn" onclick="chapterRemove()">목차제거</span>
+            <div id="thumbnail-area">
+                <label for="thumbnail">썸네일 추가</label>
+                <span id="file-name"></span>
+                <input type="file" name="thumbnail" id="thumbnail" style="display: none;">
+                <br>
+                <span id="thumbnail-msg">📌 썸네일 권장 사이즈는 470x300입니다.</span>
+            </div>
+            <span id="chapterAdd-btn" onclick="chapterAdd()">목차 추가</span>
+            <span id="chapterRemove-btn" onclick="chapterRemove()">목차 제거</span>
             <div id="dynamic-area">
                 <div id="area0">
                     <div class="chapter-input">
