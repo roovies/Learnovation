@@ -75,7 +75,8 @@ public class CourseController {
             System.out.println("첨부파일 등록 실패");
             return "에러페이지";
         } catch (NoSuchElementException message) { // 이메일이 존재하지 않을 경우
-            System.out.println(message);
+            System.out.println("이메일이 존재하지 않음");
+            return "에러페이지";
         }
         return "성공페이지";
     }

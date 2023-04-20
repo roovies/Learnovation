@@ -100,7 +100,7 @@ $(document).ready(function() {
 
 // 썸네일 파일명 표시해주기
 document.querySelector("#thumbnail").addEventListener("change", ()=>{
-    let fileName = document.querySelector("#thumbnail").value.substring(13);
+    let fileName = document.querySelector("#thumbnail").value.substring(12);
     document.querySelector("#file-name").innerHTML = fileName;
     // alert(document.querySelector("#thumbnail").value);
 })
@@ -173,6 +173,9 @@ var validCheck = ()=>{
         document.querySelector("#email").focus();
         return false;
     }
+    else if(!checkEmail()){
+        return false;
+    }
     else if(document.querySelector("#category").value === "default"){
         alert("강의 분류를 선택하세요.");
         document.querySelector("#category").focus();
@@ -193,17 +196,44 @@ var validCheck = ()=>{
         document.querySelector("#summernote").focus();
         return false;
     }
+    else if(!checkThumbnail()){
+        return false;
+    }
     else if(!checkChapter()){
         return false;
     }
     else if(!checkLesson()){
         return false;
     }
-    else if(!checkFileType()){
+    else if(!checkVideos()){
         return false;
     }
-    alert("모든 조건 클리어");
-    return false;
+    else if(!checkImageType()){
+        return false;
+    }
+    else if(!checkVideoType()){
+        return false;
+    }
+}
+
+// 이메일 존재 여부 체크
+var checkEmail = ()=>{
+    let alertTag = document.querySelector("#email-alert");
+    if(alertTag.innerHTML==="존재하지 않는 회원입니다."){
+        alert("존재하지 않는 회원입니다. 이메일을 확인하세요.");
+        return false;
+    }
+    return true;
+}
+
+// 썸네일 첨부여부 체크
+var checkThumbnail = ()=>{
+    let thumbnailTag = document.querySelector("#thumbnail");
+    if(thumbnailTag.value===""){
+        alert("썸네일 이미지를 첨부하세요.");
+        return false;
+    }
+    return true;
 }
 
 // 목차 체크
@@ -232,14 +262,45 @@ var checkLesson = () =>{
     return true;
 }
 
-// 파일 확장자 체크
-var checkFileType = ()=> {
-    const file = document.querySelector("[type=file]").files[0];
-    const allowedTypes = ['video/mp4', 'video/mov', 'video/wmv', 'video/avi'];
-    if (!allowedTypes.includes(file.type)) {
-        alert('동영상 파일만 업로드 가능합니다.');
-        document.querySelector("[type=file]").value = null;
+// 동영상 첨부여부 체크
+var checkVideos = ()=>{
+    let videoTags = document.querySelectorAll("[name=videoFile]");
+    for (let i = 0; i<videoTags.length; i++){
+        if(videoTags[i].value===""){
+            alert((i+1)+"번째 강의에 동영상을 첨부하세요.");
+            return false;
+        }
+    }
+    return true;
+}
+
+// 이미지 확장자 체크
+var checkImageType = () => {
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    const thumbnailTag = document.querySelector('#thumbnail');
+    const fileName = thumbnailTag.value;
+    const extension = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+    if (!allowedTypes.includes(`image/${extension}`)) {
+        alert('jpeg 또는 png 파일만 업로드 가능합니다.');
+        thumbnailTag.value = null;
         return false;
+    }
+    return true;
+}
+
+
+// 동영상 확장자 체크
+var checkVideoType = ()=> {
+    const allowedTypes = ['video/mp4', 'video/mov', 'video/wmv', 'video/avi'];
+    const videoTags = document.querySelectorAll("[name=videoFile]");
+    for (let i = 0; i<videoTags.length; i++){
+        const fileName = videoTags[i].value;
+        const extension = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
+        if (!allowedTypes.includes(`video/${extension}`)) {
+            alert('동영상 파일만 업로드 가능합니다.');
+            document.querySelector("[type=file]").value = null;
+            return false;
+        }
     }
     return true;
 }
