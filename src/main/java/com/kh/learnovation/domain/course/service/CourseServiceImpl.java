@@ -207,8 +207,11 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public String createImages(MultipartFile file) throws IOException {
         // 1. 업로드 경로 구하기
-        Resource resource = resourceLoader.getResource("file:src/main/resources/static/course/upload/images");
-        String realPath = resource.getFile().getAbsolutePath();
+//        Resource resource = resourceLoader.getResource("file:src/main/resources/static/course/upload/images");
+//        String realPath = resource.getFile().getAbsolutePath();
+
+        // 1. 외부(로컬) 디스크 저장 경로 구하기
+        String realPath = "C:\\img";
         // 2. 날짜별 디렉터리 생성
         String today = new SimpleDateFormat("yyMMdd").format(new Date());
         String savedFolder = realPath + File.separator + today;
@@ -222,7 +225,7 @@ public class CourseServiceImpl implements CourseService {
         if (!originalImageName.isEmpty()) {
             savedImageName = UUID.randomUUID() + originalImageName.substring(originalImageName.lastIndexOf('.'));
             file.transferTo(new File(folder, savedImageName));
-            returnUrl = "/course/upload/images/" + today + "/" + savedImageName;
+            returnUrl = "/image/" + today + "/" + savedImageName;
         }
         return returnUrl;
     }
