@@ -26,4 +26,17 @@ public class NoticeDTO {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    @Override
+    public String toString() {
+        return "NoticeDTO{" +
+                "id=" + id +
+                ", adminId=" + adminId +
+                ", adminName='" + adminName + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }
