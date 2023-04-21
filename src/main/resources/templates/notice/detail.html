@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <title>공지사항 상세보기</title>
+      <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="/common/nav.css">
+  </head>
+  <body>
+      <nav th:replace="~{common/nav.html :: nav}"></nav>
+      <p th:text="${notice.getTitle()}"></p>
+      <p th:text="${notice.adminName}"></p>
+      <div th:utext="${notice.getContent()}"></div>
+      <script src="/common/nav.js"></script>
+  </body>
+</html>

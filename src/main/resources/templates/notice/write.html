@@ -17,6 +17,7 @@
     <nav th:replace="~{common/nav.html :: nav}"></nav>
     <form action="/notice/write" method="post">
         <input type="hidden" th:value="${random}" id="id" name="id">
+        <input type="hidden" value="1" name="adminId">
         <input type="text" name="title">
         <textarea id="summernote" name="content"></textarea>
         <input type="submit">

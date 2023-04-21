@@ -7,4 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public interface NoticeService {
     Notice insertNotice(NoticeDTO noticeDTO);
+
+    public NoticeDTO selectOneNotice(Long noticeNo);
+
+    public Notice updateNotice(NoticeDTO noticeDTO);
 }
