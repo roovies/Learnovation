@@ -92,7 +92,7 @@ $(document).ready(function() {
             success: function(url) {
                 setTimeout(function() {
                     $(editor).summernote('insertImage', url);
-                }, 4000); // SummerNote는 프로젝트 내에 저장 시 GET요청으로 다시 못 불러오는 것 같아서 4초 딜레이를 줬다.
+                }, 1000);
             }
         });
     }
