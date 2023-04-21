@@ -1,0 +1,7 @@
+package com.kh.learnovation.domain.freeboard.repository;
+
+import com.kh.learnovation.domain.freeboard.entity.CommentEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
+}
