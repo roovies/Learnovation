@@ -1,6 +1,7 @@
 package com.kh.learnovation.domain.course.service;
 
 import com.kh.learnovation.domain.course.dto.CourseDTO;
+import com.kh.learnovation.domain.course.dto.CourseDetailDTO;
 import com.kh.learnovation.domain.course.dto.CourseLessonDTO;
 import com.kh.learnovation.domain.course.entity.Course;
 import com.kh.learnovation.domain.course.entity.CourseImage;
@@ -29,4 +30,6 @@ public interface CourseService {
 
     /** SummerNote 이미지 업로드 Service */
     String createImages(MultipartFile file) throws IOException;
+
+    CourseDetailDTO findCourseById(Long id);
 }

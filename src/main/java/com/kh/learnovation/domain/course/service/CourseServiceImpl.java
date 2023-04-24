@@ -1,6 +1,7 @@
 package com.kh.learnovation.domain.course.service;
 
 import com.kh.learnovation.domain.course.dto.CourseDTO;
+import com.kh.learnovation.domain.course.dto.CourseDetailDTO;
 import com.kh.learnovation.domain.course.dto.CourseLessonDTO;
 import com.kh.learnovation.domain.course.entity.*;
 import com.kh.learnovation.domain.course.repository.*;
@@ -228,5 +229,11 @@ public class CourseServiceImpl implements CourseService {
             returnUrl = "/image/" + today + "/" + savedImageName;
         }
         return returnUrl;
+    }
+
+    @Override
+    public CourseDetailDTO findCourseById(Long id) {
+        Optional<Course> course = courseRepository.findById(id);
+        return null;
     }
 }

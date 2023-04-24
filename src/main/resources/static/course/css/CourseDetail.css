@@ -1,0 +1,297 @@
+@font-face {
+    font-family: 'GowunBatang-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+    margin: 0;
+    font-family: 'GowunBatang-Regular';
+}
+
+/* =========================================
+/             인강 헤더부분                 /
+==========================================*/
+#course-header{
+    height: 350px;
+    background-color: #bdbdff;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+}
+#header-thumbnail{
+    margin-top: 40px;
+}
+        #thumbnails{
+            width: 470px;
+            height: 300px;
+            border-radius: 10px;
+        }
+#header-title{
+    display: flex;
+    flex-direction: column;
+    width: 750px;
+    margin-top: 50px;
+    height: 100%;
+    color: #ffffff;
+    justify-content: center;
+}
+        #title-category{
+            display: flex;
+        }
+        #hot{
+            background-color: rgb(255, 75, 75);
+            padding: 0px 5px 0px 5px;
+            font-weight: bolder;
+            margin-right: 10px;
+        }
+        #seperate{
+            margin: 0px 10px 0px 10px;
+        }
+        #category, #level{
+            text-decoration: none;
+            color: white;
+        }
+#title{
+    font-size: 35px;
+}
+#subtitle{
+    font-size: 130%;
+    margin-bottom: 20px;
+}
+
+#title-review{
+    margin-left: 10px;
+    text-decoration: none;
+    color: white;
+}
+
+.title-user{
+    margin-right: 10px;
+}
+#title-teacher{
+    display: flex;
+}
+#teacher{
+    color: white;
+}
+
+/* =========================================
+/             인강 네비부분                 /
+==========================================*/
+#course-nav{
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    padding-left: 350px;
+    border-bottom: 1px solid #eee;
+    background-color: white;
+    z-index: 10;
+}
+        #course-nav p{
+            cursor: pointer;
+            color: #b3b0b7;
+            font-weight: bold;
+            padding: 10px 15px 10px 15px;
+        }
+        #course-nav p:nth-child(1){
+            color: black;
+            border-bottom: 2px solid black;
+        }
+        .course-nav{
+            position: fixed;
+            top: 0;
+        }
+
+/* ==========================================
+/             메인 왼쪽 - 설명부분           /
+==========================================*/
+#course-main{
+    background-color: white;
+    width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+}
+#main-left{
+    width: 820px;
+    margin-top: 20px;
+    padding: 0px 30px 50px 0px;
+    height: 100%;
+}
+#left-introduce{
+    padding: 20px;
+    display: flex;
+    background-color: rgba(224, 224, 224, 0.315);
+}
+        #left-introduce h3{
+            margin: 20px 0px 0px 30px;
+            width: 300px;
+        }
+#left-content{
+    margin: 20px 0px 50px 0px;
+}
+
+
+/* ==========================================
+/          메인 왼쪽 - 커리큘럼부분           /
+==========================================*/
+.left-description{
+    margin-top: 10px;
+}
+#preview-btn{
+    border: none;
+    border-radius: 10px;
+    background-color: #0090F0;
+    color: white;
+    position: relative;
+    top: 75px;
+    left: 700px;
+    cursor: pointer;
+}
+table{
+    border-collapse: collapse;
+    margin-bottom: 70px;
+}
+th{
+    padding: 10px 0px 10px 0px;
+    font-size: 120%;
+    background-color: #C7E7FC;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+td{
+    border-top: 1px solid #eee;
+}
+
+tr td:nth-child(1){
+    width: 97%;
+    font-size: 110%;
+    padding: 5px 10px 5px 10px;
+}
+/* ==========================================
+/             메인 왼쪽 - 리뷰부분           /
+==========================================*/
+#review-top{
+    display: flex;
+    justify-content: center;
+    background-color: #f4f2f2;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+#review-category{
+    width: 100%;
+    border-bottom: 1px solid black;
+    list-style: none;
+    padding: 0;
+    display: flex;
+}
+    #review-category li{
+        margin-right: 10px;
+        color: #b3b0b7;
+        cursor: pointer;
+    }
+    #review-category li:nth-child(1){
+        color: black;
+    }
+#review-top h2:nth-child(1)::after{
+    content: "|";
+    margin: 50px;
+}
+.review-area{
+    margin-bottom: 10px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+.review-user{
+    display: flex;
+}
+        .user-logo{
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            margin: 0px 10px 10px 0px;
+        }
+.user-info{
+    display: flex;
+    flex-direction: column;
+}
+        .nickname{
+            color: #929292;
+            font-weight: bolder;
+        }
+        .review-date{
+            color: #7a7a7a;
+            font-size: 85%;
+        }
+.star{
+    font-size: 130%;
+    color: #FFC807;
+}
+#review-more-btn{
+    text-align: center;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px 0px 5px 0px;
+    font-size: 95%;
+}
+
+/* ==========================================
+/           메인 오른쪽 - 결제부분           /
+==========================================*/
+#main-right{
+    width: 320px;
+    height: 350px;
+    box-shadow: 0px -1px 5px rgba(143, 143, 143, 0.292);
+    border: 1px solid #eee;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px 0px 30px;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 50px;
+    z-index: 5;
+}
+        .right-description{
+            padding: 0;
+            list-style: none;
+        }
+        #price{
+            margin-top: 10px;
+        }
+        .right-apply-btn{
+            width: 100%;
+            padding: 10px 0px 10px 0px;
+            margin: 20px 0px 10px 0px;
+            font-size: 110%;
+            border: none;
+            border-radius: 5px;
+            background-color: #0090F0;
+            color: white;
+            font-weight: bolder;
+            cursor: pointer;
+        }
+        .right-cart-btn{
+            width: 100%;
+            padding: 10px 0px 10px 0px;
+            margin-bottom: 20px;
+            font-size: 110%;
+            border: 1px solid #0090F0;
+            border-radius: 5px;
+            background-color: white;
+            color: rgb(37, 37, 37);
+            font-weight: bolder;
+            cursor: pointer;
+        }
+        .right-share{
+            font-size: 90%;
+            color: #bdbcbc;
+            text-decoration: none;
+            text-align: center;
+        }

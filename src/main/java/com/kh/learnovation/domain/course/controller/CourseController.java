@@ -1,6 +1,7 @@
 package com.kh.learnovation.domain.course.controller;
 
 import com.kh.learnovation.domain.course.dto.CourseDTO;
+import com.kh.learnovation.domain.course.dto.CourseDetailDTO;
 import com.kh.learnovation.domain.course.dto.CourseLessonDTO;
 import com.kh.learnovation.domain.course.service.CourseService;
 import com.kh.learnovation.domain.user.dto.UserDTO;
@@ -93,5 +94,17 @@ public class CourseController {
             return "error";
         }
         return url;
+    }
+
+    /**
+     * ==============================================================================================================
+     * / 강의 상세 페이지
+     * /==============================================================================================================
+     */
+    @GetMapping("/{id}")
+    public String showCourseDetail(@PathVariable Long id){
+        System.out.println(id);
+        CourseDetailDTO detailDTO = courseService.findCourseById(id);
+        return "course/CourseDetail";
     }
 }
