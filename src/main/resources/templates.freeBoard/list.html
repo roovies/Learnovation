@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>list</title>
 </head>
 <body>
-
+<table>
+    <tr>
+        <th>id</th>
+        <th>title</th>
+        <th>title(||쓰지 않은 경우)</th>
+        <th>writer</th>
+        <th>date</th>
+        <th>hits</th>
+    </tr>
+    <tr th:each="freeBoard : ${freeBoardDTOList}">
+        <td th:text="${freeBoard.id}"></td>
+        <td><a th:href="@{|/freeBoard/${freeBoard.id}|}" th:text="${freeBoard.freeBoardTitle}"></a></td>
+        <td th:text="${freeBoard.freeBoardWriter}"></td>
+        <td th:text="*{#temporals.format(freeBoard.freeBoardCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td th:text="${freeBoard.freeBoardHits}"></td>
+    </tr>
+</table>
 </body>
 </html>
