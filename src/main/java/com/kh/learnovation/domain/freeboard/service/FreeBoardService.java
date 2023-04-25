@@ -126,7 +126,7 @@ public class FreeBoardService {
     public Page<FreeBoardDTO> freeBoardSearchList(Pageable pageable, String searchKeyword){
         int page = pageable.getPageNumber() - 1;
         int pageLimit = 20;
-        Page<FreeBoardEntity> freeBoardSearchEntities = freeBoardRepository.findByTitleContaining(searchKeyword, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
+        Page<FreeBoardEntity> freeBoardSearchEntities = freeBoardRepository.findByFreeBoardTitleContaining(searchKeyword, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
         Page<FreeBoardDTO> freeBoardSearchDTOS = freeBoardSearchEntities.map(freeBoardSearch -> new FreeBoardDTO(freeBoardSearch.getId(), freeBoardSearch.getFreeBoardWriter(), freeBoardSearch.getFreeBoardTitle(), freeBoardSearch.getFreeBoardHits(), freeBoardSearch.getCreatedTime()));
         return freeBoardSearchDTOS;
     }

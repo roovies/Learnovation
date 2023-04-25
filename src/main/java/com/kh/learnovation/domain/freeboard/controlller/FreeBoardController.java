@@ -26,14 +26,14 @@ public class FreeBoardController {
 
     @GetMapping("/save")
     public String saveForm() {
-        return "save";
+        return "/freeBoard/save";
     }
 
     @PostMapping("/save")
     public String save(@ModelAttribute FreeBoardDTO freeBoardDTO) throws IOException {
         System.out.println("freeBoardDTO = " + freeBoardDTO);
         freeBoardService.save(freeBoardDTO);
-        return "index";
+        return "freeBoard/index";
     }
 
     @GetMapping("/")
@@ -41,7 +41,7 @@ public class FreeBoardController {
         // DB에서 전체 게시글 데이터를 가져와서 list.html에 보여준다.
         List<FreeBoardDTO> freeBoardDTOList = freeBoardService.findAll();
         model.addAttribute("freeBoardDTOList", freeBoardDTOList);
-        return "list";
+        return "/freeBoard/FreeList";
     }
 
     @GetMapping("/{id}")
@@ -58,21 +58,21 @@ public class FreeBoardController {
         model.addAttribute("commentList", commentDTOList);
         model.addAttribute("freeBoard", freeBoardDTO);
         model.addAttribute("page", pageable.getPageNumber());
-        return "detail";
+        return "/freeBoard/FreeDetail";
     }
 
     @GetMapping("/update/{id}")
     public String updateForm(@PathVariable Long id, Model model) {
         FreeBoardDTO freeBoardDTO = freeBoardService.findById(id);
         model.addAttribute("freeBoardUpdate", freeBoardDTO);
-        return "update";
+        return "/freeBoard/update";
     }
 
     @PostMapping("/update")
     public String update(@ModelAttribute FreeBoardDTO freeBoardDTO, Model model) {
         FreeBoardDTO freeBoard = freeBoardService.update(freeBoardDTO);
         model.addAttribute("freeBoard", freeBoard);
-        return "detail";
+        return "/freeBoard/detail";
 //        return "redirect:/board/" + boardDTO.getId();
     }
 
@@ -87,7 +87,7 @@ public class FreeBoardController {
     public String paging(@PageableDefault(page = 1) Pageable pageable, Model model, String searchKeyword) {
 
         Page<FreeBoardDTO> list = null;
-        if (searchKeyword != null){
+        if (searchKeyword == null){
             list = freeBoardService.freeBoardList(pageable);
         }else{
             list = freeBoardService.freeBoardSearchList(pageable, searchKeyword);
@@ -105,7 +105,7 @@ public class FreeBoardController {
         model.addAttribute("list", list);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        return "paging";
+        return "/freeBoard/paging";
 
 
     }

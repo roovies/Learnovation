@@ -16,5 +16,5 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoardEntity, Long
     @Query(value = "update FreeBoardEntity f set f.freeBoardHits=f.freeBoardHits+1 where f.id=:id")
     void updateHits(@Param("id") Long id);
 
-    Page<FreeBoardEntity> findByTitleContaining(String searchKeyword, Pageable pageable);
+    Page<FreeBoardEntity> findByFreeBoardTitleContaining(String searchKeyword, Pageable pageable);
 }
