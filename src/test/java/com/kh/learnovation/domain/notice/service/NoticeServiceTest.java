@@ -22,7 +22,7 @@ public class NoticeServiceTest {
                 .title("제목입니다")
                 .content("내용입니다.")
                 .build();
-        Notice notice = noticeService.insertNotice(noticeDTO);
-        Assertions.assertEquals("제목입니다",notice.getTitle());
+        noticeDTO = noticeService.insertNotice(noticeDTO);
+        Assertions.assertEquals("제목입니다",noticeDTO.getTitle());
     }
 }

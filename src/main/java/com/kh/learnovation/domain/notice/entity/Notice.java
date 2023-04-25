@@ -1,6 +1,7 @@
 package com.kh.learnovation.domain.notice.entity;
 
 import com.kh.learnovation.domain.admin.entity.Admin;
+import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.sql.Timestamp;
 @Table(name="notices")
 public class Notice {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @ManyToOne
@@ -32,15 +34,35 @@ public class Notice {
     private Timestamp createdAt;
     @Column(name="updated_at")
     @UpdateTimestamp
-    private Timestamp updateAt;
+    private Timestamp updatedAt;
+    @Column(name="status")
+    private int status;
+    @Column
+    private String subject;
 
     @Builder
-    public Notice(long id, Admin admin, String title, String content, Timestamp createdAt, Timestamp updateAt){
+    public Notice(long id, Admin admin, String title, String content, Timestamp createdAt, Timestamp updatedAt, int status, String subject){
         this.id = id;
         this.admin = admin;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
-        this.updateAt = updateAt;
+        this.updatedAt = updatedAt;
+        this.status = status;
+        this.subject = subject;
+    }
+
+    @Override
+    public String toString() {
+        return "Notice{" +
+                "id=" + id +
+                ", admin=" + admin +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", status=" + status +
+                ", subject=" + subject +
+                '}';
     }
 }

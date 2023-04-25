@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../static/common/nav.css/">
+    <link rel="stylesheet" href="../../static/common/css/nav.css/">
     <head>
 <body>
     <div th:fragment="nav">
@@ -46,15 +46,16 @@
               </div>
             </li>
             <li><a href='#'>직업정보</a></li>
+            <li><a href='/notice/list'>공지사항</a></li>
             <li>
               <div class="search-box">
-                <form action='#' class="search-form">
-                  <input type='text' placeholder='검색' class='nav-search'>
+                <form action='/notice/list' method="get" class="search-form">
+                  <input type='text' placeholder='검색' class='nav-search' name="keyword">
                   </input>
-                  <label for="search">
+                  <label for="navSearch">
                       <i class="fa-solid fa-magnifying-glass search-glass"></i>
                   </label>
-                  <input type="submit" class="search-btn" id="search">
+                  <input type="submit" class="search-btn" id="navSearch">
                 </form>
               </div>
             </li>
@@ -118,7 +119,7 @@
                       <div class="modal-cart-list">
                         <div class="nav-course-box">
                           <div class="nav-course-thumbnail">
-                            <img class="nav-course-img" src="/mobile.png" alt="">
+                            <img class="nav-course-img" src="" alt="">
                           </div>
                           <div class="nav-course-content">
                             <span>제목제목제목제목</span>
@@ -127,7 +128,7 @@
                         </div>
                         <div class="nav-course-box">
                           <div class="nav-course-thumbnail">
-                            <img class="nav-course-img" src="/mobile.png" alt="">
+                            <img class="nav-course-img" src="" alt="">
                           </div>
                           <div class="nav-course-content">
                             <span>제목제목제목제목</span>
@@ -136,7 +137,7 @@
                         </div>
                         <div class="nav-course-box">
                           <div class="nav-course-thumbnail">
-                            <img class="nav-course-img" src="/mobile.png" alt="">
+                            <img class="nav-course-img" src="" alt="">
                           </div>
                           <div class="nav-course-content">
                             <span>제목제목제목제목</span>
@@ -159,6 +160,6 @@
       <div class="chat-bot-box"></div>
     </div>
 
-    <script src="../../static/common/nav.js"/>
+    <script src="../../static/common/js/nav.js"/>
 </body>
 </html>

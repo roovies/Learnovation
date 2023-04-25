@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>직업정보 목록</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+
+  <script>
+    $.ajax({
+        data : {apikey : 'dcbceba3669ac12190c6af8572955b13', searchThemeCode : 102421, pageIndex : 1},
+        url : "https://career.go.kr/cnet/front/openapi/jobs.json",
+        type : "GET",
+        dataType : "JSON",
+        success(data){
+            let list = JSON.parse(data);
+            console.log(list);
+        },
+        error(data){
+
+        }
+    })
+  </script>
+</body>
+</html>

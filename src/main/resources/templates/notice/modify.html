@@ -11,23 +11,51 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/common/nav.css">
+    <link rel="stylesheet" href="/common/css/nav.css">
+    <link rel="stylesheet" href="/notice/css/write.css">
   </head>
   <body>
     <nav th:replace="~{common/nav.html :: nav}"></nav>
-    <form action="/notice/modify" method="post">
-      <input type="hidden" th:value="${notice.getId()}" name="noticeId">
-      <input type="hidden" th:value="${random}" id="id" name="id">
-      <input type="hidden" th:value="${notice.getAdminId()}" name="adminId">
-      <input type="text" name="title" th:value="${notice.getTitle()}">
-      <textarea id="summernote" name="content" th:utext="${notice.getContent()}"></textarea>
-      <input type="submit">
-    </form>
-    <script src="/common/nav.js"></script>
+    <main>
+      <div class="notice-theme-box">
+        <div class="notice-theme-content"><a href="/notice/list"><p>공지사항</p></a></div>
+        <div class="notice-theme-line"><hr></div>
+      </div>
+      <form action="/notice/modify" method="post">
+        <input type="hidden" th:value="${notice.getId()}" name="noticeId">
+        <input type="hidden" th:value="${random}" id="id" name="id">
+        <input type="hidden" th:value="${notice.getAdminId()}" name="adminId">
+        <div class="notice-write-title-box">
+          제목 : <input type="text" class="notice-write-title" name="title" th:value="${notice.getTitle()}" required>
+        </div>
+        <div class="notice-write-content-box">
+          <textarea required id="summernote" name="content" th:utext="${notice.getContent()}"></textarea>
+        </div>
+        <div class="notice-write-btn-box">
+          <input type="submit" value="수정">
+          <input type="button" value="취소" id="prevBtn">
+        </div>
+      </form>
+    </main>
+    <script src="/common/js/nav.js"></script>
     <script>
-      const fontList =  ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'MapoFlowerIsland', '맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'];
+      document.getElementById("prevBtn").addEventListener("click", function(e){
+        let id = document.getElementById("id").value;
+        e.preventDefault();
+        $.ajax({
+          data : {id : id},
+          type : "POST",
+          url : "/notice/removeTemporary",
+          success(data){
+            window.history.back();
+          },error(){
+            window.history.back();
+          }
+        })
+      })
+      const fontList =  ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', '맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'];
       $('#summernote').summernote({
-        placeholder: '내용을 작성하세요',
+        width : 1400,
         height: 400,
         lang: "ko-KR",
         toolbar: [
@@ -36,11 +64,9 @@
           ['fontsize', ['fontsize']],
           ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
           ['color', ['forecolor','color']],
-          ['table', ['table']],
           ['para', ['ul', 'ol', 'paragraph']],
           ['height', ['height']],
-          ['insert',['picture','link','video']],
-          ['view', ['fullscreen', 'help']]
+          ['insert',['picture']],
         ],
         fontNames: fontList,
         fontNamesIgnoreCheck: fontList,

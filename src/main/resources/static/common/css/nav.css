@@ -186,6 +186,9 @@ nav a:hover{
         left: 8px;
         color : darkgray;
     }
+    .search-glass:hover{
+        color : #0090F0;
+    }
 
 .mode-box{
     background-color: #0090F0;
