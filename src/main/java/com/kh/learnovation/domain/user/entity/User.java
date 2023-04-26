@@ -1,5 +1,6 @@
 package com.kh.learnovation.domain.user.entity;
 
+import com.kh.learnovation.domain.question.entity.Question;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,11 +13,11 @@ import java.sql.Timestamp;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
-public class User extends TimeEntity{
+public class User extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(length = 100)
     private String socialId;
@@ -55,7 +56,7 @@ public class User extends TimeEntity{
     private Timestamp deletedAt;
 
     @Builder
-    public User(Integer id, String socialId, String socialProvider, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt) {
+    public User(Long id, String socialId, String socialProvider, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt) {
         this.id = id;
         this.socialId = socialId;
         this.socialProvider = socialProvider;

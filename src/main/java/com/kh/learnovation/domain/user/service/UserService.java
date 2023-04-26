@@ -6,7 +6,15 @@ import java.util.List;
 
 public interface UserService {
 
-    List<UserDTO> getUserList();
+    List<UserDTO> getUserList(Integer pageNum);
 
-    void deleteUser(Integer id);
+    Integer[] getPageList(Integer pageNum);
+
+    List<UserDTO> searchUsers(String keyword);
+
+    UserDTO getPost(Long id);
+
+    void deleteByIdIn(List<Long> selectedIds);
+
+    Long savePost(UserDTO userDTO);
 }

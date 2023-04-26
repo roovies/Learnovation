@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>질문 상세 조회</title>
+    <link rel="stylesheet" th:href="@{/css/question/detail.css}">
+    <link rel="stylesheet" href="../../static/css/question/detail.css">
 </head>
 <body>
-
+    <div id="container">
+        <div id="title-area">
+            <br>
+            <p type="text" id="title" name="title" th:text="${question.title}" readonly></p> <br>
+            <p type="text" id="created-at" name="createdAt" th:text="${question.createdAt}" readonly></p>
+            <p type="text" id="view-count" name="viewCount" th:text="${question.viewCount}" readonly></p>
+        </div>
+        <br><br>
+        <div id="main-area">
+            <p id="content" name="content" th:text="${question.content}" readonly></p>
+        </div>
+    </div>
 </body>
 </html>

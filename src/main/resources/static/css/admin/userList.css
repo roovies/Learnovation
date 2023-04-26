@@ -101,6 +101,10 @@ header {
     justify-content: center;
 }
 
+#multiremove {
+    border: 0;
+}
+
 /*테이블 css*/
 table.type10 {
     border-collapse: collapse;
@@ -133,7 +137,45 @@ table.type10 .even {
     background: #fdf3f5;
 }
 
+#modify-btn {
+    border: 0;
+    color: black;
+}
 
+
+#delete-btn button {
+    width: 50px;
+    height: 25px;
+    border: 0;
+    background-color: pink;
+    margin-left: 25px;
+}
+#delete-btn button:hover {
+    background-color: deeppink;
+}
+
+/*#delete-btn {*/
+/*    width: 70px;*/
+/*    line-height: 24px;*/
+/*    font-size: 17px;*/
+/*    border: 0;*/
+/*    background-color: white;*/
+/*}*/
+/*#delete-btn:hover {*/
+/*    background-color: rgb(19, 18, 18);*/
+/*    background-color: rgb(26, 109, 255);*/
+/*    cursor: pointer;*/
+/*}*/
+
+#page-area {
+    display: flex;
+    justify-content: center;
+}
+
+#page-area a{
+    color: black;
+    border: 0;
+}
 
 
 

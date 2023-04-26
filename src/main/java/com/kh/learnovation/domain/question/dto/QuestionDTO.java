@@ -16,11 +16,12 @@ public class QuestionDTO {
     private String content;
     private Timestamp createdAt;
     private Timestamp updatedAt;
-    private Integer deleted;
+    private Long deleted;
     private Timestamp deletedAt;
+    private Long viewCount;
 
     public Question toEntity() {
-        Question question = Question.builder()
+        Question build = Question.builder()
                 .id(id)
                 .userId(userId)
                 .title(title)
@@ -29,12 +30,13 @@ public class QuestionDTO {
                 .updatedAt(updatedAt)
                 .deleted(deleted)
                 .deletedAt(deletedAt)
+                .viewCount(viewCount)
                 .build();
-        return question;
+        return build;
     }
 
     @Builder
-    public QuestionDTO(Long id, Long userId, String title, String content, Timestamp createdAt, Timestamp updatedAt, Integer deleted, Timestamp deletedAt) {
+    public QuestionDTO(Long id, Long userId, String title, String content, Timestamp createdAt, Timestamp updatedAt, Long deleted, Timestamp deletedAt, Long viewCount) {
         this.id = id;
         this.userId = userId;
         this.title = title;
@@ -43,5 +45,6 @@ public class QuestionDTO {
         this.updatedAt = updatedAt;
         this.deleted = deleted;
         this.deletedAt = deletedAt;
+        this.viewCount = viewCount;
     }
 }

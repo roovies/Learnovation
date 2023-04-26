@@ -37,7 +37,7 @@
         <p>질문 게시글 작성</p>
     </div>
     <form action="/question/regist" method="post" id="input-area">
-        <input type="hidden" name="userId" value="">
+        <input type="hidden" name="userId" value="1">
         <label for="titlebox">제목 : </label> <br>
         <input type="text" id="titlebox" name="title" placeholder="제목을 입력해주세요."> <br>
         <label for="summernote">내용 : </label>
@@ -46,5 +46,22 @@
         <button type="button" id="golist" onclick="location.href = '/question/list'">리스트로</button>
     </form>
 </div>
+<script>
+    function uploadSummernoteImageFile(file, editor) {
+        data = new FormData();
+        data.append("file", file);
+        $.ajax({
+            data : data,
+            type : "POST",
+            url : "/uploadSummernoteImageFile",
+            contentType : false,
+            processData : false,
+            success : function(data) {
+                //항상 업로드된 파일의 url이 있어야 한다.
+                $(editor).summernote('insertImage', data.url);
+            }
+        });
+    }
+</script>
 </body>
 </html>

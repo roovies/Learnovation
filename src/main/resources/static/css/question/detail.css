@@ -1,0 +1,29 @@
+p {
+    border: 1px solid black;
+}
+
+#container {
+    width: 70%;
+    margin: 0 auto;
+}
+
+#title-area {
+    width: 60%;
+    margin: 0 auto;
+}
+#title-area #created-at{
+    width: 23%;
+}
+#title-area #view-count {
+    width: 8%;
+}
+
+#main-area {
+    margin: 0 auto;
+}
+
+#main-area #content {
+    margin-left: 265px;
+    width: 59.8%;
+    height: 600px;
+}

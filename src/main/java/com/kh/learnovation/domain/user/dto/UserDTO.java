@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @ToString
 @NoArgsConstructor
 public class UserDTO {
-    private Integer id;
+    private Long id;
     private String socialId;
     private String socialProvider;
     private String email;
@@ -44,7 +44,7 @@ public class UserDTO {
     }
 
     @Builder
-    public UserDTO(Integer id, String socialId, String socialProvider, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt) {
+    public UserDTO(Long id, String socialId, String socialProvider, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt) {
         this.id = id;
         this.socialId = socialId;
         this.socialProvider = socialProvider;
