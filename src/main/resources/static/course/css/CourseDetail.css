@@ -89,19 +89,23 @@
     background-color: white;
     z-index: 10;
 }
-        #course-nav p{
+        .nav-basic{
             cursor: pointer;
             color: #b3b0b7;
             font-weight: bold;
             padding: 10px 15px 10px 15px;
         }
-        #course-nav p:nth-child(1){
-            color: black;
-            border-bottom: 2px solid black;
-        }
+        /*#course-nav p:nth-child(1){*/
+        /*    color: black;*/
+        /*    border-bottom: 2px solid black;*/
+        /*}*/
         .course-nav{
             position: fixed;
             top: 0;
+        }
+        .nav-focus{
+            color: black;
+            border-bottom: 2px solid black;
         }
 
 /* ==========================================
@@ -201,11 +205,14 @@
     background-color: #0090F0;
     color: white;
     position: relative;
-    top: 75px;
-    left: 700px;
+    top: 77px;
+    left: 670px;
+    font-size: 90%;
+    padding: 0px 5px 0px 5px;
     cursor: pointer;
 }
 table{
+    width: 820px;
     border-collapse: collapse;
     margin-bottom: 10px;
 }
@@ -221,9 +228,13 @@ td{
 }
 
 tr td:nth-child(1){
-    width: 97%;
+    width: 710px;
     font-size: 110%;
     padding: 5px 10px 5px 10px;
+}
+tr td:nth-child(2){
+    width: 90px;
+    text-align: center;
 }
 /* ==========================================
 /             메인 왼쪽 - 리뷰부분           /

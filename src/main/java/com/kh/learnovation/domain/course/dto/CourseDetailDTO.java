@@ -20,6 +20,7 @@ public class CourseDetailDTO {
     private String savedImageName; // 저장된 썸네일 파일명
     private List<CourseChapterDTO> chapters; // 강의에 포함된 목차 목록
     private Long totalLessonCount;
+    private String totalVideoTime;
 
     @Builder
     public CourseDetailDTO(Long id, String category, int level, String title, String nickname, int price,

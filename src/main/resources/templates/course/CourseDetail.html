@@ -37,9 +37,9 @@
         </div>
     </div>
     <div id="course-nav">
-        <p>강의소개</p>
-        <p onclick="moveCurriculum()">커리큘럼</p>
-        <p>수강후기(${개수수정필요})</p>
+        <p class="nav-basic nav-focus" onclick="moveIntroduce()">강의소개</p>
+        <p class="nav-basic" onclick="moveCurriculum()">커리큘럼</p>
+        <p class="nav-basic" onclick="moveReview()">수강후기(${개수수정필요})</p>
     </div>
     <div id="course-main">
         <div id="main-left">
@@ -76,7 +76,7 @@
                     </tr>
                     <tr th:each="lesson, index : ${chapter.lessons}">
                         <td th:text="${status.count + '.' +index.count + '. ' + lesson.title}"></td>
-                        <td>05:07</td>
+                        <td th:text="${lesson.courseVideoDTO.videoTime}"></td>
                     </tr>
                 </table>
             </div>
@@ -178,8 +178,8 @@
         <div id="main-right">
             <h4>💡 강의 요약</h4>
             <ul class="right-description">
-                <li th:text="'▪ 총 강의 수: ' + ${detail.totalLessonCount} + '강'"></li>
-                <li style="color: red;">▪ 강의 시간: 40시간 31분</li>
+                <li th:text="'▪ 강의 수: 총 ' + ${detail.totalLessonCount} + '강'"></li>
+                <li th:text="'▪ 강의 시간: 총 ' + ${detail.totalVideoTime}"></li>
                 <li>▪ 소장 기간: 무제한</li>
                 <li th:switch="${detail.level}">
                     <span th:case="0">▪ 난이도: 입문자</span>
@@ -202,18 +202,61 @@
 
 
 <script th:inline="javascript">
-    /* 스크롤 관련 */
+    // ======================================================
+    // 네비게이션 관련
+    // ======================================================
+    /* 1. 스크롤 이벤트 관련 */
     window.addEventListener("scroll", () => {
+        console.log(document.querySelector('#course-nav p:nth-child(1)').scrollTop);
+        // 1-1. 스크롤 시 네비게이션 상단 고정
         if (window.scrollY > 360) {
             document.querySelector("#course-nav").className = "course-nav";
         } else {
             document.querySelector("#course-nav").classList.remove("course-nav");
         }
+        // 2-2. 스크롤 시 커리큘럼 항목 도착
+        if (window.scrollY<2099){
+            clearNavColor();
+            let curriculumTag = document.querySelector('#course-nav p:nth-child(1)');
+            curriculumTag.className = 'nav-basic nav-focus';
+        }
+        else if (window.scrollY>2098 && window.scrollY<2926){
+            clearNavColor();
+            let curriculumTag = document.querySelector('#course-nav p:nth-child(2)');
+            curriculumTag.className = 'nav-basic nav-focus';
+        }
+        else{
+            clearNavColor();
+            let curriculumTag = document.querySelector('#course-nav p:nth-child(3)');
+            curriculumTag.className = 'nav-basic nav-focus';
+        }
+
     })
-    var moveCurriculum = ()=>{
+
+    /* 2. 네비게이션 글씨색 전체 회색으로 초기화 + 밑줄 제거 */
+    let clearNavColor = ()=>{
+        let pTags = document.querySelectorAll('#course-nav p');
+        for (let i = 0; i<pTags.length; i++){
+            pTags[i].classList.remove('nav-focus');
+        }
+    }
+    /* 3-1. 네비로 강의소개 항목 클릭 */
+    let moveIntroduce =()=>{
+        window.scrollTo({top:0, behavior:'smooth'});
+        clearNavColor();
+        let curriculumTag = document.querySelector('#course-nav p:nth-child(1)');
+        curriculumTag.className = 'nav-basic nav-focus';
+    }
+
+    /* 3-2. 네비로 커리큘럼 항목 클릭 */
+    let moveCurriculum = ()=>{
         let location = document.querySelector("#left-curriculum").offsetTop;
         window.scrollTo({top:location-100, behavior:'smooth'});
+        clearNavColor();
+        let curriculumTag = document.querySelector('#course-nav p:nth-child(2)');
+        curriculumTag.className = 'nav-basic nav-focus';
     }
+
 
     /* 미리보기 모달창 열기*/
     let preview = () =>{

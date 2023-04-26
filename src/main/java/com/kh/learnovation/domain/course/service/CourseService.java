@@ -11,6 +11,7 @@ import com.kh.learnovation.domain.user.dto.UserDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.PersistenceException;
+import java.io.File;
 import java.io.IOException;
 import java.sql.BatchUpdateException;
 import java.util.List;
@@ -28,10 +29,17 @@ public interface CourseService {
     /**동영상 업로드 Service */
     List<CourseVideo> createVideos(MultipartFile[] videoFiles, List<CourseLesson> savedLessons) throws IOException;
 
+    /** 동영상 길이 구하기 Service */
+    int getVideoRunningTime(File video);
+
+
+
     /** SummerNote 이미지 업로드 Service */
     String createImages(MultipartFile file) throws IOException;
 
     /** 강의 상세조회 Service */
     CourseDetailDTO findDetailById(Long id);
 
+    /** 동영상 길이 [n분 n초] 형태로 변환 */
+    String convertTimeToString(int time);
 }

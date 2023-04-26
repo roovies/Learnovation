@@ -14,16 +14,18 @@ public class CourseVideoDTO {
     private String savedVideoName;
     private String savedPath;
     private Long videoSize;
+    private String videoTime;
     private Timestamp createdAt;
 
     @Builder
     public CourseVideoDTO(Long id, Long lessonId, String originalVideoName, String savedVideoName,
-                          String savedPath, Long videoSize, Timestamp createdAt){
+                          String savedPath, Long videoSize,String videoTime, Timestamp createdAt){
         this.id = id;
         this.originalVideoName = originalVideoName;
         this.savedVideoName = savedVideoName;
         this.savedPath = savedPath;
         this.videoSize = videoSize;
+        this.videoTime = videoTime;
         this.createdAt = createdAt;
     }
 }

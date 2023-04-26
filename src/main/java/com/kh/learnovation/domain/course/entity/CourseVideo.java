@@ -30,6 +30,8 @@ public class CourseVideo {
     private String savedPath;
     @Column(name="video_size", nullable = false)
     private Long videoSize;
+    @Column(name="video_time", nullable = false)
+    private int videoTime;
     @CreationTimestamp
     @Column(name="created_at", nullable = false)
     private Timestamp createdAt;

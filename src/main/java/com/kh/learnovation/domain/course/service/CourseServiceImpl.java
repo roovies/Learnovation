@@ -7,6 +7,9 @@ import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.entity.User;
 import com.kh.learnovation.domain.user.repository.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.jcodec.api.FrameGrab;
+import org.jcodec.api.JCodecException;
+import org.jcodec.common.io.NIOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -202,11 +205,28 @@ public class CourseServiceImpl implements CourseService {
                 toSaveVideo.setSavedPath(today);
                 toSaveVideo.setVideoSize(videoFile.getSize());
                 videoFile.transferTo(new File(folder, toSaveVideoName));
+                // 4. 비디오 길이 구해서 저장
+                int runningTime = getVideoRunningTime(new File(folder, toSaveVideoName));
+                toSaveVideo.setVideoTime(runningTime);
                 k++;
             }
             toSaveVideos.add(toSaveVideo);
         }
         return toSaveVideos;
+    }
+
+    @Override
+    @Transactional
+    public int getVideoRunningTime(File video) {
+        try {
+            FrameGrab frameGrab = FrameGrab.createFrameGrab(NIOUtils.readableChannel(video));
+            double runningTime = frameGrab.getVideoTrack().getMeta().getTotalDuration();
+            int roundTime = (int) Math.round(runningTime);
+            return roundTime;
+        } catch (Exception e) {
+            System.out.println("getVideoRunningTime failed");
+            return 0;
+        }
     }
 
     @Override
@@ -265,8 +285,14 @@ public class CourseServiceImpl implements CourseService {
                 .innerJoin(lesson.video, video)
                 .where(chapter.course.id.eq(id))
                 .fetchCount();
-        System.out.println("총 강의수 : " + totalLessonCount);
-
+        // 4. 총 강의 시간 구하기
+        long totalVideoTime = jqf
+                .select(video.videoTime.sum())
+                .from(chapter)
+                .join(chapter.lessons, lesson)
+                .join(lesson.video, video)
+                .where(chapter.course.id.eq(id))
+                .fetchOne();
 
         // 4. List<CourseChapter> -> List<CourseChapterDTO>로 변환
         List<CourseChapterDTO> chapterDtos = foundChapters.stream()
@@ -286,6 +312,7 @@ public class CourseServiceImpl implements CourseService {
                                                 .savedVideoName(lessonOne.getVideo().getSavedVideoName())
                                                 .savedPath(lessonOne.getVideo().getSavedPath())
                                                 .videoSize(lessonOne.getVideo().getVideoSize())
+                                                .videoTime(convertTimeToString(lessonOne.getVideo().getVideoTime()))
                                                 .createdAt(lessonOne.getVideo().getCreatedAt())
                                                 .build())
                                         .build();
@@ -319,6 +346,7 @@ public class CourseServiceImpl implements CourseService {
                 .chapters(chapterDtos)
                 .build();
         detailDto.setTotalLessonCount(totalLessonCount);
+        detailDto.setTotalVideoTime(convertTimeToString((int)totalVideoTime));
         System.out.println("강의 카테고리: " + detailDto.getCategory());
         System.out.println("강의 난이도: " + detailDto.getLevel());
         System.out.println("강의 제목: " + detailDto.getTitle());
@@ -338,6 +366,21 @@ public class CourseServiceImpl implements CourseService {
             i++;
         }
         return detailDto;
+    }
+
+    @Override
+    public String convertTimeToString(int time) {
+        int hours = time / 3600;
+        int remainingTime = time % 3600; //시간을 구한 후 남은 분수
+        int minutes = remainingTime / 60;
+        int seconds = remainingTime % 60;
+        String timeString;
+        if (hours > 0) { // 시간이 1시간 이상일 경우
+            timeString = hours + "시간 " + minutes + "분";
+        } else { // 시간이 1시간 미만일 경우
+            timeString = minutes + "분 " + seconds + "초";
+        }
+        return timeString;
     }
 
 }
