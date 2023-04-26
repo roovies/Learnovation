@@ -8,6 +8,7 @@ import com.kh.learnovation.domain.user.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -102,9 +103,10 @@ public class CourseController {
      * /==============================================================================================================
      */
     @GetMapping("/{id}")
-    public String showCourseDetail(@PathVariable Long id){
+    public String showCourseDetail(@PathVariable Long id, Model model){
         System.out.println(id);
-        CourseDetailDTO detailDTO = courseService.findCourseById(id);
+        CourseDetailDTO detailDTO = courseService.findDetailById(id);
+        model.addAttribute("detail", detailDTO);
         return "course/CourseDetail";
     }
 }

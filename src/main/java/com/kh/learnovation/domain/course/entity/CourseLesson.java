@@ -22,6 +22,11 @@ public class CourseLesson {
     @Column(name="lesson_order", nullable = false)
     private int lessonOrder;
 
+    // Lazy 처리 연관관계 (OneToOne)
+    @OneToOne(mappedBy = "courseLesson", fetch = FetchType.LAZY)
+    private CourseVideo video;
+
+
     @Builder
     public CourseLesson(CourseChapter courseChapter, String title, int lessonOrder){
         this.courseChapter = courseChapter;

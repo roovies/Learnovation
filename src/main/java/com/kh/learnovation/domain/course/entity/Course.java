@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -44,6 +45,13 @@ public class Course {
     private Boolean deleted;        // 강의 삭제여부
     @Column(name = "deleted_at")
     private Timestamp deletedAt;   // 강의 삭제일
+
+
+    // Lazy 처리 연관관계 정의 (OneToMany, OneToOne)
+    @OneToMany(mappedBy = "course") // mappedBy는 1:다에서 '다'쪽 엔티티에서 1쪽 엔티티의 필드명을 지정
+    private List<CourseChapter> chapters;
+    @OneToOne(mappedBy = "course")
+    private CourseImage courseImage;
 
     @Builder
     // DTO -> Entity로 변환하기 때문에 id값은 받을 필요가 없다.

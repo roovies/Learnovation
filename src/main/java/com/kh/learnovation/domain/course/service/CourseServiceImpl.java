@@ -1,19 +1,19 @@
 package com.kh.learnovation.domain.course.service;
 
-import com.kh.learnovation.domain.course.dto.CourseDTO;
-import com.kh.learnovation.domain.course.dto.CourseDetailDTO;
-import com.kh.learnovation.domain.course.dto.CourseLessonDTO;
+import com.kh.learnovation.domain.course.dto.*;
 import com.kh.learnovation.domain.course.entity.*;
 import com.kh.learnovation.domain.course.repository.*;
 import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.entity.User;
 import com.kh.learnovation.domain.user.repository.UserRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import java.io.File;
@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.sql.BatchUpdateException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -32,13 +33,14 @@ public class CourseServiceImpl implements CourseService {
     private final LessonRepository lessonRepository;
     private final VideoRepository videoRepository;
     private final UserRepository userRepository;
+    private final JPAQueryFactory jqf;
 
     @Autowired
     public CourseServiceImpl(ResourceLoader resourceLoader, CourseRepository courseRepository,
                              ImageRepository imageRepository,
                              CategoryRepository categoryRepository, ChapterRepository chapterRepository,
                              LessonRepository lessonRepository, VideoRepository videoRepository,
-                             UserRepository userRepository) {
+                             UserRepository userRepository, EntityManager entityManager) {
         this.resourceLoader = resourceLoader;
         this.courseRepository = courseRepository;
         this.imageRepository = imageRepository;
@@ -47,9 +49,11 @@ public class CourseServiceImpl implements CourseService {
         this.lessonRepository = lessonRepository;
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
+        this.jqf = new JPAQueryFactory(entityManager);
     }
 
     @Override
+    @Transactional
     public UserDTO findUserByEmail(String email) {
         Optional<User> foundUser = userRepository.findByEmail(email);
         if (foundUser.isPresent()) {
@@ -145,6 +149,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public CourseImage createImage(MultipartFile imageFile, Course savedCourse) throws IOException {
         // 1. 파일 저장 디렉터리 경로 구하기
         Resource resource = resourceLoader.getResource("file:src/main/resources/static/course/upload/thumbnails");
@@ -158,7 +163,7 @@ public class CourseServiceImpl implements CourseService {
         // 3. 업로드 요청한 썸네일 이미지 서버에 저장
         CourseImage toSaveImage = new CourseImage();
         String originalImageName = imageFile.getOriginalFilename();
-        if(!originalImageName.isEmpty()){
+        if (!originalImageName.isEmpty()) {
             String toSaveImageName = UUID.randomUUID() + originalImageName.substring(originalImageName.lastIndexOf('.'));
             toSaveImage.setCourse(savedCourse);
             toSaveImage.setOriginalImageName(originalImageName);
@@ -195,7 +200,6 @@ public class CourseServiceImpl implements CourseService {
                 toSaveVideo.setOriginalVideoName(originalVideoName);
                 toSaveVideo.setSavedVideoName(toSaveVideoName);
                 toSaveVideo.setSavedPath(today);
-//                toSaveVideo.setSavedPath(savedFolder);
                 toSaveVideo.setVideoSize(videoFile.getSize());
                 videoFile.transferTo(new File(folder, toSaveVideoName));
                 k++;
@@ -206,11 +210,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional
     public String createImages(MultipartFile file) throws IOException {
-        // 1. 업로드 경로 구하기
-//        Resource resource = resourceLoader.getResource("file:src/main/resources/static/course/upload/images");
-//        String realPath = resource.getFile().getAbsolutePath();
-
         // 1. 외부(로컬) 디스크 저장 경로 구하기
         String realPath = "C:\\img";
         // 2. 날짜별 디렉터리 생성
@@ -232,8 +233,111 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public CourseDetailDTO findCourseById(Long id) {
-        Optional<Course> course = courseRepository.findById(id);
-        return null;
+    @Transactional
+    public CourseDetailDTO findDetailById(Long id) {
+        // 1. courses + users + course_categories + course_images 테이블 join
+        QCourse course = QCourse.course;
+        QCourseCategory category = QCourseCategory.courseCategory;
+        QCourseImage image = QCourseImage.courseImage;
+        Optional<Course> foundCourse = Optional.ofNullable(jqf
+                        .selectFrom(course)
+                        .innerJoin(course.courseCategory, category)
+                        .innerJoin(course.courseImage, image)
+                        .where(course.id.eq(id))
+                        .fetchOne()
+                        );
+
+        // 2. course_chapters + course_lessons + course_videos 테이블 join
+        QCourseChapter chapter = QCourseChapter.courseChapter;
+        QCourseLesson lesson = QCourseLesson.courseLesson;
+        QCourseVideo video = QCourseVideo.courseVideo;
+        List<CourseChapter> foundChapters = jqf
+                .selectFrom(chapter)
+                .distinct()
+                .innerJoin(chapter.lessons, lesson)
+                .innerJoin(lesson.video, video)
+                .where(chapter.course.id.eq(id))
+                .fetch();
+        // 3. 총 강의 개수 구하기
+        long totalLessonCount = jqf
+                .selectFrom(chapter)
+                .innerJoin(chapter.lessons, lesson)
+                .innerJoin(lesson.video, video)
+                .where(chapter.course.id.eq(id))
+                .fetchCount();
+        System.out.println("총 강의수 : " + totalLessonCount);
+
+
+        // 4. List<CourseChapter> -> List<CourseChapterDTO>로 변환
+        List<CourseChapterDTO> chapterDtos = foundChapters.stream()
+                .map(chapterOne -> {
+                    // List<CourseLesson> -> List<CourseLessonDTO>로 변환
+                    List<CourseLessonDTO> lessonDtos = chapterOne.getLessons().stream()
+                            .map(lessonOne -> {
+                                CourseLessonDTO lessonDto = CourseLessonDTO.builder()
+                                        .id(lessonOne.getId())
+                                        .chapterId(lessonOne.getCourseChapter().getId())
+                                        .title(lessonOne.getTitle())
+                                        .lessonOrder(lessonOne.getLessonOrder())
+                                        // CourseVideo -> CourseVideoDTO로 변환
+                                        .courseVideoDTO(CourseVideoDTO.builder()
+                                                .id(lessonOne.getVideo().getId())
+                                                .originalVideoName(lessonOne.getVideo().getOriginalVideoName())
+                                                .savedVideoName(lessonOne.getVideo().getSavedVideoName())
+                                                .savedPath(lessonOne.getVideo().getSavedPath())
+                                                .videoSize(lessonOne.getVideo().getVideoSize())
+                                                .createdAt(lessonOne.getVideo().getCreatedAt())
+                                                .build())
+                                        .build();
+                                return lessonDto;
+                            })
+                            .collect(Collectors.toList());
+
+
+                    CourseChapterDTO chapterDto = CourseChapterDTO.builder()
+                            .id(chapterOne.getId())
+                            .courseId(chapterOne.getCourse().getId())
+                            .title(chapterOne.getTitle())
+                            .chapterOrder(chapterOne.getChapterOrder())
+                            .lessons(lessonDtos)
+                            .build();
+                    return chapterDto;
+                })
+                .collect(Collectors.toList());
+
+        // 5. CourseDetail DTO에 found한 정보들 저장
+        CourseDetailDTO detailDto = CourseDetailDTO.builder()
+                .id(foundCourse.get().getId())
+                .category(foundCourse.get().getCourseCategory().getName())
+                .level(foundCourse.get().getLevel())
+                .title(foundCourse.get().getTitle())
+                .nickname(foundCourse.get().getUser().getNickname())
+                .price(foundCourse.get().getPrice())
+                .content(foundCourse.get().getContent())
+                .savedPath(foundCourse.get().getCourseImage().getSavedPath())
+                .savedImageName(foundCourse.get().getCourseImage().getSavedImageName())
+                .chapters(chapterDtos)
+                .build();
+        detailDto.setTotalLessonCount(totalLessonCount);
+        System.out.println("강의 카테고리: " + detailDto.getCategory());
+        System.out.println("강의 난이도: " + detailDto.getLevel());
+        System.out.println("강의 제목: " + detailDto.getTitle());
+        System.out.println("강사 닉네임: " + detailDto.getNickname());
+        System.out.println("강의 가격: " + detailDto.getPrice());
+        System.out.println("강의 내용: " + detailDto.getContent());
+        System.out.println("썸네일 저장 폴더: " + detailDto.getSavedPath());
+        System.out.println("썸네일 파일명: " + detailDto.getSavedImageName());
+        int i = 1;
+        for (CourseChapterDTO testchapterDto : detailDto.getChapters()){
+            System.out.println("==================================================");
+            System.out.println(i+"번째 목차 : " + testchapterDto.getTitle());
+            System.out.println("==================================================");
+            for (CourseLessonDTO testlessonDto : testchapterDto.getLessons()){
+                System.out.println(i+". " + testlessonDto.getTitle() + " | /" + testlessonDto.getCourseVideoDTO().getSavedPath() + "/" + testlessonDto.getCourseVideoDTO().getSavedVideoName());
+            }
+            i++;
+        }
+        return detailDto;
     }
+
 }

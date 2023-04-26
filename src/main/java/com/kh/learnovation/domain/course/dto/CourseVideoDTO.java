@@ -1,15 +1,11 @@
 package com.kh.learnovation.domain.course.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class CourseVideoDTO {
     private Long id;
@@ -19,4 +15,15 @@ public class CourseVideoDTO {
     private String savedPath;
     private Long videoSize;
     private Timestamp createdAt;
+
+    @Builder
+    public CourseVideoDTO(Long id, Long lessonId, String originalVideoName, String savedVideoName,
+                          String savedPath, Long videoSize, Timestamp createdAt){
+        this.id = id;
+        this.originalVideoName = originalVideoName;
+        this.savedVideoName = savedVideoName;
+        this.savedPath = savedPath;
+        this.videoSize = videoSize;
+        this.createdAt = createdAt;
+    }
 }

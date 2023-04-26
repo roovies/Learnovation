@@ -31,5 +31,7 @@ public interface CourseService {
     /** SummerNote 이미지 업로드 Service */
     String createImages(MultipartFile file) throws IOException;
 
-    CourseDetailDTO findCourseById(Long id);
+    /** 강의 상세조회 Service */
+    CourseDetailDTO findDetailById(Long id);
+
 }

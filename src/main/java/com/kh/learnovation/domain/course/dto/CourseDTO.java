@@ -27,13 +27,4 @@ public class CourseDTO {
     private Timestamp deletedAt;   // 강의 삭제일
     private List<CourseChapterDTO> chapters; // 강의에 포함된 목차 목록
 
-    public Course toEntity(){
-        Course course = Course.builder()
-                .title(title)
-                .level(level)
-                .price(price)
-                .content(content)
-                .build();
-        return course;
-    }
 }

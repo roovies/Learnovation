@@ -3,6 +3,7 @@ package com.kh.learnovation.domain.course.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,6 +23,9 @@ public class CourseChapter {
     @Column(name="chapter_order", nullable = false)
     private int chapterOrder;   // 목차 순서
 
+    // Lazy 처리 연관관계 (OneToMany)
+    @OneToMany(mappedBy = "courseChapter")
+    private List<CourseLesson> lessons;
     @Builder
     public CourseChapter(Course course, String title, int chapterOrder){
         this.course = course;
