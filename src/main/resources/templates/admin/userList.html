@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 관리</title>
+    <!--구글폰트 API-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/admin/userList.css}">
+    <link rel="stylesheet" href="../../static/css/admin/userList.css">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+    <div class="side-nav">
+        <header>Learnnovation</header>
+        <ul>
+            <a href="#" class="active">
+                <li class="nav-li">
+                    <span class="menu">🙋‍♂️ 회원관리</span>
+                </li>
+            </a>
+            <a href="#">
+                <li class="nav-li">
+                    <span class="menu">게시판 관리(드롭다운ㄱㄱ)</span>
+                </li>
+            </a>
+            <a href="#">
+                <li class="nav-li">
+                    <span class="menu">📢 신고 관리</span>
+                </li>
+            </a>
+            <a href="#">
+                <li class="nav-li">
+                    <!-- <img src="/learning.png" alt="" style="width: 30px; height: 30px;"> -->
+                    <span class="menu">📺 강의 등록</span>
+                </li>
+            </a>
+            <a href="#">
+                <li class="nav-li">
+                    <span class="menu">apps</span>
+                </li>
+            </a>
+            <a href="#">
+                <li class="nav-li">
+                    <span class="menu">event</span>
+                </li>
+            </a>
+            <a href="#">
+                <li class="nav-li">
+                    <span class="menu">settings</span>
+                </li>
+            </a>
+        </ul>
+    </div>
+    <div class="main">
+        <div id="workspace">
+            <div id="title">회원목록</div>
+
+            <form action="/admin/search" method="get" id="search-area">
+                <input type="text" id="search-value" name="keyword" placeholder="회원 ^이름^ 검색">
+                <button type="submit" id="search-btn">검색</button>
+            </form>
+
+            <div id="list-area">
+                <form id="delete-form" th:action="@{/admin/delete/}" method="post">
+                    <table class="type10">
+                        <thead>
+                        <tr>
+                            <th scope="cols">
+                                <input type="checkbox" id="selectAll" onclick="toggleCheckbox(this);"/>
+                            </th>
+                            <th scope="cols">회원번호</th>
+                            <th scope="cols">이메일</th>
+                            <th scope="cols">이름</th>
+                            <th scope="cols">가입날짜</th>
+                            <th scope="cols">수정날짜</th>
+                            <th id="delete-btn">
+                                <button type="submit" onclick="return confirmDelete()">탈퇴</button>
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="user : ${userList}">
+                            <th scope="row">
+                                <input type="checkbox" name="selectedIds" th:value="${user.id}"/>
+                            </th>
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.email}"></td>
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${#dates.format(user.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td th:text="${#dates.format(user.updatedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td><a id="modify-btn" th:href="@{'/admin/detail/' + ${user.id}}">상세/수정</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div id="page-area">
+                <span th:each="pageNum : ${pageList}" th:inline="text">
+                    <a th:href="@{'/admin/userList?page=' + ${pageNum}}">[[${pageNum}]]</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <form action="/admin/deletes" method="post" name="deleteForm">
+        <input type="hidden" name="idList" />
+    </form>
+
+    <script th:inline="javascript">
+
+        function toggleCheckbox(checkbox) {
+            var checkboxes = document.getElementsByName('selectedIds');
+
+            for(var i =0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = checkbox.checked;
+            }
+        }
+
+        function confirmDelete() {
+            var checkboxes = document.getElementsByName("selectedIds");
+            var checked = false;
+            for(var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    checked = true;
+                    break;
+                }
+            }
+            if (!checked) {
+                alert("삭제할 아이디를 선택해주세요.");
+                return false;
+            }
+            return confirm("정말로 삭제하시겠습니까?");
+        }
+    </script>
+</body>
+</html>

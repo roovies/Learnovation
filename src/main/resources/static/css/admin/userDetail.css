@@ -1,0 +1,175 @@
+/* 네비게이터 및 배경색 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #eeeeee;
+    display: flex;
+}
+
+.side-nav {
+    display: flex;
+    flex-direction: column;
+    background-color: #191b1f;
+    height: 100vh;
+    width: 230px;
+    padding-top: 5vh;
+}
+
+.menu {
+    margin-left: 15px;
+    font-size: 120%;
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: #e7e7e7;
+    padding: 0 20px;
+    border-bottom: 1px solid rgb(97, 94, 94);
+}
+
+a:hover {
+    background-color: rgb(19, 18, 18);
+    background-color: rgb(26, 109, 255);
+    color: #e7e7e7;
+}
+
+.nav-li{
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    margin: 15px auto;
+}
+
+header {
+    font-size: 30px;
+    margin: 0;
+    padding: 10px;
+    border-bottom: 1px solid rgb(97, 94, 94);
+    text-align: center;
+    color: white;
+    user-select: none;
+}
+
+
+
+/* 메인 컨텐츠 */
+.main{
+    background-color: white;
+    width: 1400px;
+    margin: 50px;
+    box-shadow: 0px 5px 10px gray;
+    display: flex;
+    flex-direction: column;
+}
+
+#workspace {
+    width: 80%;
+    height: auto;
+    margin: 0 auto;
+}
+
+#title {
+    width: 60%;
+    height: auto;
+    margin: 0 auto;
+    font-size: 30px;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#info-area {
+    padding-top: 30px;
+    border: 1px solid black;
+}
+
+#info-area input {
+    width: 30%;
+    height: 30px;
+    margin: 0 auto;
+    display: flex;
+    border: 3px solid black;
+    border-radius: 10px;
+}
+
+#info-area label {
+    width: 30%;
+    margin: 0 auto;
+    display: flex;
+}
+
+
+
+#btn-area {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+#btn-area button {
+    width: auto;
+    height: 30px;
+    border: 1px solid black;
+    background-color: white;
+}
+
+#btn-area button:hover {
+    background-color: rgb(26, 109, 255);
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*#user-list {*/
+/*    margin:  auto;*/
+/*    width: 90%;*/
+/*    height: 300px;*/
+/*    border: 1px solid black;*/
+/*    border-collapse: collapse;*/
+/*}*/
+
+/*#user-list thead {*/
+/*    background-color: gray;*/
+/*}*/
+
+/*#user-list  th, td{*/
+/*    text-align: center;*/
+/*    border: 1px solid black;*/
+/*}*/

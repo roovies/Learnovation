@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 상세 정보 및 수정</title>
+    <!--구글폰트 API-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/admin/userDetail.css}">
+    <link rel="stylesheet" href="../../static/css/admin/userDetail.css">
+</head>
+<body>
+    <div class="side-nav">
+        <header>Learnnovation</header>
+        <ul>
+            <a href="#" class="active">
+                <li class="nav-li">
+                    <span class="menu">🙋‍♂️ 회원관리</span>
+                </li>
+            </a>
+            <a href="#">
+                <li class="nav-li">
+                    <span class="menu">게시판 관리(드롭다운ㄱㄱ)</span>
+                </li>
+            </a>
+            <a href="#">
+                <li class="nav-li">
+                    <span class="menu">📢 신고 관리</span>
+                </li>
+            </a>
+            <a href="#">
+                <li class="nav-li">
+                    <!-- <img src="/learning.png" alt="" style="width: 30px; height: 30px;"> -->
+                    <span class="menu">📺 강의 등록</span>
+                </li>
+            </a>
+            <a href="#">
+                <li class="nav-li">
+                    <span class="menu">apps</span>
+                </li>
+            </a>
+            <a href="#">
+                <li class="nav-li">
+                    <span class="menu">event</span>
+                </li>
+            </a>
+            <a href="#">
+                <li class="nav-li">
+                    <span class="menu">settings</span>
+                </li>
+            </a>
+        </ul>
+    </div>
+    <div class="main">
+        <div id="workspace">
+            <div id="title">회원 상세 정보 및 수정</div>
+            <form th:action="@{'/admin/update/' + ${user.id}}" method="post" id="info-area">
+                <input type="hidden" name="_method" value="put" />
+                <input type="hidden" name="id" id="id" th:value="${user.id}" />
+                <label for="email">이메일</label>
+                <input type="text" name="email" id="email" th:value="${user.email}" readonly> <br>
+                <label for="password">비밀번호</label>
+                <input type="password" name="password" id="password" th:value="${user.password}"> <br>
+                <label for="name">이름</label>
+                <input type="text" name="name" id="name" th:value="${user.name}" readonly> <br>
+                <label for="nickname">닉네임</label>
+                <input type="text" name="nickname" id="nickname" th:value="${user.nickname}"> <br>
+                <label for="phoneNumber">전화번호</label>
+                <input type="text" name="phoneNumber" id="phoneNumber" th:value="${user.phoneNumber}"> <br>
+                <input type="hidden" name="createAt" th:value="${user.createdAt}">
+                <div id="btn-area">
+                    <button type="submit">수정</button> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="button" onclick="gohome()">목록으로 돌아가기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function gohome() {
+            location.href = '/admin/userList';
+        }
+    </script>
+</body>
+</html>

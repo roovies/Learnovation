@@ -1,0 +1,225 @@
+/* 네비게이터 및 배경색 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #eeeeee;
+    display: flex;
+}
+
+.side-nav {
+    display: flex;
+    flex-direction: column;
+    background-color: #191b1f;
+    height: 100vh;
+    width: 230px;
+    padding-top: 5vh;
+}
+
+.menu {
+    margin-left: 15px;
+    font-size: 120%;
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: #e7e7e7;
+    padding: 0 20px;
+    border-bottom: 1px solid rgb(97, 94, 94);
+}
+
+a:hover {
+    background-color: rgb(19, 18, 18);
+    background-color: rgb(26, 109, 255);
+    color: #e7e7e7;
+}
+
+.nav-li{
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    margin: 15px auto;
+}
+
+header {
+    font-size: 30px;
+    margin: 0;
+    padding: 10px;
+    border-bottom: 1px solid rgb(97, 94, 94);
+    text-align: center;
+    color: white;
+    user-select: none;
+}
+
+
+
+/* 메인 컨텐츠 */
+.main{
+    background-color: white;
+    width: 1400px;
+    margin: 50px;
+    box-shadow: 0px 5px 10px gray;
+    display: flex;
+    flex-direction: column;
+}
+
+#workspace {
+    width: 80%;
+    height: auto;
+    margin: 0 auto;
+}
+
+#title {
+    font-size: 30px;
+    text-align: center;
+    padding-top: 30px;
+}
+
+#search-area {
+    padding-left: 770px;
+}
+
+#search-value {
+    width: 200px;
+    height: 25px;
+}
+#search-btn {
+    width: 50px;
+    height: 31px;
+}
+
+#list-area {
+    display: flex;
+    justify-content: center;
+}
+
+#multiremove {
+    border: 0;
+}
+
+/*테이블 css*/
+table.type10 {
+    border-collapse: collapse;
+    text-align: left;
+    line-height: 1.5;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin: 20px 10px;
+    width: 90%;
+}
+table.type10 thead th {
+    width: 150px;
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    color: #fff;
+    background: #e7708d;
+    margin: 20px 10px;
+}
+table.type10 tbody th {
+    width: 150px;
+    padding: 10px;
+}
+table.type10 td {
+    width: 350px;
+    padding: 10px;
+    vertical-align: top;
+}
+table.type10 .even {
+    background: #fdf3f5;
+}
+
+#modify-btn {
+    border: 0;
+    color: black;
+}
+
+
+#delete-btn button {
+    width: 50px;
+    height: 25px;
+    border: 0;
+    background-color: pink;
+    margin-left: 25px;
+}
+#delete-btn button:hover {
+    background-color: deeppink;
+}
+
+/*#delete-btn {*/
+/*    width: 70px;*/
+/*    line-height: 24px;*/
+/*    font-size: 17px;*/
+/*    border: 0;*/
+/*    background-color: white;*/
+/*}*/
+/*#delete-btn:hover {*/
+/*    background-color: rgb(19, 18, 18);*/
+/*    background-color: rgb(26, 109, 255);*/
+/*    cursor: pointer;*/
+/*}*/
+
+#page-area {
+    display: flex;
+    justify-content: center;
+}
+
+#page-area a{
+    color: black;
+    border: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*#user-list {*/
+/*    margin:  auto;*/
+/*    width: 90%;*/
+/*    height: 300px;*/
+/*    border: 1px solid black;*/
+/*    border-collapse: collapse;*/
+/*}*/
+
+/*#user-list thead {*/
+/*    background-color: gray;*/
+/*}*/
+
+/*#user-list  th, td{*/
+/*    text-align: center;*/
+/*    border: 1px solid black;*/
+/*}*/

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../static/common/css/nav.css/">
+    <head>
+<body>
+    <div th:fragment="nav">
+      <nav>
+        <div class="nav-content">
+          <ul>
+            <li><img src='' alt=''></img><span>Learnovation</span></li>
+            <li>
+              <div class="a-nav-course-box" id="aNavCourse">
+                <a href='#' id="navCourse">강의</a>
+                <div class="a-nav-course-hidden" id="aNavCourseHidden"></div>
+                <div class="a-nav-course-modal" id="aNavCourseModal">
+                  <div class="a-nav-course-modal-diamond"></div>
+                  <div class="a-nav-course-modal-list">
+                    <a href="#">프론트엔드</a>
+                    <a href="#">백엔드</a>
+                    <a href="#">보안</a>
+                    <a href="#">네트워크</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="a-nav-community-box" id="aNavCommunity">
+                <a href='#' id="navComu">커뮤니티</a>
+                <div class="a-nav-community-hidden" id="aNavCommuninyHidden"></div>
+                <div class="a-nav-community-modal" id="aNavCommunityModal">
+                  <div class="a-nav-community-modal-diamond"></div>
+                  <div class="a-nav-community-modal-list">
+                    <a href="#">질문 게시판</a>
+                    <a href="#">자유 게시판</a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li><a href='/explore/list'>직업정보</a></li>
+            <li><a href='/notice/list'>공지사항</a></li>
+            <li>
+              <div class="search-box">
+                <form action='/notice/list' method="get" class="search-form">
+                  <input type='text' placeholder='검색' class='nav-search' name="keyword">
+                  </input>
+                  <label for="navSearch">
+                      <i class="fa-solid fa-magnifying-glass search-glass"></i>
+                  </label>
+                  <input type="submit" class="search-btn" id="navSearch">
+                </form>
+              </div>
+            </li>
+            <li>
+              <div class='mode-box' id="modeBox">
+              <i class="fa-solid fa-moon fa-lg moon"></i>
+              <i class="fa-solid fa-sun fa-lg sun"></i>
+              <div class='mode-btn' id="mode-button"></div>
+              </div>
+            </li>
+            <li>
+              <div class="nav-content-box">
+                <button class='btn'>Login</button>
+                <button class='btn'>회원가입</button>
+              </div>
+              <div class="nav-login-icons">
+                <div id="userIconBox" class="user-icon-box">
+                  <span>
+                    <a id="userIcon" href="">
+                      <i class="fas fa-user fa-lg"></i>
+                    </a>
+                  </span>
+                  <div class="user-hidden" id="userHidden">
+                  </div>
+                  <div class="info-modal" id="infoModal">
+                    <div class="user-diamond"></div>
+                    <div class="modal-user-info">
+                      <span>
+                        <a class="modal-nickname" href="">닉네임님</a>
+                        <a class="modal-alarm" href=""><i class="fa-solid fa-bell bell"></i></a>
+                      </span>
+                    </div>
+                    <div class="modal-user-list">
+                      <span><a href=""><i class="fa-solid fa-book books"></i>&#32;내 강의실</a></span>
+                      <span><a href=""><i class="fa-solid fa-heart heart"></i>&#32;좋아요</a></span>
+                      <span><a href=""><i class="fa-solid fa-clipboard clipboard"></i>&#32;내가 쓴 게시글</a></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="cart-icon-box" id="cartIconBox">
+                  <span id="cartIcon">
+                    <a href="">
+                      <i class="fa-solid fa-cart-shopping fa-lg"></i>
+                    </a>
+                  </span>
+                  <div class="cart-hidden" id="cartHidden"></div>
+                  <div class="nav-cart-modal" id="navCartModal">
+                    <div class="cart-diamond"></div>
+                    <div class="padding-modal">
+                      <div class="modal-cart-info">
+                        <div class="modal-cart-info-left">
+                          <span>수강바구니 </span>
+                          <span>1</span>
+                        </div>
+                        <div class="modal-cart-info-right">
+                          <span>총 결제금액 </span>
+                          <span>1,000,000</span>
+                          <span>원</span>
+                        </div>
+                      </div>
+                      <div class="modal-cart-list">
+                        <div class="nav-course-box">
+                          <div class="nav-course-thumbnail">
+                            <img class="nav-course-img" src="" alt="">
+                          </div>
+                          <div class="nav-course-content">
+                            <span>제목제목제목제목</span>
+                            <span>100,000 원</span>
+                          </div>
+                        </div>
+                        <div class="nav-course-box">
+                          <div class="nav-course-thumbnail">
+                            <img class="nav-course-img" src="" alt="">
+                          </div>
+                          <div class="nav-course-content">
+                            <span>제목제목제목제목</span>
+                            <span>100,000 원</span>
+                          </div>
+                        </div>
+                        <div class="nav-course-box">
+                          <div class="nav-course-thumbnail">
+                            <img class="nav-course-img" src="" alt="">
+                          </div>
+                          <div class="nav-course-content">
+                            <span>제목제목제목제목</span>
+                            <span>100,000 원</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-cart-btn">
+                        <a href="">수강바구니에서 전체보기</a>
+                      </div>                  
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <div class="nav-block"></div>
+      <div class="chat-bot-box"></div>
+    </div>
+
+    <script src="../../static/common/js/nav.js"/>
+</body>
+</html>
