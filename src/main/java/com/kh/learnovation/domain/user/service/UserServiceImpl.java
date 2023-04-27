@@ -90,7 +90,6 @@ public class UserServiceImpl implements UserService{
         for(User user : users) {
             userDTOList.add(this.convertEntityToDto(user));
         }
-
         return userDTOList;
     }
 

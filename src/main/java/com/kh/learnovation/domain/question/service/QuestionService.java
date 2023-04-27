@@ -16,5 +16,9 @@ public interface QuestionService {
     int updateView(Long id);
 
     // 게시글 목록
-    List<QuestionDTO> questionList();
+    List<QuestionDTO> questionList(Integer pageNum);
+
+    Integer[] getPageList(Integer pageNum);
+
+    List<QuestionDTO> searchQuestion(String keyword);
 }

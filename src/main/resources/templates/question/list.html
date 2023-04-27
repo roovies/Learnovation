@@ -4,45 +4,33 @@
     <meta charset="UTF-8">
     <title>질문 목록</title>
     <link rel="stylesheet" th:href="@{/css/question/list.css}">
+    <link rel="stylesheet" href="../../static/css/question/list.css">
 </head>
 <body>
     <div id="container">
       <table id="question-list">
         <thead>
             <tr>
-                <td colspan="3">
-                    <p>질문하기 기술 커리어 기타 전체 전체 최신순</p>
-                    <p>Q&A 내에서 검색 1/777페이지 <- -></p>
-                </td>
+                <th>글 번호</th>
+                <th>작성자</th>
+                <th>제목</th>
+                <th>조회수</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td rowspan="3">
-                    <p>답변</p>
-                    <p>0</p>
-                </td>
-                <td>일용자 3분전</td>
-                <td rowspan="2"></td>
-            </tr>
-            <tr>
-                <!--                <td></td>-->
-                <td>
-                    이직 준비중입니다.
-                </td>
-                <!--                <td></td>-->
-            </tr>
-            <tr>
-                <!--                <td></td>-->
-                <td>
-                    기술 #태그 #태그 #태그
-                </td>
-                <td>
-                    조회수 8
-                </td>
+            <tr th:each="question : ${questionList}">
+                <td th:text="${question.id}"></td>
+                <td th:text="${question.userId}"></td>
+                <td th:text="${question.content}"></td>
+                <td th:text="${question.viewCount}"></td>
             </tr>
         </tbody>
       </table>
+        <div id="page-area">
+            <span th:each="pageNum : ${pageList}" th:inline="text">
+                <a th:href="@{'question/list?page=' + ${pageNum}}">[[${pageNum}]]</a>
+            </span>
+        </div>
     </div>
 <script>
 

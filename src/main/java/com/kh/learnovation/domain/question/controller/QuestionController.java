@@ -4,6 +4,7 @@ import com.kh.learnovation.domain.question.dto.QuestionDTO;
 import com.kh.learnovation.domain.question.service.QuestionService;
 import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.service.UserService;
+import lombok.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +25,24 @@ public class QuestionController {
 
     // 질문 게시글 목록
     @RequestMapping(value = "/question/list", method = RequestMethod.GET)
-    public String list(Model model) {
+    public String questionList(
+            Model model
+            , @RequestParam(value = "page", defaultValue = "1") Integer pageNum
+    ) {
 
-        List<QuestionDTO> questionList = questionService.questionList();
+        List<QuestionDTO> questionList = questionService.que현stionList(pageNum);
+        Integer[] pageList = questionService.getPageList(pageNum);
+
         model.addAttribute("question", questionList);
+        model.addAttribute("pageList", pageList);
 
+        return "question/list";
+    }
+
+    @RequestMapping(value = "/question/search")
+    public String questionSearch(@RequestParam(value = "keyword") String keyword, Model model) {
+        List<QuestionDTO> questionDTOList = questionService.searchQuestion(keyword);
+        model.addAttribute("questionList", questionDTOList);
 
         return "question/list";
     }
@@ -55,6 +69,7 @@ public class QuestionController {
         model.addAttribute("question", questionDTO);
         return "question/detail";
     }
+
 
 
 }
