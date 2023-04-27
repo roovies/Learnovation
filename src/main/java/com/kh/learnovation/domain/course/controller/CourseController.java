@@ -104,9 +104,21 @@ public class CourseController {
      */
     @GetMapping("/{id}")
     public String showCourseDetail(@PathVariable Long id, Model model){
-        System.out.println(id);
         CourseDetailDTO detailDTO = courseService.findDetailById(id);
         model.addAttribute("detail", detailDTO);
         return "course/CourseDetail";
+    }
+
+    /**
+     * ==============================================================================================================
+     * / 나의 학습 페이지 (내 강의 대시보드)
+     * /==============================================================================================================
+     */
+    @GetMapping("/purchased/{id}")
+    public String showMyCourseDetail(@PathVariable Long id, Model model){
+        // 로그인 정보를 받고, 해당 회원 id를 토대로 "인강 구매내역 테이블"에 넘어오는 인강 고유 id 값이 있는지 확인한 후, 있으면 findDetailById를 하면 될듯.
+        CourseDetailDTO detailDTO = courseService.findDetailById(id);
+        model.addAttribute("detail", detailDTO);
+        return "course/CourseDashboard";
     }
 }
