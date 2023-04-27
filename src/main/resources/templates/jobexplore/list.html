@@ -3,24 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <title>직업정보 목록</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/nav.css">
+    <style>
+        main{
+            width: 1400px;
+            margin: 0 auto;
+        }
+        .job-recommand{
+            margin: 100px auto 0;
+            width: 1400px;
+        }
+        .recommand{
+            text-align: center;
+        }
+        .recommand h1{
+            font-weight: 900;
+        }
+        .recommand h2{
+            font-weight: 400;
+        }
+        .explore-top-nav-content{
+            border-top: darkgray;
+            border-bottom: darkgray;
+            display: flex;
+            justify-content: end;
+        }
+        .explore-top-nav-content *{
+            margin: 0px 3px;
+        }
+        .explore-top-nav-content a{
+            color: darkgray;
+            text-decoration: none;
+        }
+        .explore-top-nav-content a:hover{
+            color : #0090F0;
+        }
+        .recommand-list-box{
+            width: 1400px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-bottom: 60px;
+        }
+        .job-category-link{
+            color: black;
+            text-decoration: none;
+        }
+        .job-category-link:hover{
+            color: white;
+        }
+        .job-category{
+            width: 372px;
+            height: 400px;
+            background-color: azure;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin : 30px 0px;
+        }
+        .job-category:hover{
+            background-color: antiquewhite;
+        }
+        .job-category:hover .recommand-detail{
+            color: white;
+        }
+        .job-category h1{
+            margin-top: 0;
+        }
+        .recommand-detail::after{
+            content: '\f061';
+            font-family: "Font Awesome\ 6 Free";
+            font-weight: 900;
+        }
+        .recommand-detail{
+            color: rgb(101, 197, 197);
+        }
+        .explore-bottom-nav{
+            border-top: 1px solid darkgray;
+            padding: 30px 0px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .explore-bottom-nav a{
+            color: black;
+            text-decoration: none;
+        }
+        .explore-bottom-nav a:hover{
+            color : #0090F0;
+        }
+        .explore-bottom-nav-content a{
+            padding: 0px 20px;
+        }
+        .explore-nav-check{
+            color: #0090F0 !important;
+        }
+    </style>
 </head>
 <body>
-
-  <script>
-    $.ajax({
-        data : {apikey : 'dcbceba3669ac12190c6af8572955b13', searchThemeCode : 102421, pageIndex : 1},
-        url : "https://career.go.kr/cnet/front/openapi/jobs.json",
-        type : "GET",
-        dataType : "JSON",
-        success(data){
-            let list = JSON.parse(data);
-            console.log(list);
-        },
-        error(data){
-
-        }
-    })
-  </script>
+    <nav th:replace="~{common/nav.html :: nav}"></nav>
+    <main>
+        <div class="job-recommand">
+            <div class="recommand">
+                <h1>내게 맞는 직업을 찾아보세요</h1>
+                <h2>개발자부터 프로덕트 매니저, 마케터까지</h2>
+                <h2>IT 취업에 특화된 직업을 소개합니다.</h2>
+            </div>
+            <div class="explore-top-nav-content">
+                <a th:if="${page > 1}" th:href="@{/explore/list(page=${page - 1})}"><i class="fa-solid fa-arrow-left"></i></a>
+                <a th:if="${page <= 1}" th:href="@{/explore/list(page=1)}"><i class="fa-solid fa-arrow-left"></i></a>
+                <span th:text="${page}"></span>
+                <span> / </span>
+                <span th:text="${totalPage}"></span>
+                <a th:if="${page < totalPage}" th:href="@{/explore/list(page=${page + 1})}"><i class="fa-solid fa-arrow-right"></i></a>
+                <a th:if="${page >= totalPage}" th:href="@{/explore/list(page=${totalPage})}"><i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            <div class="recommand-list-box">
+                <a th:each="job : ${jList}" href="#" class="job-category-link">
+                    <div class="job-category">
+                        <div>
+                            <h1 th:text="${job.getJobName()}"></h1>
+                            <h2 th:text="${job.getWork()}"></h2>
+                            <span class="recommand-detail">더 알아보기 </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="explore-bottom-nav">
+            <a href="/explore/list?page=1" class="explore-bottom-nav-prev">처음으로</a>
+            <div class="explore-bottom-nav-content">
+                <a th:if="${page > 1}" th:href="@{/explore/list(page=${page - 1})}">&lt;</a>
+                <a th:if="${page <= 1}" th:href="@{/explore/list(page=1)}">&lt;</a>
+                <a th:each="nav : ${navCount}" th:href="@{/explore/list(page=${nav})}">
+                    <span th:if="${page == nav}" class="explore-nav-check" th:text="${nav}"></span>
+                    <span th:if="${page != nav}" th:text="${nav}"></span>
+                </a>
+                <a th:if="${page < totalPage}" th:href="@{/explore/list(page=${page + 1})}">&gt;</a>
+                <a th:if="${page >= totalPage}" th:href="@{/explore/list(page=${totalPage})}">&gt;</a>
+            </div>
+            <a th:href="@{/explore/list(page=${totalPage})}" class="explore-bottom-nav-next">마지막으로</a>
+        </div>
+    </main>
+    <script src="/common/js/nav.js"/>
 </body>
 </html>

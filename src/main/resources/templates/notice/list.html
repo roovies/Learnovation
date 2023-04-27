@@ -32,16 +32,17 @@
                     </form>
                 </div>
                 <div class="notice-top-nav-content">
+                    <a th:if="${page > 1 && keyword != null}" th:href="@{/notice/list(page=${page - 1},keyword=${keyword})}"><i class="fa-solid fa-arrow-left"></i></a>
+                    <a th:if="${page <= 1 && keyword != null}" th:href="@{/notice/list(page=1,keyword=${keyword})}"><i class="fa-solid fa-arrow-left"></i></a>
+                    <a th:if="${page > 1 && keyword == null}" th:href="@{/notice/list(page=${page - 1})}"><i class="fa-solid fa-arrow-left"></i></a>
+                    <a th:if="${page <= 1 && keyword == null}" th:href="@{/notice/list(page=1)}"><i class="fa-solid fa-arrow-left"></i></a>
+
                     <span th:text="${page}"></span>
                     <span>/</span>
                     <span th:text="${totalPage}"></span>
-                    <a th:if="${page > 1 && keyword == null}" th:href="@{/notice/list(page=${page - 1})}"><i class="fa-solid fa-arrow-left"></i></a>
-                    <a th:if="${page <= 1 && keyword == null}" th:href="@{/notice/list(page=1)}"><i class="fa-solid fa-arrow-left"></i></a>
+
                     <a th:if="${page < totalPage && keyword == null}" th:href="@{/notice/list(page=${page + 1})}"><i class="fa-solid fa-arrow-right"></i></a>
                     <a th:if="${page >= totalPage && keyword == null}" th:href="@{/notice/list(page=${totalPage})}"><i class="fa-solid fa-arrow-right"></i></a>
-
-                    <a th:if="${page > 1 && keyword != null}" th:href="@{/notice/list(page=${page - 1},keyword=${keyword})}"><i class="fa-solid fa-arrow-left"></i></a>
-                    <a th:if="${page <= 1 && keyword != null}" th:href="@{/notice/list(page=1,keyword=${keyword})}"><i class="fa-solid fa-arrow-left"></i></a>
                     <a th:if="${page < totalPage && keyword != null}" th:href="@{/notice/list(page=${page + 1},keyword=${keyword})}"><i class="fa-solid fa-arrow-right"></i></a>
                     <a th:if="${page >= totalPage && keyword != null}" th:href="@{/notice/list(page=${totalPage},keyword=${keyword})}"><i class="fa-solid fa-arrow-right"></i></a>
                 </div>

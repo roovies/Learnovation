@@ -87,7 +87,7 @@ public class NoticeController {
         }else{
             // 임시 폴더가 없을 시
         }
-        content = content.replace(id, "notice/" + title);
+        content = content.replaceAll(id, "notice/" + title);
         /*String[] trueContent = content.split("<");
         StringBuilder sb = new StringBuilder("");
         for(String tContent : trueContent){
@@ -250,7 +250,7 @@ public class NoticeController {
         }else{
             // 폴더가 있을시
         }
-        content = content.replace(id, "notice/" + title);
+        content = content.replaceAll(id, "notice/" + title);
         String subject = content.replaceAll("<[^>]*>?", "");
         Admin admin = Admin.builder().id(Long.parseLong(adminId)).build();
         NoticeDTO noticeDTO = NoticeDTO.builder().id(Long.parseLong(noticeId)).title(title).content(content).admin(admin).subject(subject).build();

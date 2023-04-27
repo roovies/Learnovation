@@ -45,6 +45,12 @@ main{
 .notice-top-nav a:hover{
     color : #0090F0;
 }
+.notice-top-nav-content{
+    width: 120px;
+}
+.notice-top-nav-content *{
+    margin : 0px 3px;
+}
 .notice-list-box{
     border-top : 1px solid darkgray;
 }
@@ -63,7 +69,7 @@ main{
     color : #0090F0;
 }
 .notice-search-box{
-    margin-left: 575px;
+    margin-left: 540px;
     margin-right: 480px;
 }
 .notice-search-form{
