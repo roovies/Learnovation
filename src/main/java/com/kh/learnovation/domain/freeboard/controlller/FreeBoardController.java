@@ -106,9 +106,12 @@ public class FreeBoardController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         return "/freeBoard/paging";
-
-
     }
 
+//    @PostMapping("/like")
+//    public @ResponseBody int like(Long boardId, Long memberId) {
+//        int result = bs.saveLike(boardId,memberId);
+//        return result;
+//    }
 
 }

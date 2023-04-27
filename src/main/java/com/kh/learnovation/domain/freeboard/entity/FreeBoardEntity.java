@@ -3,6 +3,7 @@ package com.kh.learnovation.domain.freeboard.entity;
 import com.kh.learnovation.domain.freeboard.dto.FreeBoardDTO;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ public class FreeBoardEntity extends BaseEntity {
     @Column(length = 500)
     private String freeBoardContents;
 
-    @Column
+    @ColumnDefault("0")
+    @Column(nullable = false)
     private int freeBoardHits;
 
     @Column

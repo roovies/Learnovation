@@ -1,10 +1,13 @@
 package com.kh.learnovation.domain.freeboard.entity;
 
 import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,6 +29,15 @@ public class CommentEntity extends BaseEntity {
     @JoinColumn(name = "freeBoard_id")
     private FreeBoardEntity freeBoardEntity;
 
+    //------------------------------------------ 여긴 실험 -----------------------------------
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "parent_id")
+//    private CommentEntity parentCommentEntity;
+//
+//
+//    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+//    private List<CommentEntity> childrenCommentEntity = new ArrayList<>();
 
     public static CommentEntity toSaveEntity(CommentDTO commentDTO, FreeBoardEntity freeBoardEntity) {
         CommentEntity commentEntity = new CommentEntity();

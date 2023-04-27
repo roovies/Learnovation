@@ -49,12 +49,21 @@ public class FreeBoardService {
                     6. board_table에 해당 데이터 save 처리
                     7. board_file_table에 해당 데이터 save 처리
                  */
+            File file = new File("");
+            String rootPath = String.valueOf(file.getAbsoluteFile());
+            String savePath = rootPath + "\\src\\main\\resources\\static\\uploadFiles\\";
+            File folder = new File(savePath);
+            // 저장할 폴더가 없을 경우 생성
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
             MultipartFile freeBoardFile = freeBoardDTO.getFreeBoardFile(); // 1.
             String originalFilename = freeBoardFile.getOriginalFilename(); // 2.
             String storedFileName = System.currentTimeMillis() + "_" + originalFilename; // 3.
-            String savePath = "C:/springboot_img/" + storedFileName; // 4. C:/springboot_img/9802398403948_내사진.jpg
+            String filePath = savePath + "/" + storedFileName; // 4. C:/springboot_img/9802398403948_내사진.jpg
     //            String savePath = "/Users/사용자이름/springboot_img/" + storedFileName; // C:/springboot_img/9802398403948_내사진.jpg
-            freeBoardFile.transferTo(new File(savePath));  //5
+            freeBoardFile.transferTo(new File(filePath));  //5
             FreeBoardEntity freeBoardEntity = FreeBoardEntity.toSaveFileEntity(freeBoardDTO);
             Long savedId = freeBoardRepository.save(freeBoardEntity).getId();
             FreeBoardEntity freeBoard = freeBoardRepository.findById(savedId).get();
