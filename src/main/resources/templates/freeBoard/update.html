@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>update</title>
+</head>
+<body>
+<form action="/freeBoard/update" method="post" name="updateForm">
+    <input type="hidden" name="id" th:value="${freeBoardUpdate.id}">
+    writer: <input type="text" name="freeBoardWriter" th:value="${freeBoardUpdate.freeBoardWriter}" readonly> <br>
+    title: <input type="text" name="freeBoardTitle" th:value="${freeBoardUpdate.freeBoardTitle}"> <br>
+    contents: <textarea name="freeBoardContents" cols="30" rows="10" th:text="${freeBoardUpdate.freeBoardContents}"></textarea> <br>
+    <input type="hidden" name="freeBoardHits" th:value="${freeBoardUpdate.freeBoardHits}">
+    <input type="button" value="글수정" onclick="boardUpdate()">
+</form>
+
+</body>
