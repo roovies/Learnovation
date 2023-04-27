@@ -30,7 +30,7 @@ public class QuestionController {
             , @RequestParam(value = "page", defaultValue = "1") Integer pageNum
     ) {
 
-        List<QuestionDTO> questionList = questionService.que현stionList(pageNum);
+        List<QuestionDTO> questionList = questionService.questionList(pageNum);
         Integer[] pageList = questionService.getPageList(pageNum);
 
         model.addAttribute("question", questionList);
