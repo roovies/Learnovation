@@ -3,7 +3,6 @@ package com.kh.learnovation.domain.question.service;
 import com.kh.learnovation.domain.question.dto.QuestionDTO;
 import com.kh.learnovation.domain.question.entity.Question;
 import com.kh.learnovation.domain.question.repository.QuestionRepository;
-import com.kh.learnovation.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

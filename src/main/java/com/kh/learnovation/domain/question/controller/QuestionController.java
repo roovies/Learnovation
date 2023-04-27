@@ -2,9 +2,7 @@ package com.kh.learnovation.domain.question.controller;
 
 import com.kh.learnovation.domain.question.dto.QuestionDTO;
 import com.kh.learnovation.domain.question.service.QuestionService;
-import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.service.UserService;
-import lombok.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +14,8 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    private final UserService userService;
-
-    public QuestionController(QuestionService questionService, UserService userService) {
+    public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
-        this.userService = userService;
     }
 
     // 질문 게시글 목록
