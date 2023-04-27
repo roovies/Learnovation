@@ -2,7 +2,6 @@ package com.kh.learnovation.domain.question.controller;
 
 import com.kh.learnovation.domain.question.dto.QuestionDTO;
 import com.kh.learnovation.domain.question.service.QuestionService;
-import com.kh.learnovation.domain.user.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
