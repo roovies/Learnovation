@@ -1,11 +1,12 @@
 package com.kh.learnovation.domain.user.dto;
 
+import com.kh.learnovation.domain.user.entity.User;
 import lombok.*;
 
 import java.sql.Timestamp;
 
 @NoArgsConstructor
-@AllArgsConstructor
+@ToString
 @Getter
 @Setter
 public class UserDTO {
@@ -22,6 +23,26 @@ public class UserDTO {
     private Timestamp updatedAt;
     private String status;
     private Timestamp deletedAt;
+
+    public User toEntity() {
+        User user = User.builder()
+                .id(id)
+                .socialId(socialId)
+                .socialProvider(socialProvider)
+                .email(email)
+                .password(password)
+                .name(name)
+                .nickname(nickname)
+                .phoneNumber(phoneNumber)
+                .profileImage(profileImage)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .status(status)
+                .deletedAt(deletedAt)
+                .build();
+        return user;
+    }
+
     @Builder
     public UserDTO(Long id, String socialId, String socialProvider, String email, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt) {
         this.id = id;

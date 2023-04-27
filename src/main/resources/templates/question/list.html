@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>질문 목록</title>
+    <link rel="stylesheet" th:href="@{/css/question/list.css}">
+    <link rel="stylesheet" href="../../static/css/question/list.css">
+</head>
+<body>
+    <div id="container">
+      <table id="question-list">
+        <thead>
+            <tr>
+                <th>글 번호</th>
+                <th>작성자</th>
+                <th>제목</th>
+                <th>조회수</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="question : ${questionList}">
+                <td th:text="${question.id}"></td>
+                <td th:text="${question.userId}"></td>
+                <td th:text="${question.content}"></td>
+                <td th:text="${question.viewCount}"></td>
+            </tr>
+        </tbody>
+      </table>
+        <div id="page-area">
+            <span th:each="pageNum : ${pageList}" th:inline="text">
+                <a th:href="@{'question/list?page=' + ${pageNum}}">[[${pageNum}]]</a>
+            </span>
+        </div>
+    </div>
+<script>
+
+</script>
+</body>
+</html>
