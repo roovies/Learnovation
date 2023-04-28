@@ -3,8 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>직업정보 상세정보</title>
+    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/nav.css">
 </head>
 <body>
-
+    <nav th:replace="~{common/nav.html :: nav}"></nav>
+    <main>
+        <div></div>
+        <div></div>
+    </main>
+    <div th:each="curriculum :${LCurriculum}">
+        <span th:text="${curriculum}"></span>
+    </div>
+    <br>
+    <div th:each="certificate : ${LCertificate}">
+        <span th:text="${certificate}"></span>
+    </div>
+    <br>
+    <div th:each="training : ${LTraining}">
+        <span th:text="${training}"></span>
+    </div>
+    <br>
+    <div th:each="recruit : ${LRecruit}">
+        <span th:text="${recruit}"></span>
+    </div>
+    <br>
+    <p th:text="${jobName}"></p>
+    <p th:text="${salary}"></p>
+    <p th:text="${salaryDetail}"></p>
+    <p th:text="${satisfication}"></p>
+    <p th:text="${satisficationSource}"></p>
+    <div th:each="work : ${LworkList}">
+        <span th:text="${work}"></span>
+    </div>
+    <br>
+    <div th:each="interest : ${LinterestList}">
+        <span th:text="${interest}"></span>
+    </div>
+    <br>
+    <div th:each="forecast : ${LforecastList}">
+        <span th:text="${forecast}"></span>
+    </div>
+    <br>
+    <p th:text="${LeduChart}"></p>
+    <p th:text="${LmajorChart}"></p>
+    <p th:text="${certiList}"></p>
+    <script src="/common/js/nav.js"></script>
 </body>
 </html>

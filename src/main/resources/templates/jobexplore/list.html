@@ -8,101 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/common/css/nav.css">
-    <style>
-        main{
-            width: 1400px;
-            margin: 0 auto;
-        }
-        .job-recommand{
-            margin: 100px auto 0;
-            width: 1400px;
-        }
-        .recommand{
-            text-align: center;
-        }
-        .recommand h1{
-            font-weight: 900;
-        }
-        .recommand h2{
-            font-weight: 400;
-        }
-        .explore-top-nav-content{
-            border-top: darkgray;
-            border-bottom: darkgray;
-            display: flex;
-            justify-content: end;
-        }
-        .explore-top-nav-content *{
-            margin: 0px 3px;
-        }
-        .explore-top-nav-content a{
-            color: darkgray;
-            text-decoration: none;
-        }
-        .explore-top-nav-content a:hover{
-            color : #0090F0;
-        }
-        .recommand-list-box{
-            width: 1400px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin-bottom: 60px;
-        }
-        .job-category-link{
-            color: black;
-            text-decoration: none;
-        }
-        .job-category-link:hover{
-            color: white;
-        }
-        .job-category{
-            width: 372px;
-            height: 400px;
-            background-color: azure;
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin : 30px 0px;
-        }
-        .job-category:hover{
-            background-color: antiquewhite;
-        }
-        .job-category:hover .recommand-detail{
-            color: white;
-        }
-        .job-category h1{
-            margin-top: 0;
-        }
-        .recommand-detail::after{
-            content: '\f061';
-            font-family: "Font Awesome\ 6 Free";
-            font-weight: 900;
-        }
-        .recommand-detail{
-            color: rgb(101, 197, 197);
-        }
-        .explore-bottom-nav{
-            border-top: 1px solid darkgray;
-            padding: 30px 0px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .explore-bottom-nav a{
-            color: black;
-            text-decoration: none;
-        }
-        .explore-bottom-nav a:hover{
-            color : #0090F0;
-        }
-        .explore-bottom-nav-content a{
-            padding: 0px 20px;
-        }
-        .explore-nav-check{
-            color: #0090F0 !important;
-        }
-    </style>
+    <link rel="stylesheet" href="/explore/css/list.css">
 </head>
 <body>
     <nav th:replace="~{common/nav.html :: nav}"></nav>
@@ -130,6 +36,11 @@
                             <h2 th:text="${job.getWork()}"></h2>
                             <span class="recommand-detail">더 알아보기 </span>
                         </div>
+                        <div class="job-subject">
+                            <div><span>평균연봉</span><span class="job-subject-icon"><i class="fa-solid fa-coins"></i></span><span th:text="${job.getSalary()}"></span></div>
+                            <div><span>사회공헌</span><span class="job-subject-icon"><i class="fa-solid fa-handshake-angle"></i></span><span th:text="${job.getSocial()}"></span></div>
+                            <div><span>워라밸</span><span class="job-subject-icon"><i class="fa-solid fa-scale-balanced"></i></span><span th:text="${job.getWorkLifeBalance()}"></span></div>
+                        </div>
                     </div>
                 </a>
             </div>
@@ -149,6 +60,6 @@
             <a th:href="@{/explore/list(page=${totalPage})}" class="explore-bottom-nav-next">마지막으로</a>
         </div>
     </main>
-    <script src="/common/js/nav.js"/>
+    <script src="/common/js/nav.js"></script>
 </body>
 </html>

@@ -225,6 +225,24 @@ public class NoticeController {
         if(!diretory.exists()){
             diretory.mkdirs();
         }
+        File[] originalFiles = diretory.listFiles();
+        int[] valid = new int[originalFiles.length];
+        for(int i = 0; i < originalFiles.length; i++){
+            for(String fileName : fileList){
+                if(("notice/" + title + "/" + originalFiles[i].getName()).equals(fileName)){
+                        valid[i] = 1;
+                }
+            }
+        }
+        for (int i = 0; i < originalFiles.length; i++){
+            if(valid[i] != 1){
+                if(originalFiles[i].delete()){
+                    //원 파일 삭제 성공
+                }else{
+                    //원 파일 삭제 실패
+                }
+            }
+        }
         File file = new File("C:\\img\\" + id);
         if(file.exists()){ //파일존재여부확인
             if(file.isDirectory()){ //파일이 디렉토리인지 확인
