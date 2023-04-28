@@ -1,5 +1,6 @@
 package com.kh.learnovation.domain.user.entity;
 
+import com.kh.learnovation.domain.user.model.RoleType;
 import lombok.*;
 import lombok.Builder;
 import javax.persistence.*;
@@ -51,8 +52,17 @@ public class User {
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
+    /** 승현 User Entity 항목 추가*/
+    // @ColumnDefault("user")
+    // DB는 RoleType이라는게 없다.
+    @Enumerated(EnumType.STRING)
+    private RoleType role; // Enum을 쓰는게 좋다. // ADMIN, USER
+    private String oauth; // kakao, google
+
+
     @Builder
-    public User(Long id, String socialId, String socialProvider, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt) {
+    public User(Long id, String socialId, String socialProvider, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt,
+                String status, Timestamp deletedAt, String oauth) {
         this.id = id;
         this.socialId = socialId;
         this.socialProvider = socialProvider;
@@ -66,5 +76,6 @@ public class User {
         this.updatedAt = updatedAt;
         this.status = status;
         this.deletedAt = deletedAt;
+        this.oauth = oauth;
     }
 }
