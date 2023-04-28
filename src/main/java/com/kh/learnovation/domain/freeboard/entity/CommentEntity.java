@@ -46,4 +46,22 @@ public class CommentEntity extends BaseEntity {
         commentEntity.setFreeBoardEntity(freeBoardEntity);
         return commentEntity;
     }
+
+    public static CommentEntity toUpdateEntity(CommentDTO commentDTO, FreeBoardEntity freeBoardEntity) {
+        CommentEntity commentEntity = new CommentEntity();
+        commentEntity.setCommentWriter(commentDTO.getCommentWriter());
+        commentEntity.setCommentContents(commentDTO.getCommentContents());
+        commentEntity.setFreeBoardEntity(freeBoardEntity);
+        return commentEntity;
+
+    }
+
+    public static CommentEntity toDeleteEntity(CommentDTO commentDTO, FreeBoardEntity freeBoardEntity) {
+        CommentEntity commentEntity = new CommentEntity();
+        commentEntity.setCommentWriter(commentDTO.getCommentWriter());
+        commentEntity.setCommentContents(commentDTO.getCommentContents());
+        commentEntity.setFreeBoardEntity(freeBoardEntity);
+        return commentEntity;
+
+    }
 }

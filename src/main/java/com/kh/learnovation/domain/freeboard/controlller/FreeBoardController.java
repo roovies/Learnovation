@@ -12,9 +12,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,6 +25,13 @@ public class FreeBoardController {
     private final FreeBoardService freeBoardService;
     private final CommentService commentService;
 
+
+
+    @GetMapping("/write")
+    public ModelAndView noticeWriteView(ModelAndView mv){
+        mv.addObject("random", UUID.randomUUID()).setViewName("freeBoard/write");
+        return mv;
+    }
 
     @GetMapping("/save")
     public String saveForm() {

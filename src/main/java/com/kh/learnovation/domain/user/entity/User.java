@@ -1,9 +1,13 @@
 package com.kh.learnovation.domain.user.entity;
 
+import com.kh.learnovation.domain.freeboard.entity.FreeBoardEntity;
+import com.kh.learnovation.domain.freeboard.entity.FreeBoardFileEntity;
 import lombok.*;
 import lombok.Builder;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter

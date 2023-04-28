@@ -128,7 +128,7 @@ public class FreeBoardService {
         System.out.println("freeBoardEntities.isLast() = " + freeBoardEntities.isLast()); // 마지막 페이지 여부
 
         // 목록: id, writer, title, hits, createdTime
-        Page<FreeBoardDTO> freeBoardDTOS = freeBoardEntities.map(freeBoard -> new FreeBoardDTO(freeBoard.getId(), freeBoard.getFreeBoardWriter(), freeBoard.getFreeBoardTitle(), freeBoard.getFreeBoardHits(), freeBoard.getCreatedTime()));
+        Page<FreeBoardDTO> freeBoardDTOS = freeBoardEntities.map(freeBoard -> new FreeBoardDTO(freeBoard.getId(), freeBoard.getFreeBoardTitle(), freeBoard.getFreeBoardHits(), freeBoard.getCreatedTime()));
         return freeBoardDTOS;
     }
 
@@ -136,7 +136,7 @@ public class FreeBoardService {
         int page = pageable.getPageNumber() - 1;
         int pageLimit = 20;
         Page<FreeBoardEntity> freeBoardSearchEntities = freeBoardRepository.findByFreeBoardTitleContaining(searchKeyword, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
-        Page<FreeBoardDTO> freeBoardSearchDTOS = freeBoardSearchEntities.map(freeBoardSearch -> new FreeBoardDTO(freeBoardSearch.getId(), freeBoardSearch.getFreeBoardWriter(), freeBoardSearch.getFreeBoardTitle(), freeBoardSearch.getFreeBoardHits(), freeBoardSearch.getCreatedTime()));
+        Page<FreeBoardDTO> freeBoardSearchDTOS = freeBoardSearchEntities.map(freeBoardSearch -> new FreeBoardDTO(freeBoardSearch.getId(), freeBoardSearch.getFreeBoardTitle(), freeBoardSearch.getFreeBoardHits(), freeBoardSearch.getCreatedTime()));
         return freeBoardSearchDTOS;
     }
 

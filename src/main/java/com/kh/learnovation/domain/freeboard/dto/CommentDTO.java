@@ -26,4 +26,6 @@ public class CommentDTO {
         commentDTO.setFreeBoardId(freeBoardId);
         return commentDTO;
     }
+
+
 }

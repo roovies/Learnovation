@@ -1,6 +1,8 @@
 package com.kh.learnovation.domain.freeboard.dto;
 
 import com.kh.learnovation.domain.freeboard.entity.FreeBoardEntity;
+import com.kh.learnovation.domain.user.dto.UserDTO;
+import com.kh.learnovation.domain.user.entity.User;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +15,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor // 모든 필드를 매개변수로 하는 생성자
 public class FreeBoardDTO {
     private Long id;
-    private String freeBoardWriter;
     private String freeBoardTitle;
     private String freeBoardContents;
     private int freeBoardHits;
@@ -25,9 +26,10 @@ public class FreeBoardDTO {
     private String storedFileName; // 서버 저장용 파일 이름
     private int fileAttached; // 파일 첨부 여부(첨부 1, 미첨부 0)
 
-    public FreeBoardDTO(Long id, String freeBoardWriter, String freeBoardTitle, int freeBoardHits, LocalDateTime freeBoardCreatedTime) {
+
+
+    public FreeBoardDTO(Long id, String freeBoardTitle, int freeBoardHits, LocalDateTime freeBoardCreatedTime) {
         this.id = id;
-        this.freeBoardWriter = freeBoardWriter;
         this.freeBoardTitle = freeBoardTitle;
         this.freeBoardHits = freeBoardHits;
         this.freeBoardCreatedTime = freeBoardCreatedTime;
@@ -36,7 +38,6 @@ public class FreeBoardDTO {
     public static FreeBoardDTO toBoardDTO(FreeBoardEntity freeBoardEntity) {
         FreeBoardDTO freeBoardDTO = new FreeBoardDTO();
         freeBoardDTO.setId(freeBoardEntity.getId());
-        freeBoardDTO.setFreeBoardWriter(freeBoardEntity.getFreeBoardWriter());
         freeBoardDTO.setFreeBoardTitle(freeBoardEntity.getFreeBoardTitle());
         freeBoardDTO.setFreeBoardContents(freeBoardEntity.getFreeBoardContents());
         freeBoardDTO.setFreeBoardHits(freeBoardEntity.getFreeBoardHits());

@@ -1,6 +1,7 @@
 package com.kh.learnovation.domain.freeboard.entity;
 
 import com.kh.learnovation.domain.freeboard.dto.FreeBoardDTO;
+import com.kh.learnovation.domain.user.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -18,9 +19,6 @@ public class FreeBoardEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     private Long id;
 
-    @Column(length = 20, nullable = false) // 크기 20, not null
-    private String freeBoardWriter;
-
     @Column
     private String freeBoardTitle;
 
@@ -34,6 +32,11 @@ public class FreeBoardEntity extends BaseEntity {
     @Column
     private int fileAttached; // 1 or 0
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "member_id")
+//    private User user;
+
+
     @OneToMany(mappedBy = "freeBoardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<FreeBoardFileEntity> freeBoardFileEntityList = new ArrayList<>();
 
@@ -42,7 +45,7 @@ public class FreeBoardEntity extends BaseEntity {
 
     public static FreeBoardEntity toSaveEntity(FreeBoardDTO freeBoardDTO) {
         FreeBoardEntity freeBoardEntity = new FreeBoardEntity();
-        freeBoardEntity.setFreeBoardWriter(freeBoardDTO.getFreeBoardWriter());
+//        freeBoardEntity.setUser(freeBoardDTO.getu());
         freeBoardEntity.setFreeBoardTitle(freeBoardDTO.getFreeBoardTitle());
         freeBoardEntity.setFreeBoardContents(freeBoardDTO.getFreeBoardContents());
         freeBoardEntity.setFreeBoardHits(0);
@@ -53,7 +56,7 @@ public class FreeBoardEntity extends BaseEntity {
     public static FreeBoardEntity toUpdateEntity(FreeBoardDTO freeBoardDTO) {
         FreeBoardEntity freeBoardEntity = new FreeBoardEntity();
         freeBoardEntity.setId(freeBoardDTO.getId());
-        freeBoardEntity.setFreeBoardWriter(freeBoardDTO.getFreeBoardWriter());
+//        freeBoardEntity.setFreeBoardWriter(freeBoardDTO.getFreeBoardWriter());
         freeBoardEntity.setFreeBoardTitle(freeBoardDTO.getFreeBoardTitle());
         freeBoardEntity.setFreeBoardContents(freeBoardDTO.getFreeBoardContents());
         freeBoardEntity.setFreeBoardHits(freeBoardDTO.getFreeBoardHits());
@@ -62,7 +65,7 @@ public class FreeBoardEntity extends BaseEntity {
 
     public static FreeBoardEntity toSaveFileEntity(FreeBoardDTO freeBoardDTO) {
         FreeBoardEntity freeBoardEntity = new FreeBoardEntity();
-        freeBoardEntity.setFreeBoardWriter(freeBoardDTO.getFreeBoardWriter());
+//        freeBoardEntity.setFreeBoardWriter(freeBoardDTO.getFreeBoardWriter());
         freeBoardEntity.setFreeBoardTitle(freeBoardDTO.getFreeBoardTitle());
         freeBoardEntity.setFreeBoardContents(freeBoardDTO.getFreeBoardContents());
         freeBoardEntity.setFreeBoardHits(0);

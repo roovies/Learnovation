@@ -44,11 +44,12 @@ public class UserDTO {
     }
 
     @Builder
-    public UserDTO(Long id, String socialId, String socialProvider, String email, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt) {
+    public UserDTO(Long id, String socialId, String socialProvider, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt) {
         this.id = id;
         this.socialId = socialId;
         this.socialProvider = socialProvider;
         this.email = email;
+        this.password = password;
         this.name = name;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;

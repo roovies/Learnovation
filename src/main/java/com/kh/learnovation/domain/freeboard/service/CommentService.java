@@ -42,4 +42,16 @@ public class CommentService {
         return commentDTOList;
     }
 
+    public CommentDTO update(CommentDTO commentDTO) {
+        FreeBoardEntity freeBoardEntity = freeBoardRepository.findById(commentDTO.getFreeBoardId()).get();
+        CommentEntity commentEntity = CommentEntity.toUpdateEntity(commentDTO, freeBoardEntity);
+        CommentEntity updateCommentEntity =  commentRepository.save(commentEntity);
+        return  CommentDTO.toCommentDTO(updateCommentEntity , freeBoardEntity.getId());
+    }
+
+    public void delete(CommentDTO commentDTO) {
+        FreeBoardEntity freeBoardEntity = freeBoardRepository.findById(commentDTO.getFreeBoardId()).get();
+        CommentEntity commentEntity = CommentEntity.toDeleteEntity(commentDTO, freeBoardEntity);
+        commentRepository.delete(commentEntity);
+    }
 }

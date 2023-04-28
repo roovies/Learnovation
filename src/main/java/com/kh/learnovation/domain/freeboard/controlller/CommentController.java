@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,17 @@ public class CommentController {
         } else {
             return new ResponseEntity<>("해당 게시글이 존재하지 않습니다.", HttpStatus.NOT_FOUND);
         }
+    }
+
+    @PostMapping("/update")
+    public void update(@ModelAttribute CommentDTO commentDTO, Model model){
+        CommentDTO comment = commentService.update(commentDTO);
+
+    }
+
+    @PostMapping("/delete")
+    public void delete(@ModelAttribute CommentDTO commentDTO, Model model){
+        commentService.delete(commentDTO);
     }
 
 }
