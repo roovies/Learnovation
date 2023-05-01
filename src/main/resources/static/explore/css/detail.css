@@ -5,7 +5,7 @@ main{
 }
 .explore-side-bar{
     position: sticky;
-    top: 0px;
+    top: 50px;
     width: 300px;
     border-radius: 10px;
     border: 1px solid darkgray;
@@ -42,6 +42,7 @@ main{
     list-style: none;
     color: black;
     text-align: center;
+    cursor: pointer;
 }
 .explore-side-bar-nav li:hover{
     background-color: rgb(133, 204, 252);

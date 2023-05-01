@@ -2,6 +2,7 @@ package com.kh.learnovation.domain.jobexplore.controller;
 
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kh.learnovation.domain.jobexplore.dto.JobExploreDTO;
@@ -109,6 +110,41 @@ public class JobExploreController {
         return mv;
     }
 
+    private boolean validNullJson(JsonElement jsonElement, String key){
+        if(jsonElement != null){
+            if(!jsonElement.isJsonNull()){
+                JsonObject jsonObject = (JsonObject)jsonElement;
+                if(jsonObject.get(key) != null){
+                    if(!jsonObject.get(key).isJsonNull()){
+                        return true;
+                    }
+                }
+            }
+
+        }
+        return false;
+    }
+
+    private boolean validNullJson(JsonArray jsonArray){
+        if(jsonArray != null){
+            if(jsonArray.size() > 0){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean validNullJson(JsonObject jsonObject, String key){
+        if(jsonObject != null){
+            if(jsonObject.get(key) != null){
+                if(!jsonObject.get(key).isJsonNull()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @GetMapping(value="/explore/detail")
     public ModelAndView exploreDetail(ModelAndView mv, @RequestParam(value = "jobcode") String jobCode){
         // HttpClient 이용해 HttpComponentsClientHttpRequestFactory 객체를 생성
@@ -159,135 +195,180 @@ public class JobExploreController {
             List<String> LCurriculum = new ArrayList<String>();
             JsonArray ArcertiList = (JsonArray) jsonObject.get("certiList");
             List<Map> certiList = new ArrayList<Map>();
-            if(ArcertiList.size() != 0){
+            if(validNullJson(ArcertiList)){
                 for(int i  = 0; i < ArcertiList.size(); i++){
-                    if(ArcertiList.get(i) != null){
+                    Map<String, String> map = new HashMap<String, String>();
+                    if(validNullJson(ArcertiList.get(i), "certi")){
                         JsonObject jsonObject1 = (JsonObject) ArcertiList.get(i);
-                        Map<String, String> map = new HashMap<String, String>();
                         map.put("certi", jsonObject1.get("certi").toString().replaceAll("\"",""));
-                        map.put("link", jsonObject1.get("LINK").toString().replaceAll("\"",""));
-                        certiList.add(map);
                     }
-
+                    if(validNullJson(ArcertiList.get(i), "LINK" )){
+                        JsonObject jsonObject1 = (JsonObject) ArcertiList.get(i);
+                        map.put("link", jsonObject1.get("LINK").toString().replaceAll("\"",""));
+                    }
+                    if(map.isEmpty()){
+                        map.put("certi", "자료없음");
+                    }
+                    certiList.add(map);
                 }
+            }else{
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("certi", "자료없음");
             }
             mv.addObject("certiList", certiList);
-            if(ArCurriculum.size() != 0){
+            if(validNullJson(ArCurriculum)){
                 for(int i = 0; i < ArCurriculum.size(); i++){
-                    if(ArCurriculum.get(i) != null){
+                    if(validNullJson(ArCurriculum.get(i), "curriculum")){
                         JsonObject jsonObject1 = (JsonObject) ArCurriculum.get(i);
                         LCurriculum.add(jsonObject1.get("curriculum").toString().replaceAll("\"",""));
                     }
                 }
             }
-
+            if(LCurriculum.isEmpty()){
+                LCurriculum.add("자료없음");
+            }
             mv.addObject("LCurriculum", LCurriculum);
 
             JsonArray ArCertificate = (JsonArray) jobReadyList.get("certificate");
             List<String> LCertificate = new ArrayList<String>();
-            if(!ArCertificate.isJsonNull()){
+            if(validNullJson(ArCertificate)){
                 for(int i = 0; i < ArCertificate.size(); i++){
-                    if(!ArCertificate.get(i).isJsonNull()){
+                    if(validNullJson(ArCertificate.get(i),"certificate")){
                         JsonObject jsonObject1 = (JsonObject) ArCertificate.get(i);
                         LCertificate.add(jsonObject1.get("certificate").toString().replaceAll("\"",""));
                     }
                 }
+            }
+            if(LCertificate.isEmpty()){
+                LCertificate.add("자료없음");
             }
 
             mv.addObject("LCertificate", LCertificate);
 
             JsonArray ArTraining = (JsonArray) jobReadyList.get("training");
             List<String> LTraining = new ArrayList<String>();
-            if(ArTraining.size() != 0){
+            if(validNullJson(ArTraining)){
                 for(int i = 0; i < ArTraining.size(); i++){
-                    if(ArTraining.get(i) != null){
+                    if(validNullJson(ArTraining.get(i),"training")){
                         JsonObject jsonObject1 = (JsonObject) ArTraining.get(i);
                         LTraining.add(jsonObject1.get("training").toString().replaceAll("\"",""));
                     }
                 }
+            }
+            if(LTraining.isEmpty()){
+                LTraining.add("자료없음");
             }
 
             mv.addObject("LTraining", LTraining);
 
             JsonArray ArRecruit = (JsonArray) jobReadyList.get("recruit");
             List<String> LRecruit = new ArrayList<String>();
-            if(ArRecruit.size() != 0){
+            if(validNullJson(ArRecruit)){
                 for(int i = 0; i < ArRecruit.size(); i++){
-                    if(ArRecruit.get(i) != null) {
+                    if(validNullJson(ArRecruit.get(i), "recruit")) {
                         JsonObject jsonObject1 = (JsonObject) ArRecruit.get(i);
                         LRecruit.add(jsonObject1.get("recruit").toString().replaceAll("\"", ""));
                     }
                 }
             }
+            if(LRecruit.isEmpty()){
+                LRecruit.add("자료없음");
+            }
 
             mv.addObject("LRecruit", LRecruit);
 
             String jobName = "";
-            if(baseInfo.get("job_nm") != null){
+            if(validNullJson(baseInfo, "job_nm")){
                 jobName = baseInfo.get("job_nm").toString().replaceAll("\"","");
+                mv.addObject("jobName", jobName);
+            }else{
+                mv.addObject("jobName", "자료없음");
             }
-            mv.addObject("jobName", jobName);
+
 
             String salary = "";
-            if(baseInfo.get("wage") != null){
+            if(validNullJson(baseInfo, "wage")){
                 salary = baseInfo.get("wage").toString().replaceAll("\"","");
+                mv.addObject("salary", salary);
+            }else{
+                mv.addObject("salary", "자료없음");
             }
-            mv.addObject("salary", salary);
+
 
             String salaryDetail = "";
-            if(baseInfo.get("wage_source") != null){
+            if(validNullJson(baseInfo, "wage_source")){
                 salaryDetail = baseInfo.get("wage_source").toString().replaceAll("\"","");
+                mv.addObject("salaryDetail", salaryDetail);
+            }else{
+                mv.addObject("salaryDetail", "자료없음");
             }
-            mv.addObject("salaryDetail", salaryDetail);
+
 
             String satisfication = "";
-            if(baseInfo.get("satisfication") != null){
+            if(validNullJson(baseInfo, "satisfication")){
                 satisfication = baseInfo.get("satisfication").toString().replaceAll("\"","");
+                mv.addObject("satisfication", satisfication);
+            }else{
+                mv.addObject("satisfication", "자료없음");
             }
-            mv.addObject("satisfication", satisfication);
-            String satisficationSource = "";
-            if(baseInfo.get("satisfi_source") != null){
-                satisficationSource = baseInfo.get("satisfi_source").toString().replaceAll("\"","");
-            }
-            mv.addObject("satisficationSource", satisficationSource);
 
-            if(workList.size() != 0){
+            String satisficationSource = "";
+            if(validNullJson(baseInfo, "satisfi_source")){
+                satisficationSource = baseInfo.get("satisfi_source").toString().replaceAll("\"","");
+                mv.addObject("satisficationSource", satisficationSource);
+            }else{
+                mv.addObject("satisficationSource", "자료없음");
+            }
+
+
+
+
+            if(validNullJson(workList)){
                 for (int i = 0; i < workList.size(); i++){
-                    if(workList.get(i) != null){
+                    if(validNullJson(workList.get(i), "work")){
                         JsonObject jsonObject1 = (JsonObject) workList.get(i);
                         LworkList.add(jsonObject1.get("work").toString().replaceAll("\"",""));
                     }
                 }
             }
+            if(LworkList.isEmpty()){
+                LworkList.add("자료없음");
+            }
 
             mv.addObject("LworkList", LworkList);
 
-            if(interestList.size() != 0){
+            if(validNullJson(interestList)){
                 for (int i = 0; i < interestList.size(); i++){
-                    if(interestList.get(i) != null){
+                    if(validNullJson(interestList.get(i), "interest")){
                         JsonObject jsonObject1 = (JsonObject) interestList.get(i);
                         LinterestList.add(jsonObject1.get("interest").toString().replaceAll("\"",""));
                     }
                 }
             }
+            if(LinterestList.isEmpty()){
+                LinterestList.add("자료없음");
+            }
 
             mv.addObject("LinterestList", LinterestList);
 
-            if(forecastList.size() != 0){
+            if(validNullJson(forecastList)){
                 for (int i = 0; i < forecastList.size(); i++){
-                    if (forecastList.get(i) != null) {
+                    if (validNullJson(forecastList.get(i), "forecast")) {
                         JsonObject jsonObject1 = (JsonObject) forecastList.get(i);
                         LforecastList.add(jsonObject1.get("forecast").toString().replaceAll("\"",""));
                     }
                 }
             }
+            if(LforecastList.isEmpty()){
+                LforecastList.add("자료없음");
+            }
 
             mv.addObject("LforecastList", LforecastList);
 
-            if(eduChart.size() != 0){
+            if(validNullJson(eduChart)){
                 for (int i = 0; i < eduChart.size(); i++){
                     JsonObject jsonObject1 = (JsonObject) eduChart.get(i);
-                    if(jsonObject1.get("chart_name") != null && jsonObject1.get("chart_data") != null){
+                    if(validNullJson(jsonObject1, "chart_name") && validNullJson(jsonObject1, "chart_data")){
                         String edu = jsonObject1.get("chart_name").toString().replaceAll("\"","");
                         String data = jsonObject1.get("chart_data").toString().replaceAll("\"","");
                         String[] edus = edu.split(",");
@@ -303,17 +384,17 @@ public class JobExploreController {
                         LeduChart.put("chart_name", sb.toString());
                         LeduChart.put("chart_data", data);
                     }
-                    if(jsonObject1.get("source") != null)
+                    if(validNullJson(jsonObject1, "source"))
                     LeduChart.put("source", jsonObject1.get("source").toString().replaceAll("\"",""));
                 }
             }
 
             mv.addObject("LeduChart", LeduChart);
 
-            if(majorChart.size() != 0){
+            if(validNullJson(majorChart)){
                 for (int i = 0; i < majorChart.size(); i++){
                     JsonObject jsonObject1 = (JsonObject) majorChart.get(i);
-                    if(jsonObject1.get("major_data") != null && jsonObject1.get("major") != null){
+                    if(validNullJson(jsonObject1, "major_data") && validNullJson(jsonObject1, "major")){
                         String data = jsonObject1.get("major_data").toString().replaceAll("\"","");
                         String major = jsonObject1.get("major").toString().replaceAll("\"","");
                         String[] majors = major.split(",");
@@ -329,7 +410,7 @@ public class JobExploreController {
                         LmajorChart.put("major", sb.toString());
                         LmajorChart.put("major_data", data);
                     }
-                    if(jsonObject1.get("source") != null)
+                    if(validNullJson(jsonObject1, "source"))
                     LmajorChart.put("source", jsonObject1.get("source").toString().replaceAll("\"",""));
                 }
             }
