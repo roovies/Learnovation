@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class CourseDetailDTO {
     private Long id;
     private String category; // 강의 카테고리

@@ -67,9 +67,68 @@
         <div id="review">
             <h2>🔔 나의 수강후기</h2>
             <div class="my-review">
-                <h3>아직 후기를 작성하지 않았어요. 😥</h3>
-                <h4 class="review-write">후기 작성하기</h4>
-                <textarea class=""></textarea>
+                <th:block th:if="${review.id != null}">
+                    <div class="review-area">
+                        <div class="review-user">
+                            <img th:src="@{/course/image/user_logo.png}" alt="" class="user-logo">
+                            <div class="user-info">
+                                <span class="nickname" th:text="${loginUser.nickname}"></span>
+                                <span class="review-date" th:text="${#dates.format(review.createdAt, 'yyyy-MM-dd')}"></span>
+                            </div>
+                            <div class="review-controller">
+                                <span id="reviewUpdate">수정</span>
+                                <span id="reviewDelete">삭제</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="my-rating">
+                                <input type="hidden" name="ratingValue" th:value="${review.rating}">
+                                ★★★★★
+                                <span class="my-ratingColor">★★★★★</span>
+                            </span>
+                        </div>
+                        <div>
+                            <p th:text="${review.content}"></p>
+                        </div>
+                    </div>
+                    <div id="update-review" class="none">
+                        <textarea placeholder="강의와 관련없거나, 비평이 아닌 비방의 목적으로 작성될 경우 삭제될 수 있습니다." th:text="${review.content}"></textarea>
+                        <div class="right-aside">
+                            <span class="star">
+                                ★★★★★
+                                <span>★★★★★</span>
+                                <input type="range" oninput="drawStar(this)" value="0" step="0.5" min="0" max="5">
+                            </span>
+                            <h3 class="rating">(0.0)</h3>
+                            <div class="right-aside-btn">
+                                <button class="write">수정하기</button>
+                                <button class="cancel">취소하기</button>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+                <th:block th:if="${review.id == null}">
+                    <div id="no-review" class="no-review">
+                        <h3>아직 후기를 작성하지 않았어요. 😥</h3>
+                        <h4 class="do-write">후기 작성하기</h4>
+                    </div>
+                    <div id="write-review" class="none">
+                        <textarea placeholder="강의와 관련없거나, 비평이 아닌 비방의 목적으로 작성될 경우 삭제될 수 있습니다."></textarea>
+                        <div class="right-aside">
+                            <span class="star">
+                                ★★★★★
+                                <span>★★★★★</span>
+                                <input type="range" oninput="drawStar(this)" value="0" step="0.5" min="0" max="5">
+                            </span>
+                            <h3 class="rating">(0.0)</h3>
+                            <div class="right-aside-btn">
+                                <button class="write">작성하기</button>
+                                <button class="cancel">취소하기</button>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+
             </div>
         </div>
 </div>
@@ -80,11 +139,10 @@
 
 
 <script th:inline="javascript">
+    //==============================================
+    // 인강 모달 관련
+    //==============================================
     let showVideo = (elem)=>{
-        console.log(elem.dataset.chapter);
-        console.log(elem.dataset.lesson);
-        console.log(elem.dataset.savedPath);
-        console.log(elem.dataset.savedVideoName);
         let chapterTitle = elem.dataset.chapter;
         let lessonTitle = elem.dataset.lesson;
         let savedPath = elem.dataset.savedPath;
@@ -131,7 +189,7 @@
         modalTag.style.display = 'none';
         const videoTag = document.querySelector('video');
         videoTag.pause();
-    })
+    });
     window.addEventListener("keyup", e => {
         if(document.querySelector('.modal').style.display === "flex" && e.key === "Escape") {
             document.querySelector('.modal').style.display = "none"
@@ -140,6 +198,137 @@
             const bodyTag = document.querySelector('body');
             bodyTag.style.overflow = 'auto';
         }
-    })
+    });
+    //==============================================
+    // 수강후기 관련 (작성된 후기가 존재하지 않을 경우)
+    //==============================================
+    /* 후기작성 안내 메시지 */
+    if(document.querySelector('.do-write')!=null){
+        document.querySelector('.do-write').addEventListener("click", ()=>{
+            document.querySelector('#no-review').className = "none";
+            document.querySelector('#write-review').className = 'input-review';
+        });
+    }
+    const drawStar = (target) => {
+        document.querySelector(`.star span`).style.width = `${target.value * 20}%`;
+        document.querySelector(".rating").innerHTML = "("+document.querySelector("[type=range]").value+")";
+    }
+    /* 작성하기(ajax) */
+    /* 후기작성 form */
+    if(document.querySelector("#write-review") != null){
+        /* 수강후기 작성 - 별점 드래그 */
+        document.querySelector('.write').addEventListener("click", ()=>{
+            const courseId = [[${detail.id}]];
+            const content = document.querySelector('textarea').value;
+            const rating = document.querySelector("[type=range]").value;
+            if(content===""){
+                alert("내용을 입력하세요.");
+                return false;
+            } else if(rating==0){
+                alert("별점을 선택해주세요.");
+                return false;
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/course/review/register',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'courseId': courseId,
+                    'content': content,
+                    'rating': rating
+                }),
+                success: function (response){
+                    if(response=="success"){
+                        location.reload();
+                    } else {
+                        alert("이미 수강후기를 작성했거나, 잘못된 접근입니다.");
+                    }
+                }
+            });
+        });
+        /* 취소하기 */
+        document.querySelector('.cancel').addEventListener("click", ()=>{
+            document.querySelector('#no-review').className = "no-review";
+            document.querySelector('#write-review').className = 'none';
+        });
+    }
+    //==============================================
+    // 수강후기 관련 (작성된 후기가 존재하는 경우)
+    //==============================================
+    /* static 별점 색칠 */
+    if(document.querySelector(".my-ratingColor") !=null)
+    {
+        const ratingValue = document.querySelector("[name=ratingValue]").value;
+        document.querySelector(".my-rating span").style.width=`${ratingValue*20}%`;
+
+        // 수강후기 수정form
+        document.querySelector("#reviewUpdate").addEventListener("click", ()=>{
+            document.querySelector('.review-area').style.display = "none";
+            document.querySelector('#update-review').className = 'input-review';
+        });
+
+        // 수강후기 수정하기
+        document.querySelector('.write').addEventListener("click", ()=>{
+            const reviewId = [[${review.id}]];
+            const courseId = [[${detail.id}]];
+            const content = document.querySelector('textarea').value;
+            let rating = document.querySelector('[type=range]').value;
+            if(content===""){
+                alert("내용을 입력하세요.");
+                return false;
+            } else if(rating==0){
+                alert("별점을 선택해주세요.");
+                return false;
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/course/review/update',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'id': reviewId,
+                    'courseId': courseId,
+                    'content': content,
+                    'rating': rating
+                }),
+                success: function (response){
+                    if(response=="success"){
+                        location.reload();
+                    } else {
+                        alert("수강후기 수정에 실패했습니다.");
+                    }
+                }
+            });
+        });
+
+        // 수강후기 수정 취소
+        document.querySelector(".cancel").addEventListener("click", ()=>{
+            document.querySelector('.review-area').style.display = "block";
+            document.querySelector('#update-review').className = 'none';
+        });
+
+        // 수강후기 삭제
+        document.querySelector("#reviewDelete").addEventListener("click", ()=>{
+            if (!confirm("후기를 삭제할까요?")){
+                return false;
+            }
+            const reviewId = [[${review.id}]];
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                url: '/course/review/delete',
+                data: JSON.stringify({
+                    'id' : reviewId
+                }),
+                success: function (response){
+                    if (response === "success"){
+                        location.reload();
+                    } else{
+                        alert("수강후기 작성에 실패했습니다.");
+                    }
+                }
+            })
+        });
+    }
+
 </script>
 </html>

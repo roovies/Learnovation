@@ -191,14 +191,153 @@ tr td:nth-child(2){
     margin: 20px 0px 70px 0px;
     width: 960px;
     height: 100%;
-    background-color: #f4f2f2;
+    background-color: white;
     padding: 20px;
+}
+/* display none 클래스 */
+.none {
+    display: none;
+}
+/* 작성된 리뷰가 없을 때 메시지 */
+.no-review{
     display: flex;
     flex-direction: column;
     justify-items: center;
     align-items: center;
 }
-        .review-write{
+        .do-write{
             margin-top: 20px;
             cursor: pointer;
+        }
+/* 리뷰 작성폼 */
+.input-review{
+    display: flex;
+}
+        .input-review textarea{
+            width: 700px;
+            height: 100px;
+            resize: none;
+            border: 1px solid #d3d3d3;
+            padding: 10px;
+            font-size: 100%;
+        }
+        .input-review textarea:focus{
+            outline: none;
+        }
+.right-aside{
+    display: flex;
+    width: 260px;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+}
+
+.review-area{
+    background-color: white;
+}
+        /* 나의 별점css */
+        .my-rating {
+            position: relative;
+            font-size: 150%;
+            color: #ddd;
+        }
+        .my-rating span{
+            width: 0%;
+            position: absolute;
+            left: 0;
+            color: #FFC807;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        /* 별점 선택css */
+        .star {
+            position: relative;
+            top: -20px;
+            font-size: 2.5rem;
+            color: #ddd;
+        }
+
+        .star input {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .star span {
+            width: 0;
+            position: absolute;
+            left: 0;
+            color: #FFC807;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .rating{
+            position: relative;
+            top: -25px;
+        }
+.right-aside-btn{
+    display: flex;
+    justify-content: center;
+}
+.write{
+    border: none;
+    background-color: #0090F0;
+    font-size: 90%;
+    color: white;
+    border-radius: 5px;
+    padding: 4px 8px 4px 8px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+.cancel{
+    border: 1px solid #0090F0;
+    background-color: white;
+    font-size: 90%;
+    padding: 4px 8px 4px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+/* 리뷰 존재 시, 나의 리뷰 css */
+.review-user{
+    display: flex;
+}
+.user-logo{
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    margin: 0px 10px 10px 0px;
+}
+.user-info{
+    display: flex;
+    flex-direction: column;
+}
+.nickname{
+    color: #929292;
+    font-weight: bolder;
+}
+.review-date{
+    color: #7a7a7a;
+    font-size: 85%;
+}
+.review-controller{
+    position: relative;
+    top: 20px;
+    font-size: 90%;
+}
+    #reviewUpdate{
+        cursor: pointer;
+    }
+        #reviewUpdate:hover{
+            color: deepskyblue;
+        }
+
+    #reviewDelete{
+        cursor: pointer;
+    }
+        #reviewDelete:hover{
+            color: deepskyblue;
         }

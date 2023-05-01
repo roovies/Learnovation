@@ -8,7 +8,6 @@ import com.kh.learnovation.domain.user.entity.User;
 import com.kh.learnovation.domain.user.repository.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.jcodec.api.FrameGrab;
-import org.jcodec.api.JCodecException;
 import org.jcodec.common.io.NIOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -18,10 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.sql.BatchUpdateException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +37,7 @@ public class CourseServiceImpl implements CourseService {
     private final LessonRepository lessonRepository;
     private final VideoRepository videoRepository;
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
     private final JPAQueryFactory jqf;
 
     @Autowired
@@ -43,7 +45,8 @@ public class CourseServiceImpl implements CourseService {
                              ImageRepository imageRepository,
                              CategoryRepository categoryRepository, ChapterRepository chapterRepository,
                              LessonRepository lessonRepository, VideoRepository videoRepository,
-                             UserRepository userRepository, EntityManager entityManager) {
+                             UserRepository userRepository, ReviewRepository reviewRepository,
+                             EntityManager entityManager) {
         this.resourceLoader = resourceLoader;
         this.courseRepository = courseRepository;
         this.imageRepository = imageRepository;
@@ -52,6 +55,7 @@ public class CourseServiceImpl implements CourseService {
         this.lessonRepository = lessonRepository;
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
+        this.reviewRepository = reviewRepository;
         this.jqf = new JPAQueryFactory(entityManager);
     }
 
@@ -62,8 +66,6 @@ public class CourseServiceImpl implements CourseService {
         if (foundUser.isPresent()) {
             UserDTO userResp = UserDTO.builder()
                     .id(foundUser.get().getId())
-                    .socialId(foundUser.get().getSocialId())
-                    .socialProvider(foundUser.get().getSocialProvider())
                     .email(foundUser.get().getEmail())
                     .name(foundUser.get().getName())
                     .nickname(foundUser.get().getNickname())
@@ -347,24 +349,6 @@ public class CourseServiceImpl implements CourseService {
                 .build();
         detailDto.setTotalLessonCount(totalLessonCount);
         detailDto.setTotalVideoTime(convertTimeToString((int)totalVideoTime));
-        System.out.println("강의 카테고리: " + detailDto.getCategory());
-        System.out.println("강의 난이도: " + detailDto.getLevel());
-        System.out.println("강의 제목: " + detailDto.getTitle());
-        System.out.println("강사 닉네임: " + detailDto.getNickname());
-        System.out.println("강의 가격: " + detailDto.getPrice());
-        System.out.println("강의 내용: " + detailDto.getContent());
-        System.out.println("썸네일 저장 폴더: " + detailDto.getSavedPath());
-        System.out.println("썸네일 파일명: " + detailDto.getSavedImageName());
-        int i = 1;
-        for (CourseChapterDTO testchapterDto : detailDto.getChapters()){
-            System.out.println("==================================================");
-            System.out.println(i+"번째 목차 : " + testchapterDto.getTitle());
-            System.out.println("==================================================");
-            for (CourseLessonDTO testlessonDto : testchapterDto.getLessons()){
-                System.out.println(i+". " + testlessonDto.getTitle() + " | /" + testlessonDto.getCourseVideoDTO().getSavedPath() + "/" + testlessonDto.getCourseVideoDTO().getSavedVideoName());
-            }
-            i++;
-        }
         return detailDto;
     }
 
@@ -383,4 +367,57 @@ public class CourseServiceImpl implements CourseService {
         return timeString;
     }
 
+    @Override
+    @Transactional
+    public void createReview(CourseReviewDTO reviewDTO) throws Exception {
+        // builder 패턴 만들고.. save하고.. entity에 unique 제약조건 추가하고..
+        CourseReview toSaveReview = CourseReview.builder()
+                .user(User.builder()
+                        .id(reviewDTO.getUserId())
+                        .build())
+                .course(Course.builder()
+                        .id(reviewDTO.getCourseId())
+                        .build())
+                .content(reviewDTO.getContent())
+                .rating(reviewDTO.getRating())
+                .build();
+        reviewRepository.save(toSaveReview);
+    }
+
+    @Override
+    @Transactional
+    public Optional<CourseReviewDTO> findReviewByUserIdAndCourseId(Long userId, Long courseId) {
+        Optional<CourseReview> foundReview = reviewRepository.findByUserIdAndCourseId(userId, courseId);
+        if(foundReview.isPresent()){
+            CourseReviewDTO reviewDTO = CourseReviewDTO.builder()
+                    .id(foundReview.get().getId())
+                    .userId(foundReview.get().getUser().getId())
+                    .userNickname(foundReview.get().getUser().getNickname())
+                    .courseId(foundReview.get().getCourse().getId())
+                    .content(foundReview.get().getContent())
+                    .rating(foundReview.get().getRating())
+                    .createdAt(foundReview.get().getCreatedAt())
+                    .updatedAt(foundReview.get().getUpdatedAt())
+                    .build();
+            return Optional.of(reviewDTO);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public void updateReview(CourseReviewDTO reviewDTO) throws Exception {
+        Optional<CourseReview> foundReview = reviewRepository.findByIdAndUserId(reviewDTO.getId(), reviewDTO.getUserId());
+        if (foundReview.isPresent()){
+            foundReview.get().setContent(reviewDTO.getContent());
+            foundReview.get().setRating(reviewDTO.getRating());
+            reviewRepository.save(foundReview.get());
+        }
+    }
+
+    @Override
+    @Transactional
+    public int deleteReview(Long id, Long userId) {
+        int result = reviewRepository.deleteByIdAndUserId(id, userId);
+        return result;
+    }
 }

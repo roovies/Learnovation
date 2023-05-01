@@ -3,6 +3,7 @@ package com.kh.learnovation.domain.course.service;
 import com.kh.learnovation.domain.course.dto.CourseDTO;
 import com.kh.learnovation.domain.course.dto.CourseDetailDTO;
 import com.kh.learnovation.domain.course.dto.CourseLessonDTO;
+import com.kh.learnovation.domain.course.dto.CourseReviewDTO;
 import com.kh.learnovation.domain.course.entity.Course;
 import com.kh.learnovation.domain.course.entity.CourseImage;
 import com.kh.learnovation.domain.course.entity.CourseLesson;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.BatchUpdateException;
 import java.util.List;
+import java.util.Optional;
 
 public interface CourseService {
     /** 이메일로 유저 찾기 Service */
@@ -42,4 +44,16 @@ public interface CourseService {
 
     /** 동영상 길이 [n분 n초] 형태로 변환 */
     String convertTimeToString(int time);
+
+    /** 수강후기 등록 Service */
+    void createReview(CourseReviewDTO reviewDTO) throws Exception;
+
+    /** 내 수강후기 조회 Service */
+    Optional<CourseReviewDTO> findReviewByUserIdAndCourseId(Long userId, Long courseId);
+    /** 수강후기 수정 Service */
+    void updateReview(CourseReviewDTO reviewDTO) throws Exception;
+
+    /** 수강후기 삭제 Service */
+    int deleteReview(Long id, Long userId);
+
 }
