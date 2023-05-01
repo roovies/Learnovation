@@ -159,89 +159,182 @@ public class JobExploreController {
             List<String> LCurriculum = new ArrayList<String>();
             JsonArray ArcertiList = (JsonArray) jsonObject.get("certiList");
             List<Map> certiList = new ArrayList<Map>();
-            for(int i  = 0; i < ArcertiList.size(); i++){
-                JsonObject jsonObject1 = (JsonObject) ArcertiList.get(i);
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("certi", jsonObject1.get("certi").toString().replaceAll("\"",""));
-                map.put("link", jsonObject1.get("LINK").toString().replaceAll("\"",""));
-                certiList.add(map);
+            if(ArcertiList.size() != 0){
+                for(int i  = 0; i < ArcertiList.size(); i++){
+                    if(ArcertiList.get(i) != null){
+                        JsonObject jsonObject1 = (JsonObject) ArcertiList.get(i);
+                        Map<String, String> map = new HashMap<String, String>();
+                        map.put("certi", jsonObject1.get("certi").toString().replaceAll("\"",""));
+                        map.put("link", jsonObject1.get("LINK").toString().replaceAll("\"",""));
+                        certiList.add(map);
+                    }
+
+                }
             }
             mv.addObject("certiList", certiList);
-
-            for(int i = 0; i < ArCurriculum.size(); i++){
-                JsonObject jsonObject1 = (JsonObject) ArCurriculum.get(i);
-                LCurriculum.add(jsonObject1.get("curriculum").toString().replaceAll("\"",""));
+            if(ArCurriculum.size() != 0){
+                for(int i = 0; i < ArCurriculum.size(); i++){
+                    if(ArCurriculum.get(i) != null){
+                        JsonObject jsonObject1 = (JsonObject) ArCurriculum.get(i);
+                        LCurriculum.add(jsonObject1.get("curriculum").toString().replaceAll("\"",""));
+                    }
+                }
             }
+
             mv.addObject("LCurriculum", LCurriculum);
 
             JsonArray ArCertificate = (JsonArray) jobReadyList.get("certificate");
             List<String> LCertificate = new ArrayList<String>();
-            for(int i = 0; i < ArCertificate.size(); i++){
-                JsonObject jsonObject1 = (JsonObject) ArCertificate.get(i);
-                LCertificate.add(jsonObject1.get("certificate").toString().replaceAll("\"",""));
+            if(!ArCertificate.isJsonNull()){
+                for(int i = 0; i < ArCertificate.size(); i++){
+                    if(!ArCertificate.get(i).isJsonNull()){
+                        JsonObject jsonObject1 = (JsonObject) ArCertificate.get(i);
+                        LCertificate.add(jsonObject1.get("certificate").toString().replaceAll("\"",""));
+                    }
+                }
             }
+
             mv.addObject("LCertificate", LCertificate);
 
             JsonArray ArTraining = (JsonArray) jobReadyList.get("training");
             List<String> LTraining = new ArrayList<String>();
-            for(int i = 0; i < ArTraining.size(); i++){
-                JsonObject jsonObject1 = (JsonObject) ArTraining.get(i);
-                LTraining.add(jsonObject1.get("training").toString().replaceAll("\"",""));
+            if(ArTraining.size() != 0){
+                for(int i = 0; i < ArTraining.size(); i++){
+                    if(ArTraining.get(i) != null){
+                        JsonObject jsonObject1 = (JsonObject) ArTraining.get(i);
+                        LTraining.add(jsonObject1.get("training").toString().replaceAll("\"",""));
+                    }
+                }
             }
+
             mv.addObject("LTraining", LTraining);
 
             JsonArray ArRecruit = (JsonArray) jobReadyList.get("recruit");
             List<String> LRecruit = new ArrayList<String>();
-            for(int i = 0; i < ArRecruit.size(); i++){
-                JsonObject jsonObject1 = (JsonObject) ArRecruit.get(i);
-                LRecruit.add(jsonObject1.get("recruit").toString().replaceAll("\"",""));
+            if(ArRecruit.size() != 0){
+                for(int i = 0; i < ArRecruit.size(); i++){
+                    if(ArRecruit.get(i) != null) {
+                        JsonObject jsonObject1 = (JsonObject) ArRecruit.get(i);
+                        LRecruit.add(jsonObject1.get("recruit").toString().replaceAll("\"", ""));
+                    }
+                }
             }
+
             mv.addObject("LRecruit", LRecruit);
 
-            String jobName = baseInfo.get("job_nm").toString().replaceAll("\"","");
-            mv.addObject("jobName", jobName);
-            String salary = baseInfo.get("wage").toString().replaceAll("\"","");
-            mv.addObject("salary", salary);
-            String salaryDetail = baseInfo.get("wage_source").toString().replaceAll("\"","");
-            mv.addObject("salaryDetail", salaryDetail);
-            String satisfication = baseInfo.get("satisfication").toString().replaceAll("\"","");
-            mv.addObject("satisfication", satisfication);
-            String satisficationSource = baseInfo.get("satisfi_source").toString().replaceAll("\"","");
-            mv.addObject("satisficationSource", satisficationSource);
-            for (int i = 0; i < workList.size(); i++){
-                JsonObject jsonObject1 = (JsonObject) workList.get(i);
-                LworkList.add(jsonObject1.get("work").toString().replaceAll("\"",""));
+            String jobName = "";
+            if(baseInfo.get("job_nm") != null){
+                jobName = baseInfo.get("job_nm").toString().replaceAll("\"","");
             }
+            mv.addObject("jobName", jobName);
+
+            String salary = "";
+            if(baseInfo.get("wage") != null){
+                salary = baseInfo.get("wage").toString().replaceAll("\"","");
+            }
+            mv.addObject("salary", salary);
+
+            String salaryDetail = "";
+            if(baseInfo.get("wage_source") != null){
+                salaryDetail = baseInfo.get("wage_source").toString().replaceAll("\"","");
+            }
+            mv.addObject("salaryDetail", salaryDetail);
+
+            String satisfication = "";
+            if(baseInfo.get("satisfication") != null){
+                satisfication = baseInfo.get("satisfication").toString().replaceAll("\"","");
+            }
+            mv.addObject("satisfication", satisfication);
+            String satisficationSource = "";
+            if(baseInfo.get("satisfi_source") != null){
+                satisficationSource = baseInfo.get("satisfi_source").toString().replaceAll("\"","");
+            }
+            mv.addObject("satisficationSource", satisficationSource);
+
+            if(workList.size() != 0){
+                for (int i = 0; i < workList.size(); i++){
+                    if(workList.get(i) != null){
+                        JsonObject jsonObject1 = (JsonObject) workList.get(i);
+                        LworkList.add(jsonObject1.get("work").toString().replaceAll("\"",""));
+                    }
+                }
+            }
+
             mv.addObject("LworkList", LworkList);
 
-            for (int i = 0; i < interestList.size(); i++){
-                JsonObject jsonObject1 = (JsonObject) interestList.get(i);
-                LinterestList.add(jsonObject1.get("interest").toString().replaceAll("\"",""));
+            if(interestList.size() != 0){
+                for (int i = 0; i < interestList.size(); i++){
+                    if(interestList.get(i) != null){
+                        JsonObject jsonObject1 = (JsonObject) interestList.get(i);
+                        LinterestList.add(jsonObject1.get("interest").toString().replaceAll("\"",""));
+                    }
+                }
             }
+
             mv.addObject("LinterestList", LinterestList);
 
-            for (int i = 0; i < forecastList.size(); i++){
-                JsonObject jsonObject1 = (JsonObject) forecastList.get(i);
-                LforecastList.add(jsonObject1.get("forecast").toString().replaceAll("\"",""));
+            if(forecastList.size() != 0){
+                for (int i = 0; i < forecastList.size(); i++){
+                    if (forecastList.get(i) != null) {
+                        JsonObject jsonObject1 = (JsonObject) forecastList.get(i);
+                        LforecastList.add(jsonObject1.get("forecast").toString().replaceAll("\"",""));
+                    }
+                }
             }
+
             mv.addObject("LforecastList", LforecastList);
 
-            for (int i = 0; i < eduChart.size(); i++){
-                JsonObject jsonObject1 = (JsonObject) eduChart.get(i);
-                LeduChart.put("chart_name", jsonObject1.get("chart_name").toString().replaceAll("\"",""));
-                LeduChart.put("chart_data", jsonObject1.get("chart_data").toString().replaceAll("\"",""));
-                LeduChart.put("source", jsonObject1.get("source").toString().replaceAll("\"",""));
+            if(eduChart.size() != 0){
+                for (int i = 0; i < eduChart.size(); i++){
+                    JsonObject jsonObject1 = (JsonObject) eduChart.get(i);
+                    if(jsonObject1.get("chart_name") != null && jsonObject1.get("chart_data") != null){
+                        String edu = jsonObject1.get("chart_name").toString().replaceAll("\"","");
+                        String data = jsonObject1.get("chart_data").toString().replaceAll("\"","");
+                        String[] edus = edu.split(",");
+                        String[] datas = data.split(",");
+                        StringBuilder sb = new StringBuilder();
+                        for(int j = 0; j < edus.length; j++){
+                            if(j == edus.length - 1){
+                                sb.append(edus[j] + "(" + datas[j] + "%)");
+                            }else{
+                                sb.append(edus[j] + "(" + datas[j] + "%),");
+                            }
+                        }
+                        LeduChart.put("chart_name", sb.toString());
+                        LeduChart.put("chart_data", data);
+                    }
+                    if(jsonObject1.get("source") != null)
+                    LeduChart.put("source", jsonObject1.get("source").toString().replaceAll("\"",""));
+                }
             }
+
             mv.addObject("LeduChart", LeduChart);
 
-            for (int i = 0; i < majorChart.size(); i++){
-                JsonObject jsonObject1 = (JsonObject) majorChart.get(i);
-                LmajorChart.put("major", jsonObject1.get("major").toString().replaceAll("\"",""));
-                LmajorChart.put("major_data", jsonObject1.get("major_data").toString().replaceAll("\"",""));
-                LmajorChart.put("source", jsonObject1.get("source").toString().replaceAll("\"",""));
+            if(majorChart.size() != 0){
+                for (int i = 0; i < majorChart.size(); i++){
+                    JsonObject jsonObject1 = (JsonObject) majorChart.get(i);
+                    if(jsonObject1.get("major_data") != null && jsonObject1.get("major") != null){
+                        String data = jsonObject1.get("major_data").toString().replaceAll("\"","");
+                        String major = jsonObject1.get("major").toString().replaceAll("\"","");
+                        String[] majors = major.split(",");
+                        String[] datas = data.split(",");
+                        StringBuilder sb = new StringBuilder();
+                        for(int j = 0; j < majors.length; j++){
+                            if(j == majors.length - 1){
+                                sb.append(majors[j] + "(" + datas[j] + "%)");
+                            }else{
+                                sb.append(majors[j] + "(" + datas[j] + "%),");
+                            }
+                        }
+                        LmajorChart.put("major", sb.toString());
+                        LmajorChart.put("major_data", data);
+                    }
+                    if(jsonObject1.get("source") != null)
+                    LmajorChart.put("source", jsonObject1.get("source").toString().replaceAll("\"",""));
+                }
             }
-            mv.addObject("LmajorChart", LmajorChart);
 
+            mv.addObject("LmajorChart", LmajorChart);
             mv.setViewName("jobexplore/detail");
         }
         return mv;

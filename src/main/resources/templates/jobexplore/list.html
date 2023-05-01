@@ -29,7 +29,7 @@
                 <a th:if="${page >= totalPage}" th:href="@{/explore/list(page=${totalPage})}"><i class="fa-solid fa-arrow-right"></i></a>
             </div>
             <div class="recommand-list-box">
-                <a th:each="job : ${jList}" href="#" class="job-category-link">
+                <a th:each="job : ${jList}" th:href="@{/explore/detail(jobcode=${job.getJobId()})}" class="job-category-link">
                     <div class="job-category">
                         <div>
                             <h1 th:text="${job.getJobName()}"></h1>

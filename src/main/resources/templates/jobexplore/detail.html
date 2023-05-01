@@ -8,49 +8,181 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/common/css/nav.css">
+    <link rel="stylesheet" href="/explore/css/detail.css">
 </head>
 <body>
     <nav th:replace="~{common/nav.html :: nav}"></nav>
     <main>
-        <div></div>
-        <div></div>
+        <h1>직업백과</h1>
+        <div class="explore-side-bar">
+            <h1 th:text="${jobName}">고객관리시스템(CRM)전문가</h1>
+            <div class="explore-side-bar-container">
+                <div class="explore-side-bar-box">
+                    <span>평균급여</span>
+                    <span class="side-bar-icon"><i class="fa-solid fa-coins"></i></span>
+                    <span th:text="${salary}+'만원'">알 수 없음</span>
+                </div>
+                <div class="explore-side-bar-box">
+                    <span>만족도</span>
+                    <span class="side-bar-icon"><i class="fa-solid fa-thumbs-up"></i></span>
+                    <span th:text="${satisfication}">알 수 없음</span>
+                </div>
+            </div>
+            <div class="explore-side-bar-nav">
+                <ul>
+                    <li>직업 개요</li>
+                    <li>탐색 및 준비</li>
+                    <li>현황 및 지표</li>
+                </ul>
+            </div>
+        </div>
+        <div class="explore-main">
+
+            <h2>하는일</h2>
+            <ul th:each="work : ${LworkList}">
+                <li th:text="${work}"></li>
+            </ul>
+            <h2>적성</h2>
+            <ul th:each="interest : ${LinterestList}">
+                <li th:text="${interest}"></li>
+            </ul>
+            <h2>전망</h2>
+            <ul th:each="forecast : ${LforecastList}">
+                <li th:text="${forecast}"></li>
+            </ul>
+            <h2>준비방법</h2>
+            <h3>정규교육과정</h3>
+            <ul th:each="curriculum :${LCurriculum}">
+                <li th:text="${curriculum}"></li>
+            </ul>
+            <h3>직업훈련</h3>
+            <ul th:each="training : ${LTraining}">
+                <li th:text="${training}"></li>
+            </ul>
+            <h3>관련자격증</h3>
+            <ul th:each="certificate : ${LCertificate}">
+                <li th:text="${certificate}"></li>
+            </ul>
+            <h3>입직 및 취업방법</h3>
+            <ul th:each="recruit : ${LRecruit}">
+                <li th:text="${recruit}"></li>
+            </ul>
+            <h2>관련 자격증</h2>
+            <ul th:each="cert : ${certiList}">
+                <a th:href="${cert.get('link')}"><li th:text="${cert.get('certi')}"></li></a>
+            </ul>
+            <h2>급여</h2>
+            <ul>
+                <li th:text="${salary}+'만원'">알 수 없음</li>
+                <li th:text="${salaryDetail}"></li>
+            </ul>
+            <h2>만족도</h2>
+            <div class="satisfication-container">
+                <div class="satisfication-box">
+                    <canvas id="satisfication" th:data-satisfication="${satisfication}"></canvas>
+                </div>
+                <span th:text="${satisficationSource}"></span>
+            </div>
+            <h2>학력분포 및 전공계열</h2>
+            <div class="chart-box">
+                <div>
+                    <div>
+                        <canvas id="eduChart" th:data-edu="${LeduChart.get('chart_name')}" th:data-staticstis="${LeduChart.get('chart_data')}"></canvas>
+                    </div>
+                    <span th:text="${LeduChart.get('source')}"></span>
+                </div>
+                <div>
+                    <div>
+                        <canvas id="deptChart" th:data-major="${LmajorChart.get('major')}" th:data-staticstis="${LmajorChart.get('major_data')}"></canvas>
+                    </div>
+                    <span th:text="${LmajorChart.get('source')}"></span>
+                </div>
+            </div>
+        </div>
     </main>
-    <div th:each="curriculum :${LCurriculum}">
-        <span th:text="${curriculum}"></span>
-    </div>
-    <br>
-    <div th:each="certificate : ${LCertificate}">
-        <span th:text="${certificate}"></span>
-    </div>
-    <br>
-    <div th:each="training : ${LTraining}">
-        <span th:text="${training}"></span>
-    </div>
-    <br>
-    <div th:each="recruit : ${LRecruit}">
-        <span th:text="${recruit}"></span>
-    </div>
-    <br>
-    <p th:text="${jobName}"></p>
-    <p th:text="${salary}"></p>
-    <p th:text="${salaryDetail}"></p>
-    <p th:text="${satisfication}"></p>
-    <p th:text="${satisficationSource}"></p>
-    <div th:each="work : ${LworkList}">
-        <span th:text="${work}"></span>
-    </div>
-    <br>
-    <div th:each="interest : ${LinterestList}">
-        <span th:text="${interest}"></span>
-    </div>
-    <br>
-    <div th:each="forecast : ${LforecastList}">
-        <span th:text="${forecast}"></span>
-    </div>
-    <br>
-    <p th:text="${LeduChart}"></p>
-    <p th:text="${LmajorChart}"></p>
-    <p th:text="${certiList}"></p>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const eduChart = document.getElementById('eduChart');
+        const deptChart = document.getElementById('deptChart');
+        const satisficationChart = document.getElementById('satisfication');
+        const satisfication = satisficationChart.dataset.satisfication;
+        const edu = eduChart.dataset.edu.split(",");
+        const eduData = eduChart.dataset.staticstis.split(",");
+        const major = deptChart.dataset.major.split(",");
+        const deptData = deptChart.dataset.staticstis.split(",");
+
+        new Chart(satisficationChart, {
+            type: 'bar',
+            data: {
+                labels: ['만족도'],
+                datasets: [{
+                    data: [satisfication],
+                }]
+            },
+            options: {
+                plugins : {
+                    legend : {
+                        display : false
+                    }
+                },
+                indexAxis: 'y',
+                scales : {
+                    xAxis : {
+                        suggestedMax: 100,
+                    }
+                }
+            }
+        });
+
+        new Chart(deptChart, {
+            type: 'pie',
+            data: {
+                labels: major,
+                datasets: [{
+                    data: deptData,
+                    backgroundColor: ['#84A9FF', '#6690FF', '#3366FF', '#254EDB', '#1939B7', '#102693', '#091A7A'],
+                    borderWidth: 1
+                }]
+            },
+            options : {
+                plugins :{
+                    title : {
+                        display : true,
+                        text : '전공계열',
+                        position : 'top',
+                    },
+                    legend : {
+                        padding : 10,
+                        position : 'bottom'
+                    }
+                }
+            }
+        });
+        new Chart(eduChart, {
+            type: 'pie',
+            data: {
+                labels: edu,
+                datasets: [{
+                    data: eduData,
+                    backgroundColor: ['#89FAF1', '#6AF5F5', '#3BE0EF', '#2BB2CD', '#1D88AC', '#12638A', '#0B4872'],
+                    borderWidth: 1
+                }]
+            },
+            options : {
+                plugins :{
+                    title : {
+                        display : true,
+                        text : '학력분포',
+                        position : 'top',
+                    },
+                    legend : {
+                        padding : 10,
+                        position : 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
     <script src="/common/js/nav.js"></script>
 </body>
 </html>
