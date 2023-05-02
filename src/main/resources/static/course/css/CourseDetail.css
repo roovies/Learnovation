@@ -292,9 +292,19 @@ tr td:nth-child(2){
             color: #7a7a7a;
             font-size: 85%;
         }
-.star{
-    font-size: 130%;
+.star {
+    position: relative;
+    top: -10px;
+    font-size: 150%;
+    color: #ddd;
+}
+.star span {
+    width: 0;
+    position: absolute;
+    left: 0;
     color: #FFC807;
+    overflow: hidden;
+    pointer-events: none;
 }
 #review-more-btn{
     text-align: center;

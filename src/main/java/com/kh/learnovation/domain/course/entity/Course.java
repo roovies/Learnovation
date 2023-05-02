@@ -54,9 +54,10 @@ public class Course {
     private CourseImage courseImage;
 
     @Builder
-    // DTO -> Entity로 변환하기 때문에 id값은 받을 필요가 없다.
-    public Course(CourseCategory courseCategory, User user, String title, int level, int price, String content
+    // DTO -> Entity로 변환하기 때문에 id값은 받을 필요가 없다. => 그런줄 알았는데 써야 할 것 같아서 추가함
+    public Course(Long id, CourseCategory courseCategory, User user, String title, int level, int price, String content
                   ) {
+        this.id = id;
         this.courseCategory = courseCategory;
         this.user = user;
         this.title = title;

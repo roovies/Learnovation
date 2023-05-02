@@ -39,7 +39,7 @@
     <div id="course-nav">
         <p class="nav-basic nav-focus" onclick="moveIntroduce()">강의소개</p>
         <p class="nav-basic" onclick="moveCurriculum()">커리큘럼</p>
-        <p class="nav-basic" onclick="moveReview()">수강후기(${개수수정필요})</p>
+        <p class="nav-basic" onclick="moveReview()" th:text="'수강후기(' + ${totalReview} + ')'"></p>
     </div>
     <div id="course-main">
         <div id="main-left">
@@ -84,92 +84,33 @@
                 <h2>🔔 수강후기</h2>
                 <p class="left-description">실제 수강생들의 생생한 후기입니다.</p>
                 <div id="review-top">
-                    <h2>👨🏻‍🎓 수강후기 43개</h2>
-                    <h2>💚 만족도 4.7점</h2>
+                    <h2 th:text="'👨🏻‍🎓 수강후기 ' + ${totalReview} + '개'"></h2>
+                    <h2 th:text="'💚 만족도 ' + ${avgRating} + '점'"></h2>
                 </div>
                 <ul id="review-category">
                     <li>최신순</li>
-                    <li>별점 높은 순</li>
-                    <li>별점 낮은 순</li>
+<!--                    <li>별점 높은 순</li>-->
+<!--                    <li>별점 낮은 순</li>-->
                 </ul>
-                <!-- 1번째 리뷰 -->
-                <div class="review-area">
-                    <div class="review-user">
-                        <img th:src="@{/course/image/user_logo.png}" alt="" class="user-logo">
-                        <div class="user-info">
-                            <span class="nickname">김치만두</span>
-                            <span class="review-date">2023. 04. 24</span>
+                <!-- 리뷰 -->
+                <div id="dynamic-review-area">
+                    <div class="review-area" th:each="review : ${reviews}">
+                        <div class="review-user">
+                            <img th:src="@{/course/image/user_logo.png}" alt="" class="user-logo">
+                            <div class="user-info">
+                                <span class="nickname" th:text="${review.userNickname}"></span>
+                                <span class="review-date" th:text="${#dates.format(review.createdAt, 'yyyy-MM-dd')}"></span>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <span class="star">★★★★★</span>
-                    </div>
-                    <div>
-                        <p>리뷰가 알차고 좋았어요~ 감사합니다~~~</p>
-                    </div>
-                </div>
-                <!-- 2번째 리뷰 -->
-                <div class="review-area">
-                    <div class="review-user">
-                        <img th:src="@{/course/image/user_logo.png}" class="user-logo">
-                        <div class="user-info">
-                            <span class="nickname">파란곰돌이</span>
-                            <span class="review-date">2023. 04. 24</span>
+                        <div>
+                            <span class="star">
+                                ★★★★★
+                                <span th:style="'width: ' + ${review.rating * 20} + '%;'">★★★★★</span>
+                            </span>
                         </div>
-                    </div>
-                    <div>
-                        <span class="star">★★★★★</span>
-                    </div>
-                    <div>
-                        <p>리뷰가 알차고 좋았어요~ 감사합니다~~~</p>
-                    </div>
-                </div>
-                <!-- 3번째 리뷰 -->
-                <div class="review-area">
-                    <div class="review-user">
-                        <img th:src="@{/course/image/user_logo.png}" class="user-logo">
-                        <div class="user-info">
-                            <span class="nickname">파란곰돌이</span>
-                            <span class="review-date">2023. 04. 24</span>
+                        <div>
+                            <p th:text="${review.content}"></p>
                         </div>
-                    </div>
-                    <div>
-                        <span class="star">★★★★★</span>
-                    </div>
-                    <div>
-                        <p>리뷰가 알차고 좋았어요~ 감사합니다~~~</p>
-                    </div>
-                </div>
-                <!-- 4번째 리뷰 -->
-                <div class="review-area">
-                    <div class="review-user">
-                        <img th:src="@{/course/image/user_logo.png}" alt="" class="user-logo">
-                        <div class="user-info">
-                            <span class="nickname">파란곰돌이</span>
-                            <span class="review-date">2023. 04. 24</span>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="star">★★★★★</span>
-                    </div>
-                    <div>
-                        <p>리뷰가 알차고 좋았어요~ 감사합니다~~~</p>
-                    </div>
-                </div>
-                <!-- 5번째 리뷰 -->
-                <div class="review-area">
-                    <div class="review-user">
-                        <img th:src="@{/course/image/user_logo.png}" alt="" class="user-logo">
-                        <div class="user-info">
-                            <span class="nickname">파란곰돌이</span>
-                            <span class="review-date">2023. 04. 24</span>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="star">★★★★★</span>
-                    </div>
-                    <div>
-                        <p>리뷰가 알차고 좋았어요~ 감사합니다~~~</p>
                     </div>
                 </div>
                 <button id="review-more-btn">수강후기 더보기</button>
@@ -188,7 +129,6 @@
                 </li>
                 <li th:text="'▪ 강사: ' + ${detail.nickname}"></li>
             </ul>
-<!--            <h2 id="price">💸 99,000원</h2>-->
             <h2 id="price" th:text="${'💸 ' + #numbers.formatInteger(detail.price, 3, 'COMMA') + '원'}"></h2>
             <button class="right-apply-btn">수강신청</button>
             <button class="right-cart-btn">장바구니 추가</button>
@@ -205,33 +145,36 @@
     // ======================================================
     // 네비게이션 관련
     // ======================================================
+    let curriculumLocation = (document.querySelector("#left-curriculum").getBoundingClientRect().top + window.scrollY)-150;
+    let reviewLocation = (document.querySelector("#left-review").getBoundingClientRect().top + window.scrollY)-150;
     /* 1. 스크롤 이벤트 관련 */
     window.addEventListener("scroll", () => {
-        console.log(document.querySelector('#course-nav p:nth-child(1)').scrollTop);
         // 1-1. 스크롤 시 네비게이션 상단 고정
         if (window.scrollY > 360) {
             document.querySelector("#course-nav").className = "course-nav";
         } else {
             document.querySelector("#course-nav").classList.remove("course-nav");
         }
-        // 2-2. 스크롤 시 커리큘럼 항목 도착
-        if (window.scrollY<2099){
+        // 1-2. 강의소개 유지
+        if (window.scrollY<curriculumLocation){
             clearNavColor();
             let curriculumTag = document.querySelector('#course-nav p:nth-child(1)');
             curriculumTag.className = 'nav-basic nav-focus';
         }
-        else if (window.scrollY>2098 && window.scrollY<2926){
+        // 1-3. 커리큘럼 항목 도착
+        else if (window.scrollY>curriculumLocation && window.scrollY<reviewLocation){
             clearNavColor();
             let curriculumTag = document.querySelector('#course-nav p:nth-child(2)');
             curriculumTag.className = 'nav-basic nav-focus';
         }
-        else{
+        // 1-4. 수강후기 항목 도착
+        else if (window.scrollY>reviewLocation){
             clearNavColor();
             let curriculumTag = document.querySelector('#course-nav p:nth-child(3)');
             curriculumTag.className = 'nav-basic nav-focus';
         }
 
-    })
+    });
 
     /* 2. 네비게이션 글씨색 전체 회색으로 초기화 + 밑줄 제거 */
     let clearNavColor = ()=>{
@@ -257,6 +200,15 @@
         curriculumTag.className = 'nav-basic nav-focus';
     }
 
+    /* 3-3. 네비로 수강후기 항목 클릭 */
+    let moveReview = () =>{
+        let location = document.querySelector("#left-review").offsetTop;
+        window.scrollTo({top:location-100, behavior:'smooth'});
+        clearNavColor();
+        let curriculumTag = document.querySelector('#course-nav p:nth-child(3)');
+        curriculumTag.className = 'nav-basic nav-focus';
+    }
+
 
     /* 미리보기 모달창 열기*/
     let preview = () =>{
@@ -275,7 +227,7 @@
         modalTag.style.display = 'none';
         const videoTag = document.querySelector('video');
         videoTag.pause();
-    })
+    });
     window.addEventListener("keyup", e => {
         if(document.querySelector('.modal').style.display === "flex" && e.key === "Escape") {
             document.querySelector('.modal').style.display = "none"
@@ -284,6 +236,51 @@
             const bodyTag = document.querySelector('body');
             bodyTag.style.overflow = 'auto';
         }
-    })
+    });
+
+    // ======================================================
+    // 수강후기 관련
+    // ======================================================
+    let page = 1;
+    const courseId = [[${detail.id}]];
+    document.querySelector("#review-more-btn").addEventListener("click", ()=>{
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            url: `/course/${courseId}/more`,
+            data: JSON.stringify({
+                'page': page
+            }),
+            success: function (response){
+                if(!(response.length === 0)){
+                    $(response).each(function(index, review){
+                        let tag = `<div class="review-area">
+                                        <div class="review-user">
+                                              <img src="/course/image/user_logo.png" alt="" class="user-logo">
+                                              <div class="user-info">
+                                                <span class="nickname">${review.userNickname}</span>
+                                                <span class="review-date">${review.createdAt.substring(0,10)}</span>
+                                              </div>
+                                        </div>
+                                        <div>
+                                              <span class="star">
+                                                ★★★★★
+                                                <span style="width:${review.rating*20}%;">★★★★★</span>
+                                              </span>
+                                        </div>
+                                        <div>
+                                              <p>${review.content}</p>
+                                        </div>
+                                  </div>`;
+                        $("#dynamic-review-area").append(tag);
+                    });
+                    page++;
+                } else {
+                    alert("마지막 수강후기입니다.")
+                    return false;
+                }
+            }
+        });
+    });
 </script>
 </html>
