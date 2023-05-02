@@ -28,6 +28,6 @@ public interface UserService {
     void 회원수정(User user);
 
     /** user이메일로 user Entity 가져오기 */
-    Optional<User> findUserByEmail(String email);
+    Optional<User> getCurrentUser();
 
 }

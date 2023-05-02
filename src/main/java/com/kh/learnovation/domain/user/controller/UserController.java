@@ -113,18 +113,10 @@ public class UserController {
 	 * */
 	@GetMapping("/")
 	public String indexForm() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-			// 현재 로그인된 사용자의 정보를 가져올 수 있습니다.
-			String email = userDetails.getUsername(); // 예시: User 엔티티에 userId 필드가 있다고 가정
-			System.out.println("@@@@@@@@@@@@@@@@@@@@@@");
-			System.out.println(email);
-			Optional<User> foundUser = userService.findUserByEmail(email);
-			if (foundUser.isPresent()){
+		Optional<User> foundUser = userService.getCurrentUser();
+		if (foundUser.isPresent()){
 				System.out.println(foundUser.toString());
 			}
-		}
 		return "index";
 	}
 

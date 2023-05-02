@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -202,8 +205,16 @@ public class UserServiceImpl implements UserService{
      }
 
     @Override
-    public Optional<User>  findUserByEmail(String email) {
-        Optional<User> foundUser = userRepository.findByEmail(email);
-        return foundUser; // optional 객체가 존재하는지 (isPresent()) 여부 체크 하세요.
+    public Optional<User>  getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername();
+            Optional<User> foundUser = userRepository.findByEmail(email);
+            return foundUser;
+        }
+        else {
+            return Optional.empty();
+        } // optional 객체가 존재하는지 (isPresent()) 여부 체크 하세요.
     }
 }
