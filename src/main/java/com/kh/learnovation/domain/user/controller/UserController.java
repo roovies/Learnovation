@@ -113,9 +113,9 @@ public class UserController {
 	 * */
 	@GetMapping("/")
 	public String indexForm() {
-		Optional<User> foundUser = userService.getCurrentUser();
-		if (foundUser.isPresent()){
-				System.out.println(foundUser.toString());
+		Optional<UserDTO> userDTO = userService.getCurrentUser();
+		if (userDTO.isPresent()){
+				System.out.println(userDTO.toString());
 			}
 		return "index";
 	}

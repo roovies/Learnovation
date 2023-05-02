@@ -205,13 +205,31 @@ public class UserServiceImpl implements UserService{
      }
 
     @Override
-    public Optional<User>  getCurrentUser() {
+    public Optional<UserDTO>  getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String email = userDetails.getUsername();
             Optional<User> foundUser = userRepository.findByEmail(email);
-            return foundUser;
+            if (foundUser.isPresent()){
+                UserDTO userDTO = UserDTO.builder()
+                        .id(foundUser.get().getId())
+                        .email(foundUser.get().getEmail())
+                        .password(foundUser.get().getPassword())
+                        .name(foundUser.get().getName())
+                        .nickname(foundUser.get().getNickname())
+                        .phoneNumber(foundUser.get().getPhoneNumber())
+                        .profileImage(foundUser.get().getProfileImage())
+                        .createdAt(foundUser.get().getCreatedAt())
+                        .updatedAt(foundUser.get().getUpdatedAt())
+                        .status(foundUser.get().getStatus())
+                        .deletedAt(foundUser.get().getDeletedAt())
+                        .oauth(foundUser.get().getOauth())
+                        .build();
+                return Optional.of(userDTO);
+            } else{
+                return Optional.empty();
+            }
         }
         else {
             return Optional.empty();

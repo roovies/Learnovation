@@ -6,6 +6,7 @@ import com.kh.learnovation.domain.course.dto.CourseLessonDTO;
 import com.kh.learnovation.domain.course.dto.CourseReviewDTO;
 import com.kh.learnovation.domain.course.service.CourseService;
 import com.kh.learnovation.domain.user.dto.UserDTO;
+import com.kh.learnovation.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,11 +29,13 @@ public class CourseController {
 
     private final ResourceLoader resourceLoader;
     private final CourseService courseService;
+    private final UserService userService;
 
     @Autowired
-    public CourseController(ResourceLoader resourceLoader, CourseService courseService) {
+    public CourseController(ResourceLoader resourceLoader, CourseService courseService, UserService userService) {
         this.resourceLoader = resourceLoader;
         this.courseService = courseService;
+        this.userService = userService;
     }
 
 
@@ -132,6 +135,9 @@ public class CourseController {
                 .name("이현준")
                 .nickname("고수되고싶다")
                 .build();
+
+
+
         CourseDetailDTO detailDTO = courseService.findDetailById(id);
         Optional<CourseReviewDTO> reviewDTO = courseService.findReviewByUserIdAndCourseId(tmpUser.getId(), id);
         model.addAttribute("detail", detailDTO);
