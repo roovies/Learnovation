@@ -19,32 +19,32 @@ function modeChange(){
 let num = 0;
 const userIconBox = document.getElementById('userIconBox');
 const userModal = document.getElementById('infoModal');
+if(userIconBox != null && userModal !=null){
+    userIconBox.addEventListener('mouseenter',function(){
+        userModal.style.display = "block";
+        document.getElementById("userHidden").style.display = "block";
+        document.getElementById("userIcon").style.color ="#0090F0"
+    });
+    userIconBox.addEventListener('mouseleave',function(){
+        userModal.style.display = "none";
+        document.getElementById("userHidden").style.display = "none";
+        document.getElementById("userIcon").style.color ="darkgray";
+    });
 
-userIconBox.addEventListener('mouseenter',function(){
-    userModal.style.display = "block";
-    document.getElementById("userHidden").style.display = "block";
-    document.getElementById("userIcon").style.color ="#0090F0"
-});
-userIconBox.addEventListener('mouseleave',function(){
-    userModal.style.display = "none";
-    document.getElementById("userHidden").style.display = "none";
-    document.getElementById("userIcon").style.color ="darkgray";
-});
+    const cartIconBox = document.getElementById('cartIconBox');
+    const cartModal = document.getElementById('navCartModal');
 
-const cartIconBox = document.getElementById('cartIconBox');
-const cartModal = document.getElementById('navCartModal');
-
-cartIconBox.addEventListener('mouseenter',function(){
-    cartModal.style.display = "block";
-    document.getElementById("cartHidden").style.display = "block";
-    document.getElementById("cartIcon").style.color ="#0090F0"
-})
-cartIconBox.addEventListener('mouseleave', function(){
-    cartModal.style.display = "none";
-    document.getElementById("cartHidden").style.display = "none";
-    document.getElementById("cartIcon").style.color ="darkgray";
-})
-
+    cartIconBox.addEventListener('mouseenter',function(){
+        cartModal.style.display = "block";
+        document.getElementById("cartHidden").style.display = "block";
+        document.getElementById("cartIcon").style.color ="#0090F0"
+    })
+    cartIconBox.addEventListener('mouseleave', function(){
+        cartModal.style.display = "none";
+        document.getElementById("cartHidden").style.display = "none";
+        document.getElementById("cartIcon").style.color ="darkgray";
+    })
+}
 const courseLink = document.getElementById('aNavCourse');
 const courseLinkModal = document.getElementById('aNavCourseModal');
 courseLink.addEventListener('mouseenter', function(){
@@ -69,3 +69,4 @@ communityLink.addEventListener('mouseleave', function(){
     document.getElementById("aNavCommuninyHidden").style.display = "none";
     document.getElementById("navComu").style.color ="black"
 });
+

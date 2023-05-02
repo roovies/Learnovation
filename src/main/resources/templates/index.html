@@ -1,42 +1,413 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Example</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
-
-    <div sec:authorize="isAuthenticated()">
-        <span sec:authentication="principal.username"></span>
-    </div>
-
-    <div th:if="${#authorization.expression('isAuthenticated()')}">
-        <div th:with="principal=${#authentication.principal}">
-
-            <div th:if="${principal == null}">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/auth/loginForm}">로그인</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/auth/joinForm}">회원가입</a></li>
-                </ul>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/common/css/nav.css">
+        <link rel="stylesheet" href="/common/css/main.css">
+    </head>
+    <body>
+        <nav th:replace="~{common/nav.html :: nav}"></nav>
+        <main>
+            <div class="swipe-box">
+                <div class="swipe-nav">
+                <span>
+                    <span id="swipeNavIndex"></span>
+                    <a id="prev-swipe">&lt;</a>
+                    <a id="next-swipe">&gt;</a>
+                    <a href="" id="swipeNavAction" class="action"></a>
+                </span>
+                </div>
+                <a href="">
+                    <div class="pre-end" id="preEnd">
+                        <img src="/web.png" alt="">
+                    </div>
+                </a>
+                <a href="">
+                    <div class="first-page" id="firstPage">
+                        <img src="/mobile.png" alt="">
+                    </div>
+                </a>
+                <a href="">
+                    <div class="swipe-img-box one">
+                        <img src="/mobile.png" alt="">
+                    </div>
+                </a>
+                <a href="">
+                    <div class="swipe-img-box two">
+                        <img src="/PC_Page.png" alt="">
+                    </div>
+                </a>
+                <a href="">
+                    <div class="swipe-img-box three">
+                        <img src="/responsiveweb.jpeg" alt="">
+                    </div>
+                </a>
+                <a href="">
+                    <div class="swipe-img-box four">
+                        <img src="/secure_coding.jpg" alt="">
+                    </div>
+                </a>
+                <a href="">
+                    <div class="swipe-img-box five">
+                        <img src="/web.png" alt="">
+                    </div>
+                </a>
+                <a href="">
+                    <div class="end-page" id="endPage">
+                        <img src="/web.png" alt="">
+                    </div>
+                </a>
+                <a href="">
+                    <div class="next-first" id="nextFirst">
+                        <img src="/mobile.png" alt="">
+                    </div>
+                </a>
             </div>
-            <div th:if="${principal != null}">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" th:href="@{/user/updateForm}">회원정보</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/logout}">로그아웃</a></li>
-                </ul>
+            <div class="job-recommand">
+                <div class="recommand">
+                    <h1>내게 맞는 직업을 찾아보세요</h1>
+                    <h2>개발자부터 프로덕트 매니저, 마케터까지</h2>
+                    <h2>IT 취업에 특화된 직업을 소개합니다.</h2>
+                </div>
+                <div class="recommand-list-box">
+                    <a href="#" class="job-category-link">
+                        <div class="job-category">
+                            <div>
+                                <h1>직업명</h1>
+                                <h2>대충 설명</h2>
+                                <span class="recommand-detail">더 알아보기 </span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="job-category-link">
+                        <div class="job-category">
+                            <div>
+                                <h1>직업명</h1>
+                                <h2>대충 설명</h2>
+                                <span class="recommand-detail">더 알아보기 </span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="job-category-link">
+                        <div class="job-category">
+                            <div>
+                                <h1>직업명</h1>
+                                <h2>대충 설명</h2>
+                                <span class="recommand-detail">더 알아보기 </span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="job-category-link">
+                        <div class="job-category">
+                            <div>
+                                <h1>직업명</h1>
+                                <h2>대충 설명</h2>
+                                <span class="recommand-detail">더 알아보기 </span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="job-category-link">
+                        <div class="job-category">
+                            <div>
+                                <h1>직업명</h1>
+                                <h2>대충 설명</h2>
+                                <span class="recommand-detail">더 알아보기 </span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="job-category-link">
+                        <div class="job-category">
+                            <div>
+                                <h1>직업명</h1>
+                                <h2>대충 설명</h2>
+                                <span class="recommand-detail">더 알아보기 </span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="#" class="job-category-link">
+                        <div class="job-category">
+                            <div>
+                                <h1>직업명</h1>
+                                <h2>대충 설명</h2>
+                                <span class="recommand-detail">더 알아보기 </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
-
-        </div>
-    </div>
-
-
-
-
-</body>
+            <div class="job-posting"></div>
+            <div class="board-list-container">
+                <div class="board-list-box">
+                    <div class="board-list-title">
+                        <a href="">자유게시판</a>
+                    </div>
+                    <div class="board-content">
+                        <div>
+                            <span class="board-writer">설석현</span>
+                            <span class="board-like">52</span>
+                            <span class="board-time">2020/03/28</span>
+                            <span class="board-comment">3</span>
+                        </div>
+                        <div class="board-title">
+                            <a href="#">하라라라라라라라라라라라</a>
+                        </div>
+                    </div>
+                    <div class="board-content">
+                        <div>
+                            <span class="board-writer">설석현</span>
+                            <span class="board-like">52</span>
+                            <span class="board-time">2020/03/28</span>
+                            <span class="board-comment">3</span>
+                        </div>
+                        <div class="board-title">
+                            <a href="#">하라라라라라라라라라라라</a>
+                        </div>
+                    </div>
+                    <div class="board-content">
+                        <div>
+                            <span class="board-writer">설석현</span>
+                            <span class="board-like">52</span>
+                            <span class="board-time">2020/03/28</span>
+                            <span class="board-comment">3</span>
+                        </div>
+                        <div class="board-title">
+                            <a href="#">하라라라라라라라라라라라</a>
+                        </div>
+                    </div>
+                    <div class="board-content">
+                        <div>
+                            <span class="board-writer">설석현</span>
+                            <span class="board-like">52</span>
+                            <span class="board-time">2020/03/28</span>
+                            <span class="board-comment">3</span>
+                        </div>
+                        <div class="board-title">
+                            <a href="#">하라라라라라라라라라라라</a>
+                        </div>
+                    </div>
+                    <div class="board-content">
+                        <div>
+                            <span class="board-writer">설석현</span>
+                            <span class="board-like">52</span>
+                            <span class="board-time">2020/03/28</span>
+                            <span class="board-comment">3</span>
+                        </div>
+                        <div class="board-title">
+                            <a href="#">하라라라라라라라라라라라</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="board-list-box">
+                    <div class="board-list-title">
+                        <a href="">질문게시판</a>
+                    </div>
+                    <div class="board-content">
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="board-content">
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="board-content">
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="board-content">
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="board-content">
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="board-list-box">
+                    <div class="board-list-title">
+                        <a href="">WEEKLY BEST</a>
+                    </div>
+                    <div class="board-content">
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-like">52</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-like">52</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-like">52</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="board-list-box">
+                    <div class="board-list-title">
+                        <a href="">공지사항</a>
+                    </div>
+                    <div class="board-content">
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                        <div class="board-content">
+                            <div>
+                                <span class="board-writer">설석현</span>
+                                <span class="board-time">2020/03/28</span>
+                                <span class="board-comment">3</span>
+                            </div>
+                            <div class="board-title">
+                                <a href="#">하라라라라라라라라라라라</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="review-box">
+                <h1>수 많은 강의 후기가 기다리고 있어요!</h1>
+                <div class="review-swipe-box" id="reviewSwipeBox">
+                    <div class="review-content-box">1</div>
+                    <div class="review-content-box">2</div>
+                    <div class="review-content-box">3</div>
+                    <div class="review-content-box">4</div>
+                    <div class="review-content-box">5</div>
+                    <div class="review-content-box">6</div>
+                    <div class="review-content-box">7</div>
+                    <div class="review-content-box">8</div>
+                    <div class="review-content-box">9</div>
+                    <div class="review-content-box">10</div>
+                    <div class="review-content-box">11</div>
+                    <div class="review-content-box">12</div>
+                    <div class="review-content-box">13</div>
+                </div>
+                <div class="review-btn-area">
+                    <a href="">다양한 강의 보러 가기</a>
+                </div>
+            </div>
+        </main>
+        <script src="/common/js/nav.js"></script>
+        <script src="/common/js/main.js"></script>
+    </body>
 </html>

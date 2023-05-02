@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -67,87 +68,93 @@
               </div>
             </li>
             <li>
-              <div class="nav-content-box">
-                <button class='btn'>Login</button>
-                <button class='btn'>회원가입</button>
-              </div>
-              <div class="nav-login-icons">
-                <div id="userIconBox" class="user-icon-box">
+              <!-- dto 던져서 체크-->
+              <div th:if="${#authorization.expression('isAuthenticated()')}">
+                <div th:with="principal=${#authentication.principal}">
+                  <div th:if="${principal == null}" class="nav-content-box">
+                    <button class='btn'>Login</button>
+                    <button class='btn'>회원가입</button>
+                  </div>
+                  <div th:if="${principal != null}" class="nav-login-icons">
+                    <div id="userIconBox" class="user-icon-box">
                   <span>
                     <a id="userIcon" href="">
                       <i class="fas fa-user fa-lg"></i>
                     </a>
                   </span>
-                  <div class="user-hidden" id="userHidden">
-                  </div>
-                  <div class="info-modal" id="infoModal">
-                    <div class="user-diamond"></div>
-                    <div class="modal-user-info">
+                      <div class="user-hidden" id="userHidden">
+                      </div>
+                      <div class="info-modal" id="infoModal">
+                        <div class="user-diamond"></div>
+                        <div class="modal-user-info">
                       <span>
                         <a class="modal-nickname" href="">닉네임님</a>
                         <a class="modal-alarm" href=""><i class="fa-solid fa-bell bell"></i></a>
                       </span>
+                        </div>
+                        <div class="modal-user-list">
+                          <span><a href=""><i class="fa-solid fa-book books"></i>&#32;내 강의실</a></span>
+                          <span><a href=""><i class="fa-solid fa-heart heart"></i>&#32;좋아요</a></span>
+                          <span><a href=""><i class="fa-solid fa-clipboard clipboard"></i>&#32;내가 쓴 게시글</a></span>
+                          <span><a th:href="@{/logout}"><i class="fa-solid fa-right-from-bracket"></i>&#32;로그아웃</a></span>
+                        </div>
+                      </div>
                     </div>
-                    <div class="modal-user-list">
-                      <span><a href=""><i class="fa-solid fa-book books"></i>&#32;내 강의실</a></span>
-                      <span><a href=""><i class="fa-solid fa-heart heart"></i>&#32;좋아요</a></span>
-                      <span><a href=""><i class="fa-solid fa-clipboard clipboard"></i>&#32;내가 쓴 게시글</a></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="cart-icon-box" id="cartIconBox">
+                    <div class="cart-icon-box" id="cartIconBox">
                   <span id="cartIcon">
                     <a href="">
                       <i class="fa-solid fa-cart-shopping fa-lg"></i>
                     </a>
                   </span>
-                  <div class="cart-hidden" id="cartHidden"></div>
-                  <div class="nav-cart-modal" id="navCartModal">
-                    <div class="cart-diamond"></div>
-                    <div class="padding-modal">
-                      <div class="modal-cart-info">
-                        <div class="modal-cart-info-left">
-                          <span>수강바구니 </span>
-                          <span>1</span>
-                        </div>
-                        <div class="modal-cart-info-right">
-                          <span>총 결제금액 </span>
-                          <span>1,000,000</span>
-                          <span>원</span>
+                      <div class="cart-hidden" id="cartHidden"></div>
+                      <div class="nav-cart-modal" id="navCartModal">
+                        <div class="cart-diamond"></div>
+                        <div class="padding-modal">
+                          <div class="modal-cart-info">
+                            <div class="modal-cart-info-left">
+                              <span>수강바구니 </span>
+                              <span>1</span>
+                            </div>
+                            <div class="modal-cart-info-right">
+                              <span>총 결제금액 </span>
+                              <span>1,000,000</span>
+                              <span>원</span>
+                            </div>
+                          </div>
+                          <div class="modal-cart-list">
+                            <div class="nav-course-box">
+                              <div class="nav-course-thumbnail">
+                                <img class="nav-course-img" src="" alt="">
+                              </div>
+                              <div class="nav-course-content">
+                                <span>제목제목제목제목</span>
+                                <span>100,000 원</span>
+                              </div>
+                            </div>
+                            <div class="nav-course-box">
+                              <div class="nav-course-thumbnail">
+                                <img class="nav-course-img" src="" alt="">
+                              </div>
+                              <div class="nav-course-content">
+                                <span>제목제목제목제목</span>
+                                <span>100,000 원</span>
+                              </div>
+                            </div>
+                            <div class="nav-course-box">
+                              <div class="nav-course-thumbnail">
+                                <img class="nav-course-img" src="" alt="">
+                              </div>
+                              <div class="nav-course-content">
+                                <span>제목제목제목제목</span>
+                                <span>100,000 원</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-cart-btn">
+                            <a href="">수강바구니에서 전체보기</a>
+                          </div>
                         </div>
                       </div>
-                      <div class="modal-cart-list">
-                        <div class="nav-course-box">
-                          <div class="nav-course-thumbnail">
-                            <img class="nav-course-img" src="" alt="">
-                          </div>
-                          <div class="nav-course-content">
-                            <span>제목제목제목제목</span>
-                            <span>100,000 원</span>
-                          </div>
-                        </div>
-                        <div class="nav-course-box">
-                          <div class="nav-course-thumbnail">
-                            <img class="nav-course-img" src="" alt="">
-                          </div>
-                          <div class="nav-course-content">
-                            <span>제목제목제목제목</span>
-                            <span>100,000 원</span>
-                          </div>
-                        </div>
-                        <div class="nav-course-box">
-                          <div class="nav-course-thumbnail">
-                            <img class="nav-course-img" src="" alt="">
-                          </div>
-                          <div class="nav-course-content">
-                            <span>제목제목제목제목</span>
-                            <span>100,000 원</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="modal-cart-btn">
-                        <a href="">수강바구니에서 전체보기</a>
-                      </div>                  
                     </div>
                   </div>
                 </div>
