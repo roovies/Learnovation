@@ -14,14 +14,23 @@ public class UserDTO {
     private Long id;
 
     private String email;
+
     private String password;
+
     private String name;
+
     private String nickname;
+
     private String phoneNumber;
+
     private String profileImage;
+
     private Timestamp createdAt;
+
     private Timestamp updatedAt;
+
     private String status;
+
     private Timestamp deletedAt;
 
     public User toEntity() {
