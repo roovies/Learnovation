@@ -132,7 +132,6 @@ public class UserServiceImpl implements UserService{
     @Override
     public void pwUpdate(UserDTO userDTO) {
         String encryptPassword = encoder.encode(userDTO.getPassword());
-        user.update(encryptPassword);
     }
 
 
@@ -158,6 +157,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional(readOnly = true)
+    @Override
     public User 회원찾기(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if(user.isPresent()){
@@ -169,6 +169,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Transactional
+    @Override
     public void 회원가입(User user) {
         String rawPassword = user.getPassword(); // 1234 원문
         String encPassword = encoder.encode(rawPassword); // 해쉬
@@ -178,6 +179,7 @@ public class UserServiceImpl implements UserService{
     }
 
      @Transactional
+     @Override
      public void 회원수정(User user) {
   		// 수정시에는 영속성 컨텍스트 User 오브젝트를 영속화시키고, 영속화된 User 오브젝트를 수정
   		// select를 해서 User오브젝트를 DB로부터 가져오는 이유는 영속화를 하기 위해서!!
@@ -195,7 +197,13 @@ public class UserServiceImpl implements UserService{
          }
 
 
-  		// 회원수정 함수 종료시 = 서비스 종료 = 트랜잭션 종료 = commit이 자동으로 됩니다.
+  		// 회원수정 함수 종료시 = 서비스 종료 = 트랜잭션 종료 = commit이 자동으로 됩니다.n
   		// 영속화된 persistance 객체의 변화가 감지되면 더티체킹이 되어 update문을 날려줌.
      }
+
+    @Override
+    public Optional<User>  findUserByEmail(String email) {
+        Optional<User> foundUser = userRepository.findByEmail(email);
+        return foundUser; // optional 객체가 존재하는지 (isPresent()) 여부 체크 하세요.
+    }
 }

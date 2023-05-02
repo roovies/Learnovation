@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
@@ -47,15 +49,13 @@ import java.util.UUID;
 @Controller
 public class UserController {
 
-    private AuthenticationManager authenticationManager;
-    private final UserService userService;
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
 	//HttpURLConnection con = (HttpURLConnection) url.openConnection();
 	private String cosKey = "cos1234";
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
-
+    private final UserService userService;
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -113,6 +113,18 @@ public class UserController {
 	 * */
 	@GetMapping("/")
 	public String indexForm() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+			// 현재 로그인된 사용자의 정보를 가져올 수 있습니다.
+			String email = userDetails.getUsername(); // 예시: User 엔티티에 userId 필드가 있다고 가정
+			System.out.println("@@@@@@@@@@@@@@@@@@@@@@");
+			System.out.println(email);
+			Optional<User> foundUser = userService.findUserByEmail(email);
+			if (foundUser.isPresent()){
+				System.out.println(foundUser.toString());
+			}
+		}
 		return "index";
 	}
 

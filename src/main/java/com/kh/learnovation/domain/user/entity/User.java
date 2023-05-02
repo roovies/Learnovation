@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 @DynamicInsert
 @Entity
 @Table(name="users")
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,8 +1,10 @@
 package com.kh.learnovation.domain.user.service;
 
 import com.kh.learnovation.domain.user.dto.UserDTO;
+import com.kh.learnovation.domain.user.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -19,4 +21,13 @@ public interface UserService {
     Long savePost(UserDTO userDTO);
 
     void pwUpdate(UserDTO userDTO);
+
+    User 회원찾기(String email);
+
+    void 회원가입(User user);
+    void 회원수정(User user);
+
+    /** user이메일로 user Entity 가져오기 */
+    Optional<User> findUserByEmail(String email);
+
 }
