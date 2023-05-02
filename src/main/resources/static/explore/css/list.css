@@ -1,0 +1,128 @@
+main{
+    width: 1400px;
+    margin: 0 auto;
+}
+.job-recommand{
+    margin: 100px auto 0;
+    width: 1400px;
+}
+.recommand{
+    text-align: center;
+}
+.recommand h1{
+    font-weight: 900;
+}
+.recommand h2{
+    font-weight: 400;
+}
+.explore-top-nav-content{
+    border-top: darkgray;
+    border-bottom: darkgray;
+    display: flex;
+    justify-content: end;
+}
+.explore-top-nav-content *{
+    margin: 0px 3px;
+}
+.explore-top-nav-content a{
+    color: darkgray;
+    text-decoration: none;
+}
+.explore-top-nav-content a:hover{
+    color : #0090F0;
+}
+.recommand-list-box{
+    width: 1400px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 60px;
+}
+.job-category-link{
+    color: black;
+    text-decoration: none;
+    margin : 30px 0px;
+}
+
+.job-category{
+    width: 372px;
+    height: 600px;
+    background-color: azure;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.job-category:hover{
+    background-color: antiquewhite;
+}
+.job-category:hover .recommand-detail{
+    color: #ffc839;
+}
+.job-category h1{
+    margin-top: 0;
+}
+.job-subject{
+    height: 100px;
+    width : 100%;
+    background-color: #bdf6f6;
+    border-top: 1px solid darkgray;
+    display: flex;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 0px;
+}
+.yellow{
+    color: rgb(255, 218, 18);
+}
+.skin{
+    color: rgb(239, 199, 164);
+}
+.brown{
+    color : rgb(194, 101, 34);
+}
+.job-category:hover .job-subject{
+    background-color: #ffddb3;
+}
+.job-subject div{
+    width : 124px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.job-subject-icon{
+    font-size : 40px
+}
+.recommand-detail::after{
+    content: '\f061';
+    font-family: "Font Awesome\ 6 Free";
+    font-weight: 900;
+}
+.recommand-detail{
+    color: rgb(101, 197, 197);
+}
+.recommand-detail:hover{
+    color : white !important;
+}
+.explore-bottom-nav{
+    border-top: 1px solid darkgray;
+    padding: 30px 0px;
+    display: flex;
+    justify-content: space-between;
+}
+.explore-bottom-nav a{
+    color: black;
+    text-decoration: none;
+}
+.explore-bottom-nav a:hover{
+    color : #0090F0;
+}
+.explore-bottom-nav-content a{
+    padding: 0px 20px;
+}
+.explore-nav-check{
+    color: #0090F0 !important;
+}

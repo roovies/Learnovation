@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.File;
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,6 +52,8 @@ public class NoticeController {
             mv.setViewName("redirect:/notice/list");
             return mv;
         }
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        String time = ts.toString().replaceAll(":", "");
         String[] sList = content.split("\"");
         List<String> fileList = new ArrayList<String>();
         for(String aa : sList){
@@ -58,7 +61,7 @@ public class NoticeController {
                 fileList.add(aa.substring(7));
             }
         }
-        File diretory = new File("C:\\img\\notice\\" + title);
+        File diretory = new File("C:\\img\\notice\\" + title + time);
         if(!diretory.exists()){
             diretory.mkdirs();
         }
@@ -69,7 +72,7 @@ public class NoticeController {
                 for(int i = 0; i < files.length; i++){
                     for(String fileName : fileList) {
                         if ((id + "/" + files[i].getName()).equals(fileName)) {
-                            files[i].renameTo(new File("C:\\img\\notice\\" + title + "\\" + files[i].getName()));
+                            files[i].renameTo(new File("C:\\img\\notice\\" + title + time + "\\" + files[i].getName()));
                         }
                     }
                     if (files[i].delete()) {
@@ -87,7 +90,7 @@ public class NoticeController {
         }else{
             // 임시 폴더가 없을 시
         }
-        content = content.replaceAll(id, "notice/" + title);
+        content = content.replaceAll(id, "notice/" + title + time);
         /*String[] trueContent = content.split("<");
         StringBuilder sb = new StringBuilder("");
         for(String tContent : trueContent){
@@ -100,7 +103,7 @@ public class NoticeController {
         System.out.println(sb);*/
         String subject = content.replaceAll("<[^>]*>?","");
         Admin admin = Admin.builder().id(Long.parseLong(adminId)).build();
-        NoticeDTO noticeDTO = NoticeDTO.builder().title(title).content(content).admin(admin).status(0).subject(subject).build();
+        NoticeDTO noticeDTO = NoticeDTO.builder().title(title).content(content).admin(admin).status(0).subject(subject).createdAt(ts).build();
         long noticeNo = nService.insertNotice(noticeDTO).getId();
         mv.setViewName("redirect:/notice/detail?noticeNo=" + noticeNo);
         return mv;
@@ -156,9 +159,10 @@ public class NoticeController {
         noticeDTO.setStatus(1);
         noticeDTO = nService.updateNotice(noticeDTO);
         String title = noticeDTO.getTitle();
-        File file = new File("C:\\img\\notice\\" + title);
+        String time = noticeDTO.getCreatedAt().toString().replaceAll(":", "");
+        File file = new File("C:\\img\\notice\\" + title + time);
         if(file.exists()){
-            file.renameTo(new File("C:\\img\\notice\\삭제예정[" + title + "]"));
+            file.renameTo(new File("C:\\img\\notice\\삭제예정[" + title + time +  "]"));
         }
         mv.setViewName("redirect:/notice/list");
         return mv;
@@ -209,30 +213,78 @@ public class NoticeController {
             , @RequestParam("title") String title
             , @RequestParam("id") String id
             , @RequestParam("adminId") String adminId
-            , @RequestParam("noticeId") String noticeId) {
+            , @RequestParam("noticeId") String noticeId
+            , @RequestParam("createTime") Timestamp ts
+            , @RequestParam("originalTitle") String originalTitle) {
         if(content.equals("") || title.equals("")){
             mv.setViewName("redirect:/notice/list");
             return mv;
         }
+        String time = ts.toString().replaceAll(":", "");
+        if(!title.equals(originalTitle)){
+            File originDirectory = new File("C:\\img\\notice\\" + originalTitle + time);
+            File newDirectory = new File("C:\\img\\notice\\" + title + time);
+            File[] originFiles = originDirectory.listFiles();
+            if(originFiles != null){
+                for(int i = 0; i < originFiles.length; i++){
+                    originFiles[i].renameTo(new File("C:\\img\\notice\\" + title + time + "\\" + originFiles[i].getName()));
+                }
+                originDirectory.renameTo(newDirectory);
+            }
+        }
+        // <p><img src="/image/notice/와우/efc877df-84ff-4495-9cad-7189dfe92d42플차.png"><img src="/image/notice/와우/f4e42ed1-ec45-4a05-a562-ab9fb06666be제목 없음.png"><br></p>
+        // 썸머노트 글 작성시 내용 예시
+        // "로 시작하는거로 짜름
         String[] sList = content.split("\"");
         List<String> fileList = new ArrayList<String>();
         for(String aa : sList){
+            // /로 시작하는거 찾음
             if(aa.startsWith("/")){
+                // /image/부분 공통이라 짜름
                 fileList.add(aa.substring(7));
             }
         }
-        File diretory = new File("C:\\img\\notice\\" + title);
+        // c 아래 img 아래 noitce아래 제목으로 파일 객체 생성 
+        File diretory = new File("C:\\img\\notice\\" + title + time);
         if(!diretory.exists()){
+            // 객체가 존재하지않으면 해당경로에 폴더 생성
             diretory.mkdirs();
         }
+        // 해당 폴더에 이미지 파일들 파일 배열로 저장
+        File[] originalFiles = diretory.listFiles();
+        // 해당 폴더에 파일에서 수정된 게시글에서 지워진 이미지 판단 할 배열
+        int[] valid = new int[originalFiles.length];
+        // 기존 폴더에서 수정된 게시글과 비교해 삭제되지 않은거 배열에 저장
+        for(int i = 0; i < originalFiles.length; i++){
+            for(String fileName : fileList){
+                if(("notice/" + title + time + "/" + originalFiles[i].getName()).equals(fileName)){
+                        valid[i] = 1;
+                }
+            }
+        }
+        // 수정된 게시글에서 삭제된 이미지 삭제
+        for (int i = 0; i < originalFiles.length; i++){
+            if(valid[i] != 1){
+                if(originalFiles[i].delete()){
+                    //원 파일 삭제 성공
+                }else{
+                    //원 파일 삭제 실패
+                }
+            }
+        }
+        // 임시 이미지 파일 저장된 폴더 파일 객체에 담음
         File file = new File("C:\\img\\" + id);
+        // 임시 이미지 파일 담은 폴더가 존재 여부 확인
         if(file.exists()){ //파일존재여부확인
+            // 폴더가 폴더인지 확인
             if(file.isDirectory()){ //파일이 디렉토리인지 확인
+                // 폴더에 파일들 담은 배열 생성
                 File[] files = file.listFiles();
+                // 임시 파일중 게시글 내용에 포함된거 제목으로 된 폴더로 이동 나머지는 삭제
                 for(int i = 0; i < files.length; i++){
                     for(String fileName : fileList) {
                         if ((id + "/" + files[i].getName()).equals(fileName)) {
-                            files[i].renameTo(new File("C:\\img\\notice\\" + title + "\\" + files[i].getName()));
+                            files[i].renameTo(new File("C:\\img\\notice\\" + title + time + "\\" + files[i].getName()));
                         }
                     }
                     if (files[i].delete()) {
@@ -250,10 +302,13 @@ public class NoticeController {
         }else{
             // 폴더가 있을시
         }
-        content = content.replaceAll(id, "notice/" + title);
+        // 썸머노트 내용중 임시저장 경로였던 id값들 실 저장된 폴더로 경로 내용 변경
+        content = content.replaceAll(id, "notice/" + title + time);
+        // 글 내용 검색용으로 만들기 위해 html 태그들 삭제
         String subject = content.replaceAll("<[^>]*>?", "");
         Admin admin = Admin.builder().id(Long.parseLong(adminId)).build();
-        NoticeDTO noticeDTO = NoticeDTO.builder().id(Long.parseLong(noticeId)).title(title).content(content).admin(admin).subject(subject).build();
+        NoticeDTO OriginalNoticeDTO = nService.selectOneNotice(Long.parseLong(noticeId));
+        NoticeDTO noticeDTO = NoticeDTO.builder().id(Long.parseLong(noticeId)).title(title).content(content).admin(admin).subject(subject).createdAt(OriginalNoticeDTO.getCreatedAt()).build();
         long noticeNo = nService.updateNotice(noticeDTO).getId();
         mv.setViewName("redirect:/notice/detail?noticeNo=" + noticeId);
         return mv;

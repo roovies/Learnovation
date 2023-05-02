@@ -30,7 +30,6 @@ public class Notice {
     @Column(name="content", nullable = false)
     private String content;
     @Column(name="created_at")
-    @CreationTimestamp
     private Timestamp createdAt;
     @Column(name="updated_at")
     @UpdateTimestamp
