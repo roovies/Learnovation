@@ -13,13 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
     private static final int BLOCK_PAGE_NUM_COUNT = 5; // 블럭에 존재하는 페이지 수
-    private static final int PAGE_POST_COUNT = 4; // 한 페이지에 존재하는 게시글 수
+    private static final int PAGE_POST_COUNT = 10; // 한 페이지에 존재하는 게시글 수
 
     public QuestionServiceImpl(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
@@ -117,6 +116,12 @@ public class QuestionServiceImpl implements QuestionService {
             questionDTOList.add(this.convertEntityToDto(question));
         }
         return questionDTOList;
+    }
+
+    @Override
+    @Transactional
+    public void questionDelete(Long id) {
+      questionRepository.deleteById(id);
     }
 
     private QuestionDTO convertEntityToDto(Question question) {

@@ -42,4 +42,11 @@ public interface CourseService {
 
     /** 동영상 길이 [n분 n초] 형태로 변환 */
     String convertTimeToString(int time);
+
+    /** 강의 리스트 Service*/
+    List<CourseDetailDTO> getCourseList(Integer pageNum);
+
+    /** 리스트 페이징 */
+    Integer[] getPageList(Integer pageNum);
+
 }

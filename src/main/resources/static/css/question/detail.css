@@ -18,12 +18,13 @@ p {
     width: 8%;
 }
 
-#main-area {
+#content-area p{
+    border: 0;
     margin: 0 auto;
-}
-
-#main-area #content {
     margin-left: 265px;
     width: 59.8%;
-    height: 600px;
+}
+
+#update-btn, #golist-btn {
+    cursor: pointer;
 }

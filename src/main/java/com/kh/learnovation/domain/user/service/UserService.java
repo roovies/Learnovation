@@ -17,4 +17,6 @@ public interface UserService {
     void deleteByIdIn(List<Long> selectedIds);
 
     Long savePost(UserDTO userDTO);
+
+    void pwUpdate(UserDTO userDTO);
 }

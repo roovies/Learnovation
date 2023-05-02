@@ -64,6 +64,11 @@ public class QuestionController {
         return "question/detail";
     }
 
+    @DeleteMapping("/question/delete/{no}")
+    public String questionDelete(@PathVariable("no") Long id) {
+        questionService.questionDelete(id);
+        return "redirect:/question/list";
+    }
 
 
 }

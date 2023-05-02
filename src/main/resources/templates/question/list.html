@@ -18,22 +18,24 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="question : ${questionList}">
+            <tr th:each="question : ${question}">
                 <td th:text="${question.id}"></td>
                 <td th:text="${question.userId}"></td>
-                <td th:text="${question.content}"></td>
+                <td>
+                   <a th:href="@{'/question/' + ${question.id}}">
+                       <span th:text="${question.title}"></span>
+                   </a>
+                </td>
                 <td th:text="${question.viewCount}"></td>
             </tr>
         </tbody>
       </table>
         <div id="page-area">
             <span th:each="pageNum : ${pageList}" th:inline="text">
-                <a th:href="@{'question/list?page=' + ${pageNum}}">[[${pageNum}]]</a>
+                <a th:href="@{'/question/list?page=' + ${pageNum}}">[[${pageNum}]]</a>
             </span>
         </div>
+        <a href="/question/registView">글쓰기</a>
     </div>
-<script>
-
-</script>
 </body>
 </html>

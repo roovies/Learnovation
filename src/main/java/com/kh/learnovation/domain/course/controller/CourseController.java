@@ -109,4 +109,24 @@ public class CourseController {
         model.addAttribute("detail", detailDTO);
         return "course/CourseDetail";
     }
+
+    /**
+     * ==============================================================================================================
+     * / 강의 리스트
+     * /==============================================================================================================
+     */
+    @GetMapping("/list")
+    public String courseList(
+            Model model
+            , @RequestParam(value = "page", defaultValue = "1") Integer pageNum
+    ) {
+
+        List<CourseDetailDTO> courseList = courseService.getCourseList(pageNum);
+        Integer[] pageList = courseService.getPageList(pageNum);
+
+        model.addAttribute("courses", courseList);
+        model.addAttribute("page", pageList);
+
+        return "course/CourseList";
+    }
 }

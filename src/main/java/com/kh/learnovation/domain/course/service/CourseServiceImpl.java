@@ -8,11 +8,13 @@ import com.kh.learnovation.domain.user.entity.User;
 import com.kh.learnovation.domain.user.repository.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.jcodec.api.FrameGrab;
-import org.jcodec.api.JCodecException;
 import org.jcodec.common.io.NIOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,6 +39,9 @@ public class CourseServiceImpl implements CourseService {
     private final VideoRepository videoRepository;
     private final UserRepository userRepository;
     private final JPAQueryFactory jqf;
+    private static final int BLOCK_PAGE_NUM_COUNT = 5; // 블럭에 존재하는 페이지 수
+    private static final int PAGE_POST_COUNT = 10; // 한 페이지에 존재하는 게시글 수
+
 
     @Autowired
     public CourseServiceImpl(ResourceLoader resourceLoader, CourseRepository courseRepository,
@@ -62,8 +67,6 @@ public class CourseServiceImpl implements CourseService {
         if (foundUser.isPresent()) {
             UserDTO userResp = UserDTO.builder()
                     .id(foundUser.get().getId())
-                    .socialId(foundUser.get().getSocialId())
-                    .socialProvider(foundUser.get().getSocialProvider())
                     .email(foundUser.get().getEmail())
                     .name(foundUser.get().getName())
                     .nickname(foundUser.get().getNickname())
@@ -383,4 +386,58 @@ public class CourseServiceImpl implements CourseService {
         return timeString;
     }
 
+    /* 강의 리스트 */
+    @Override
+    public List<CourseDetailDTO> getCourseList(Integer pageNum) {
+
+        Page<Course> page = courseRepository
+                .findAll(PageRequest.of(pageNum-1, PAGE_POST_COUNT, Sort.by(Sort.Direction.ASC, "createdAt")));
+
+        List<Course> courses = page.getContent();
+        List<CourseDetailDTO> courseDetailDTOList = new ArrayList<>();
+
+        for(Course course : courses) {
+            CourseDetailDTO courseDetailDTO = CourseDetailDTO.builder()
+                    .id(course.getId())
+                    .category(course.getCourseCategory().getName())
+                    .level(course.getLevel())
+                    .title(course.getTitle())
+                    .nickname(course.getUser().getNickname())
+                    .price(course.getPrice())
+                    .content(course.getContent())
+                    .savedPath(course.getCourseImage().getSavedPath())
+                    .savedImageName(course.getCourseImage().getSavedImageName())
+                    .build();
+
+            courseDetailDTOList.add(courseDetailDTO);
+        }
+        return courseDetailDTOList;
+    }
+
+    /* 강의 리스트 페이징 */
+    @Override
+    @Transactional
+    public Integer[] getPageList(Integer curPageNum) {
+        Integer[] pageList = new Integer[BLOCK_PAGE_NUM_COUNT];
+
+        Double coursesTotalCount = Double.valueOf(this.getCourseCount());
+
+        Integer totalLastPageNum = (int)(Math.ceil((coursesTotalCount/PAGE_POST_COUNT)));
+
+        Integer blockLastPageNum = (totalLastPageNum > curPageNum + BLOCK_PAGE_NUM_COUNT)
+                ? curPageNum + BLOCK_PAGE_NUM_COUNT
+                : totalLastPageNum;
+
+        curPageNum = (curPageNum<=3) ? 1 : curPageNum-2;
+
+        for(int val=curPageNum, i=0;val<=blockLastPageNum;val++, i++) {
+            pageList[i] = val;
+        }
+
+        return pageList;
+    }
+
+    public Long getCourseCount() {
+        return courseRepository.count();
+    }
 }

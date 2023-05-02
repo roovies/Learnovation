@@ -21,4 +21,6 @@ public interface QuestionService {
     Integer[] getPageList(Integer pageNum);
 
     List<QuestionDTO> searchQuestion(String keyword);
+
+    void questionDelete(Long id);
 }
