@@ -11,13 +11,24 @@
         <div id="title-area">
             <br>
             <p type="text" id="title" name="title" th:text="${question.title}" readonly></p> <br>
-            <p type="text" id="created-at" name="createdAt" th:text="${question.createdAt}" readonly></p>
+            <p type="text" id="created-at" name="createdAt" th:text="${#dates.format(question.createdAt, 'yyyy-MM-dd HH:mm:ss')}" readonly></p>
             <p type="text" id="view-count" name="viewCount" th:text="${question.viewCount}" readonly></p>
         </div>
         <br><br>
-        <div id="main-area">
-            <p id="content" name="content" th:text="${question.content}" readonly></p>
+        <div id="content-area" th:utext="${question.content}"></div>
+        <div id="btn-area">
+            <form id="delete-form" th:action="@{'/question/delete/' +${question.id}}" method="post">
+                <input type="hidden" name="_method" value="delete" />
+                <button id="delete-btn">게시글 삭제하기</button>
+            </form>
+            <a id="update-btn">게시글 수정하기</a> <br>
+            <a id="golist-btn" onclick="golist();">질문 목록으로 돌아가기</a>
         </div>
     </div>
+    <script>
+        function golist() {
+            location.href = "/question/list";
+        }
+    </script>
 </body>
 </html>

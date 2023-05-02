@@ -3,6 +3,7 @@ package com.kh.learnovation.domain.user.dto;
 import com.kh.learnovation.domain.user.entity.User;
 import lombok.*;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @NoArgsConstructor
@@ -11,8 +12,7 @@ import java.sql.Timestamp;
 @Setter
 public class UserDTO {
     private Long id;
-    private String socialId;
-    private String socialProvider;
+
     private String email;
     private String password;
     private String name;
@@ -42,7 +42,7 @@ public class UserDTO {
     }
 
     @Builder
-    public UserDTO(Long id, String socialId, String socialProvider, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt) {
+    public UserDTO(Long id, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt) {
         this.id = id;
         this.email = email;
         this.password = password;

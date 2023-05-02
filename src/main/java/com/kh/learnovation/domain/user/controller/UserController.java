@@ -2,6 +2,10 @@ package com.kh.learnovation.domain.user.controller;
 
 import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.service.UserService;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +15,7 @@ import java.util.List;
 @Controller
 public class UserController {
 
+    private AuthenticationManager authenticationManager;
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -51,6 +56,7 @@ public class UserController {
         return "admin/userDetail";
     }
 
+    // 회원 정보 수정
     @PutMapping("/admin/update/{id}")
     public String userUpdate(UserDTO userDTO) {
         userService.savePost(userDTO);
@@ -61,6 +67,19 @@ public class UserController {
     @PostMapping("/admin/delete")
     public String userDelete(@RequestParam("selectedIds") List<Long> selectedIds) {
         userService.deleteByIdIn(selectedIds);
+        return "redirect:/admin/userList";
+    }
+
+    @PutMapping("/admin/pwUpdate")
+    public String passwordUpdate(UserDTO userDTO) {
+
+        userService.pwUpdate(userDTO);
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userDTO.getEmail(), userDTO.getPassword())
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         return "redirect:/admin/userList";
     }
 

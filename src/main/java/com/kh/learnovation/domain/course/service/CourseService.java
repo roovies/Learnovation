@@ -64,4 +64,11 @@ public interface CourseService {
 
     /** 수강후기 평균 별점 Service */
     String averageRatingByCourseId(Long courseId);
+
+    /** 강의 리스트 Service*/
+    List<CourseDetailDTO> getCourseList(Integer pageNum);
+
+    /** 리스트 페이징 */
+    Integer[] getPageList(Integer pageNum);
+
 }

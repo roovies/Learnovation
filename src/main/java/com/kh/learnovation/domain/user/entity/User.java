@@ -4,12 +4,16 @@ import lombok.*;
 import lombok.Builder;
 import org.hibernate.annotations.ColumnDefault;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@DynamicInsert
 @Entity
 @Table(name="users")
 public class User {
@@ -17,11 +21,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-/*    @Column(name = "social_id", length = 100)
+    @Column(name = "social_id", length = 100)
     private String socialId;
 
     @Column(name = "social_provider", length = 50)
-    private String socialProvider;*/
+    private String socialProvider;
 
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;

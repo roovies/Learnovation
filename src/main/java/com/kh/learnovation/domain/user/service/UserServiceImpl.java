@@ -6,6 +6,7 @@ import com.kh.learnovation.domain.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +17,11 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService{
 
+    private BCryptPasswordEncoder encoder;
+    private User user;
     private final UserRepository userRepository;
     private static final int BLOCK_PAGE_NUM_COUNT = 5; // 블럭에 존재하는 페이지 수
-    private static final int PAGE_POST_COUNT = 4; // 한 페이지에 존재하는 게시글 수
+    private static final int PAGE_POST_COUNT = 10; // 한 페이지에 존재하는 게시글 수
 
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -121,6 +124,12 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public Long savePost(UserDTO userDTO) {
         return userRepository.save(userDTO.toEntity()).getId();
+    }
+
+    @Override
+    public void pwUpdate(UserDTO userDTO) {
+        String encryptPassword = encoder.encode(userDTO.getPassword());
+        user.update(encryptPassword);
     }
 
 

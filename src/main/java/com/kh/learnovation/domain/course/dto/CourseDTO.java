@@ -1,10 +1,7 @@
 package com.kh.learnovation.domain.course.dto;
 
 import com.kh.learnovation.domain.course.entity.Course;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -12,7 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class CourseDTO {
     private Long id;
     private String category; // 강의 카테고리
