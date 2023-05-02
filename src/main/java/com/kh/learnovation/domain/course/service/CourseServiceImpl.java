@@ -12,6 +12,9 @@ import org.jcodec.common.io.NIOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -419,5 +422,45 @@ public class CourseServiceImpl implements CourseService {
     public int deleteReview(Long id, Long userId) {
         int result = reviewRepository.deleteByIdAndUserId(id, userId);
         return result;
+    }
+
+    @Override
+    public List<CourseReviewDTO> findReviewByPaging(Long courseId, int page) {
+        PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Slice<CourseReview> slicedReviews = reviewRepository.findByCourseId(courseId, pageRequest);
+        List<CourseReview> reviews = slicedReviews.getContent();
+        return reviews.stream()
+                .map(review -> {
+                CourseReviewDTO reviewDTO = CourseReviewDTO.builder()
+                        .id(review.getId())
+                        .userNickname(review.getUser().getNickname())
+                        .content(review.getContent())
+                        .rating(review.getRating())
+                        .createdAt(review.getCreatedAt())
+                        .updatedAt(review.getUpdatedAt())
+                        .build();
+                return reviewDTO;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Long countReviewByCourseId(Long courseId) {
+        QCourseReview qReview = QCourseReview.courseReview;
+        Long totalCount = jqf
+                .selectFrom(qReview)
+                .where(qReview.course.id.eq(courseId))
+                .fetchCount();
+        return totalCount;
+    }
+
+    @Override
+    public String averageRatingByCourseId(Long courseId) {
+        QCourseReview qReview = QCourseReview.courseReview;
+        Double avgRating = jqf
+                .select(qReview.rating.avg())
+                .from(qReview)
+                .where(qReview.course.id.eq(courseId))
+                .fetchOne();
+        return String.format("%.1f", avgRating);
     }
 }

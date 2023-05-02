@@ -56,4 +56,12 @@ public interface CourseService {
     /** 수강후기 삭제 Service */
     int deleteReview(Long id, Long userId);
 
+    /** 수강후기 최신순 페이징 Service */
+    List<CourseReviewDTO> findReviewByPaging(Long courseId, int page);
+
+    /** 수강후기 총 개수 Service */
+    Long countReviewByCourseId(Long courseId);
+
+    /** 수강후기 평균 별점 Service */
+    String averageRatingByCourseId(Long courseId);
 }

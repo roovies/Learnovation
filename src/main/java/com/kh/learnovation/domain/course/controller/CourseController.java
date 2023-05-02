@@ -107,8 +107,14 @@ public class CourseController {
      */
     @GetMapping("/{id}")
     public String showCourseDetail(@PathVariable Long id, Model model){
-        CourseDetailDTO detailDTO = courseService.findDetailById(id);
+        CourseDetailDTO detailDTO = courseService.findDetailById(id); // 인강 상세정보
+        List<CourseReviewDTO> reviewDTOs = courseService.findReviewByPaging(id, 0); // 수강후기 최근 5개
+        Long totalReview = courseService.countReviewByCourseId(id); // 수강후기 총 개수
+        String avgRating = courseService.averageRatingByCourseId(id);
         model.addAttribute("detail", detailDTO);
+        model.addAttribute("reviews", reviewDTOs);
+        model.addAttribute("totalReview", totalReview);
+        model.addAttribute("avgRating", avgRating);
         return "course/CourseDetail";
     }
 
@@ -185,6 +191,22 @@ public class CourseController {
         } else{
             return "failed";
         }
+    }
+
+    // 4. 수강후기 더보기
+    @PostMapping("/{courseId}/more")
+    @ResponseBody
+    public List<CourseReviewDTO> moreReview(@PathVariable Long courseId, @RequestBody Map<String, String> map){
+        int page = Integer.parseInt(map.get("page"));
+        List<CourseReviewDTO> reviewDTOs = courseService.findReviewByPaging(courseId, page);
+        if (!reviewDTOs.isEmpty()){
+            System.out.println("@@@@@@@@@@@@@@@@@@@@@");
+            System.out.println("비어있다~~");
+        }
+//        for (CourseReviewDTO reviewDTO : reviewDTOs){
+//            System.out.println(reviewDTO.toString());
+//        }
+        return reviewDTOs;
     }
 
 }
