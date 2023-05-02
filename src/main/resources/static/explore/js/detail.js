@@ -52,8 +52,8 @@ new Chart(satisficationChart, {
         indexAxis: 'y',
         scales : {
             xAxis : {
-            suggestedMax: 100,
-            }
+                suggestedMax: 100,
+            },
         }
     }
 });

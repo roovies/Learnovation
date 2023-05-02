@@ -13,18 +13,18 @@
 <body>
     <nav th:replace="~{common/nav.html :: nav}"></nav>
     <main>
-        <h1>직업백과</h1>
+        <a href="/explore/list"><h1>직업백과</h1></a>
         <div class="explore-side-bar">
             <h1 th:text="${jobName}">고객관리시스템(CRM)전문가</h1>
             <div class="explore-side-bar-container">
                 <div class="explore-side-bar-box">
                     <span>평균급여</span>
-                    <span class="side-bar-icon"><i class="fa-solid fa-coins"></i></span>
-                    <span th:text="${salary}"></span><span th:if="${salary != '자료없음'}" th:text="만원"></span>
+                    <span class="side-bar-icon"><i class="fa-solid fa-coins yellow"></i></span>
+                    <div><span th:text="${salary}"></span><span th:if="${salary != '자료없음'}" th:text="만원"></span></div>
                 </div>
                 <div class="explore-side-bar-box">
                     <span>만족도</span>
-                    <span class="side-bar-icon"><i class="fa-solid fa-thumbs-up"></i></span>
+                    <span class="side-bar-icon"><i class="fa-solid fa-thumbs-up blue"></i></span>
                     <span th:text="${satisfication}">알 수 없음</span>
                 </div>
             </div>

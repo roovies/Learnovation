@@ -25,6 +25,8 @@
         <input type="hidden" th:value="${notice.getId()}" name="noticeId">
         <input type="hidden" th:value="${random}" id="id" name="id">
         <input type="hidden" th:value="${notice.getAdminId()}" name="adminId">
+        <input type="hidden" th:value="${notice.getCreatedAt()}" name="createTime">
+        <input type="hidden" th:value="${notice.getTitle()}" name="originalTitle">
         <div class="notice-write-title-box">
           제목 : <input type="text" class="notice-write-title" name="title" th:value="${notice.getTitle()}" required>
         </div>

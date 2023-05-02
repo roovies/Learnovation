@@ -74,6 +74,15 @@ main{
     position: absolute;
     bottom: 0px;
 }
+.yellow{
+    color: rgb(255, 218, 18);
+}
+.skin{
+    color: rgb(239, 199, 164);
+}
+.brown{
+    color : rgb(194, 101, 34);
+}
 .job-category:hover .job-subject{
     background-color: #ffddb3;
 }
