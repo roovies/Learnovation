@@ -44,7 +44,7 @@
         $.ajax({
             data : {id : id},
             type : "POST",
-            url : "/notice/removeTemporary",
+            url : "/freeBoard/removeTemporary",
             success(data){
                 window.history.back();
             },error(){

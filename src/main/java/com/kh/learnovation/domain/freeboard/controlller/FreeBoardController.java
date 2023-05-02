@@ -3,8 +3,9 @@ package com.kh.learnovation.domain.freeboard.controlller;
 
 import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
 import com.kh.learnovation.domain.freeboard.dto.FreeBoardDTO;
-import com.kh.learnovation.domain.freeboard.service.CommentService;
-import com.kh.learnovation.domain.freeboard.service.FreeBoardService;
+import com.kh.learnovation.domain.freeboard.service.CommentServiceImpl;
+import com.kh.learnovation.domain.freeboard.service.FreeBoardServiceImpl;
+import com.kh.learnovation.domain.freeboard.service.LikeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,13 +23,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/freeBoard")
 public class FreeBoardController {
-    private final FreeBoardService freeBoardService;
-    private final CommentService commentService;
+    private final FreeBoardServiceImpl freeBoardService;
+    private final CommentServiceImpl commentService;
+    private final LikeServiceImpl likeService;
+
 
 
 
     @GetMapping("/write")
-    public ModelAndView noticeWriteView(ModelAndView mv){
+    public ModelAndView freeBoardWriteView(ModelAndView mv){
         mv.addObject("random", UUID.randomUUID()).setViewName("freeBoard/write");
         return mv;
     }
@@ -45,12 +48,12 @@ public class FreeBoardController {
         return "freeBoard/index";
     }
 
-    @GetMapping("/")
+    @GetMapping("/list")
     public String findAll(Model model) {
         // DB에서 전체 게시글 데이터를 가져와서 list.html에 보여준다.
         List<FreeBoardDTO> freeBoardDTOList = freeBoardService.findAll();
         model.addAttribute("freeBoardDTOList", freeBoardDTOList);
-        return "/freeBoard/FreeList";
+        return "/freeBoard/list";
     }
 
     @GetMapping("/{id}")
@@ -64,6 +67,8 @@ public class FreeBoardController {
         FreeBoardDTO freeBoardDTO = freeBoardService.findById(id);
         /* 댓글 목록 가져오기 */
         List<CommentDTO> commentDTOList = commentService.findAll(id);
+        int result = likeService.likeCheck(id);
+        model.addAttribute("result", result);
         model.addAttribute("commentList", commentDTOList);
         model.addAttribute("freeBoard", freeBoardDTO);
         model.addAttribute("page", pageable.getPageNumber());

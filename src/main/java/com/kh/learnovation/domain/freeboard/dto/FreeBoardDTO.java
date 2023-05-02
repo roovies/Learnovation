@@ -15,6 +15,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor // 모든 필드를 매개변수로 하는 생성자
 public class FreeBoardDTO {
     private Long id;
+
+    private Long userId;
+
+    private String nickname;
     private String freeBoardTitle;
     private String freeBoardContents;
     private int freeBoardHits;
@@ -41,6 +45,8 @@ public class FreeBoardDTO {
         freeBoardDTO.setFreeBoardTitle(freeBoardEntity.getFreeBoardTitle());
         freeBoardDTO.setFreeBoardContents(freeBoardEntity.getFreeBoardContents());
         freeBoardDTO.setFreeBoardHits(freeBoardEntity.getFreeBoardHits());
+        freeBoardDTO.setUserId(freeBoardEntity.getUser().getId());
+        freeBoardDTO.setNickname(freeBoardEntity.getUser().getNickname());
         freeBoardDTO.setFreeBoardCreatedTime(freeBoardEntity.getCreatedTime());
         freeBoardDTO.setFreeBoardUpdatedTime(freeBoardEntity.getUpdatedTime());
         if (freeBoardEntity.getFileAttached() == 0) {

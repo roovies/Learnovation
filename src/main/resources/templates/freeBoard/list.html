@@ -11,82 +11,82 @@
   <link rel="stylesheet" href="/freeBoard/css/list.css">
 </head>
 <body>
-    <nav th:replace="~{common/nav.html :: nav}"></nav>
-    <main>
-      <div class="freeBoard-title-box">
-        <a class="reset-a" href="/freeBoard/list"><p class="board-title">자유게시판</p></a>
-        <p>다양한 사람을 만나고 생각의 폭을 넓혀보세요.</p>
+<nav th:replace="~{common/nav.html :: nav}"></nav>
+<main>
+  <div class="freeBoard-title-box">
+    <a class="reset-a" href="/freeBoard/list"><p class="board-title">커뮤니티</p></a>
+    <p>다양한 사람을 만나고 생각의 폭을 넓혀보세요.</p>
+  </div>
+  <div class="write-btn-box">
+    <a href="/freeBoard/write" class="freeBoard-write-btn"><i class="fa-solid fa-pencil"></i>&#32;글 쓰기</a>
+  </div>
+  <div class="freeBoard-list-box">
+    <div class="freeBoard-top-nav">
+      <div class="freeBoard-search-box">
+        <form action='/freeBoard/list' method="get" class="freeBoard-search-form">
+          <input type='text' name="keyword" placeholder='커뮤니티 내에서 검색' class='nav-search'>
+          <label for="freeBoardSearch">
+            <i class="fa-solid fa-magnifying-glass search-glass"></i>
+          </label>
+          <input type="submit" class="search-btn" id="freeBoardSearch">
+        </form>
       </div>
-      <div class="write-btn-box">
-        <a href="/freeBoard/write" class="freeBoard-write-btn"><i class="fa-solid fa-pencil"></i>&#32;글 쓰기</a>
+      <div class="freeBoard-top-nav-content">
+        <a th:if="${page > 1 && keyword != null}" th:href="@{/freeBoard/list(page=${page - 1},keyword=${keyword})}"><i class="fa-solid fa-arrow-left"></i></a>
+        <a th:if="${page <= 1 && keyword != null}" th:href="@{/freeBoard/list(page=1,keyword=${keyword})}"><i class="fa-solid fa-arrow-left"></i></a>
+        <a th:if="${page > 1 && keyword == null}" th:href="@{/freeBoard/list(page=${page - 1})}"><i class="fa-solid fa-arrow-left"></i></a>
+        <a th:if="${page <= 1 && keyword == null}" th:href="@{/freeBoard/list(page=1)}"><i class="fa-solid fa-arrow-left"></i></a>
+
+        <span th:text="${page}"></span>
+        <span>/</span>
+        <span th:text="${totalPage}"></span>
+
+        <a th:if="${page < totalPage && keyword == null}" th:href="@{/freeBoard/list(page=${page + 1})}"><i class="fa-solid fa-arrow-right"></i></a>
+        <a th:if="${page >= totalPage && keyword == null}" th:href="@{/freeBoard/list(page=${totalPage})}"><i class="fa-solid fa-arrow-right"></i></a>
+        <a th:if="${page < totalPage && keyword != null}" th:href="@{/freeBoard/list(page=${page + 1},keyword=${keyword})}"><i class="fa-solid fa-arrow-right"></i></a>
+        <a th:if="${page >= totalPage && keyword != null}" th:href="@{/freeBoard/list(page=${totalPage},keyword=${keyword})}"><i class="fa-solid fa-arrow-right"></i></a>
       </div>
-      <div class="freeBoard-list-box">
-        <div class="freeBoard-top-nav">
-          <div class="freeBoard-search-box">
-            <form action='/freeBoard/list' method="get" class="freeBoard-search-form">
-              <input type='text' name="keyword" placeholder='공지사항 내 검색' class='nav-search'>
-              <label for="freeBoardSearch">
-                <i class="fa-solid fa-magnifying-glass search-glass"></i>
-              </label>
-              <input type="submit" class="search-btn" id="freeBoardSearch">
-            </form>
-          </div>
-          <div class="freeBoard-top-nav-content">
-            <a th:if="${page > 1 && keyword != null}" th:href="@{/freeBoard/list(page=${page - 1},keyword=${keyword})}"><i class="fa-solid fa-arrow-left"></i></a>
-            <a th:if="${page <= 1 && keyword != null}" th:href="@{/freeBoard/list(page=1,keyword=${keyword})}"><i class="fa-solid fa-arrow-left"></i></a>
-            <a th:if="${page > 1 && keyword == null}" th:href="@{/freeBoard/list(page=${page - 1})}"><i class="fa-solid fa-arrow-left"></i></a>
-            <a th:if="${page <= 1 && keyword == null}" th:href="@{/freeBoard/list(page=1)}"><i class="fa-solid fa-arrow-left"></i></a>
-
-            <span th:text="${page}"></span>
-            <span>/</span>
-            <span th:text="${totalPage}"></span>
-
-            <a th:if="${page < totalPage && keyword == null}" th:href="@{/freeBoard/list(page=${page + 1})}"><i class="fa-solid fa-arrow-right"></i></a>
-            <a th:if="${page >= totalPage && keyword == null}" th:href="@{/freeBoard/list(page=${totalPage})}"><i class="fa-solid fa-arrow-right"></i></a>
-            <a th:if="${page < totalPage && keyword != null}" th:href="@{/freeBoard/list(page=${page + 1},keyword=${keyword})}"><i class="fa-solid fa-arrow-right"></i></a>
-            <a th:if="${page >= totalPage && keyword != null}" th:href="@{/freeBoard/list(page=${totalPage},keyword=${keyword})}"><i class="fa-solid fa-arrow-right"></i></a>
-          </div>
-        </div>
-        <div th:each="freeBoard : ${fList}" class="freeBoard-content-box">
-          <div>
-            <span>작성자 : </span>
-            <span th:text="${freeBoard.getAdmin().getName()}"></span>
-            <span>수정 일 : </span>
-            <span th:text="${freeBoard.getUpdatedAt()}"></span>
-          </div>
-          <div>
-            <a th:if="${keyword == null}" th:href="@{/freeBoard/detail(noticeNo=${freeBoard.getId()},page=${page})}"><span th:text="${notice.getTitle()}"></span></a>
-            <a th:if="${keyword != null}" th:href="@{/freeBoard/detail(noticeNo=${freeBoard.getId()},page=${page},keyword=${keyword})}"><span th:text="${notice.getTitle()}"></span></a>
-          </div>
-        </div>
-        <div class="freeBoard-bottom-nav">
-          <a th:if="${keyword == null}" href="/freeBoard/list?page=1" class="freeBoard-bottom-nav-prev">처음으로</a>
-          <a th:if="${keyword != null}" th:href="@{/freeBoard/list(page=1,keyword=${keyword})}" class="freeBoard-bottom-nav-prev">처음으로</a>
-          <div class="freeBoard-bottom-nav-content">
-            <a th:if="${page > 1 && keyword == null}" th:href="@{/freeBoard/list(page=${page - 1})}">&lt;</a>
-            <a th:if="${page <= 1 && keyword == null}" th:href="@{/freeBoard/list(page=1)}">&lt;</a>
-            <a th:if="${keyword == null}" th:each="nav : ${navCount}" th:href="@{/freeBoard/list(page=${nav})}">
-              <span th:if="${page == nav}" class="notice-nav-check" th:text="${nav}"></span>
-              <span th:if="${page != nav}" th:text="${nav}"></span>
-            </a>
-            <a th:if="${page < totalPage && keyword == null}" th:href="@{/freeBoard/list(page=${page + 1})}">&gt;</a>
-            <a th:if="${page >= totalPage && keyword == null}" th:href="@{/freeBoard/list(page=${totalPage})}">&gt;</a>
-
-            <a th:if="${page > 1 && keyword != null}" th:href="@{/freeBoard/list(page=${page - 1},keyword=${keyword})}">&lt;</a>
-            <a th:if="${page <= 1 && keyword != null}" th:href="@{/freeBoard/list(page=1,keyword=${keyword})}">&lt;</a>
-            <a th:if="${keyword != null}" th:each="nav : ${navCount}" th:href="@{/freeBoard/list(page=${nav},keyword=${keyword})}">
-              <span th:if="${page == nav}" class="notice-nav-check" th:text="${nav}"></span>
-              <span th:if="${page != nav}" th:text="${nav}"></span>
-            </a>
-            <a th:if="${page < totalPage && keyword != null}" th:href="@{/freeBoard/list(page=${page + 1},keyword=${keyword})}">&gt;</a>
-            <a th:if="${page >= totalPage && keyword != null}" th:href="@{/freeBoard/list(page=${totalPage},keyword=${keyword})}">&gt;</a>
-          </div>
-          <a th:if="${keyword == null}" th:href="@{/freeBoard/list(page=${totalPage})}" class="freeBoard-bottom-nav-next">마지막으로</a>
-          <a th:if="${keyword != null}" th:href="@{/freeBoard/list(page=${totalPage},keyword=${keyword})}" class="freeBoard-bottom-nav-next">마지막으로</a>
-        </div>
+    </div>
+    <div th:each="freeBoard : ${freeBoardDTOList}" class="freeBoard-content-box">
+      <div>
+        <span>작성자 : </span>
+        <span th:text="${freeBoard.getNickname()}"></span>
+        <span>수정 일 : </span>
+        <span th:text="${freeBoard.getFreeBoardCreatedTime()}"></span>
       </div>
-    </main>
-    <script src="/common/js/nav.js"></script>
+      <div>
+        <a th:if="${keyword == null}" th:href="@{/freeBoard/detail(noticeNo=${freeBoard.getId()},page=${page})}"><span th:text="${freeBoard.getFreeBoardTitle()}"></span></a>
+        <a th:if="${keyword != null}" th:href="@{/freeBoard/detail(noticeNo=${freeBoard.getId()},page=${page},keyword=${keyword})}"><span th:text="${freeBoard.getFreeBoardTitle()}"></span></a>
+      </div>
+    </div>
+    <div class="freeBoard-bottom-nav">
+      <a th:if="${keyword == null}" href="/freeBoard/list?page=1" class="freeBoard-bottom-nav-prev">처음으로</a>
+      <a th:if="${keyword != null}" th:href="@{/freeBoard/list(page=1,keyword=${keyword})}" class="freeBoard-bottom-nav-prev">처음으로</a>
+      <div class="freeBoard-bottom-nav-content">
+        <a th:if="${page > 1 && keyword == null}" th:href="@{/freeBoard/list(page=${page - 1})}">&lt;</a>
+        <a th:if="${page <= 1 && keyword == null}" th:href="@{/freeBoard/list(page=1)}">&lt;</a>
+        <a th:if="${keyword == null}" th:each="nav : ${navCount}" th:href="@{/freeBoard/list(page=${nav})}">
+          <span th:if="${page == nav}" class="notice-nav-check" th:text="${nav}"></span>
+          <span th:if="${page != nav}" th:text="${nav}"></span>
+        </a>
+        <a th:if="${page < totalPage && keyword == null}" th:href="@{/freeBoard/list(page=${page + 1})}">&gt;</a>
+        <a th:if="${page >= totalPage && keyword == null}" th:href="@{/freeBoard/list(page=${totalPage})}">&gt;</a>
+
+        <a th:if="${page > 1 && keyword != null}" th:href="@{/freeBoard/list(page=${page - 1},keyword=${keyword})}">&lt;</a>
+        <a th:if="${page <= 1 && keyword != null}" th:href="@{/freeBoard/list(page=1,keyword=${keyword})}">&lt;</a>
+        <a th:if="${keyword != null}" th:each="nav : ${navCount}" th:href="@{/freeBoard/list(page=${nav},keyword=${keyword})}">
+          <span th:if="${page == nav}" class="notice-nav-check" th:text="${nav}"></span>
+          <span th:if="${page != nav}" th:text="${nav}"></span>
+        </a>
+        <a th:if="${page < totalPage && keyword != null}" th:href="@{/freeBoard/list(page=${page + 1},keyword=${keyword})}">&gt;</a>
+        <a th:if="${page >= totalPage && keyword != null}" th:href="@{/freeBoard/list(page=${totalPage},keyword=${keyword})}">&gt;</a>
+      </div>
+      <a th:if="${keyword == null}" th:href="@{/freeBoard/list(page=${totalPage})}" class="freeBoard-bottom-nav-next">마지막으로</a>
+      <a th:if="${keyword != null}" th:href="@{/freeBoard/list(page=${totalPage},keyword=${keyword})}" class="freeBoard-bottom-nav-next">마지막으로</a>
+    </div>
+  </div>
+</main>
+<script src="/common/js/nav.js"></script>
 
 </body>
 </html>

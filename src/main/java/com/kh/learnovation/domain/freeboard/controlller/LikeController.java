@@ -1,15 +1,12 @@
 package com.kh.learnovation.domain.freeboard.controlller;
 
 
-import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
 import com.kh.learnovation.domain.freeboard.dto.LikeDTO;
-import com.kh.learnovation.domain.freeboard.service.LikeService;
+import com.kh.learnovation.domain.freeboard.service.LikeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -17,7 +14,7 @@ import java.util.List;
 @RequestMapping("/like")
 public class LikeController {
 
-    private final LikeService likeService;
+    private final LikeServiceImpl likeService;
 
 
     @PostMapping("/check")
@@ -35,10 +32,8 @@ public class LikeController {
     }
 
 
-
-
-
-
 }
+
+
 
 

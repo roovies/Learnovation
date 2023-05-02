@@ -1,7 +1,7 @@
 package com.kh.learnovation.domain.freeboard.controlller;
 
 import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
-import com.kh.learnovation.domain.freeboard.service.CommentService;
+import com.kh.learnovation.domain.freeboard.service.CommentServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/comment")
 public class CommentController {
-    private final CommentService commentService;
+    private final CommentServiceImpl commentService;
     @PostMapping("/save")
     public ResponseEntity save(@ModelAttribute CommentDTO commentDTO) {
         System.out.println("commentDTO = " + commentDTO);

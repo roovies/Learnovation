@@ -32,9 +32,9 @@ public class FreeBoardEntity extends BaseEntity {
     @Column
     private int fileAttached; // 1 or 0
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id")
-//    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private User user;
 
 
     @OneToMany(mappedBy = "freeBoardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
