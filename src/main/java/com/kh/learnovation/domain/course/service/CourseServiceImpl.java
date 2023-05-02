@@ -62,8 +62,6 @@ public class CourseServiceImpl implements CourseService {
         if (foundUser.isPresent()) {
             UserDTO userResp = UserDTO.builder()
                     .id(foundUser.get().getId())
-                    .socialId(foundUser.get().getSocialId())
-                    .socialProvider(foundUser.get().getSocialProvider())
                     .email(foundUser.get().getEmail())
                     .name(foundUser.get().getName())
                     .nickname(foundUser.get().getNickname())

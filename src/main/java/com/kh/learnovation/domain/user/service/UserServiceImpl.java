@@ -43,8 +43,6 @@ public class UserServiceImpl implements UserService{
         for(User user : users) {
             UserDTO userDTO = UserDTO.builder()
                     .id(user.getId())
-                    .socialId(user.getSocialId())
-                    .socialProvider(user.getSocialProvider())
                     .email(user.getEmail())
                     .password(user.getPassword())
                     .name(user.getName())
@@ -134,8 +132,6 @@ public class UserServiceImpl implements UserService{
     private UserDTO convertEntityToDto(User user) {
         return UserDTO.builder()
                 .id(user.getId())
-                .socialId(user.getSocialId())
-                .socialProvider(user.getSocialProvider())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .name(user.getName())

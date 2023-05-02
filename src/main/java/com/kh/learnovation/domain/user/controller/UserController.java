@@ -32,6 +32,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Random;
 import java.util.UUID;
 
 
@@ -209,6 +210,12 @@ public class UserController {
 		User kakaoUser = User.builder()
 				.email(kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId())
 				.password(cosKey)
+
+				/*.name()
+				.nickname()
+				.phoneNumber()
+*/
+
 				.email(kakaoProfile.getKakao_account().getEmail())
 				.oauth("kakao")
 				.build();

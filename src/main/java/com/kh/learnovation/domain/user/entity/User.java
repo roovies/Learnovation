@@ -3,12 +3,16 @@ package com.kh.learnovation.domain.user.entity;
 import com.kh.learnovation.domain.user.model.RoleType;
 import lombok.*;
 import lombok.Builder;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@DynamicInsert
 @Entity
 @Table(name="users")
 public class User {
@@ -16,11 +20,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "social_id", length = 100)
+/*    @Column(name = "social_id", length = 100)
     private String socialId;
 
     @Column(name = "social_provider", length = 50)
-    private String socialProvider;
+    private String socialProvider;*/
 
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
@@ -40,13 +44,13 @@ public class User {
     @Column(name = "profile_image")
     private String profileImage;
 
-    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
-    @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp updatedAt;
 
-    @Column(name = "status", nullable = false)
+    @ColumnDefault("'N'")
     private String status;
 
     @Column(name = "deleted_at")
@@ -61,11 +65,9 @@ public class User {
 
 
     @Builder
-    public User(Long id, String socialId, String socialProvider, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt,
+    public User(Long id, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt,
                 String status, Timestamp deletedAt, String oauth) {
         this.id = id;
-        this.socialId = socialId;
-        this.socialProvider = socialProvider;
         this.email = email;
         this.password = password;
         this.name = name;

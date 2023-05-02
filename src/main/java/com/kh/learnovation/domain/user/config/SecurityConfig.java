@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 
 @Configuration // IoC
@@ -42,6 +42,7 @@ public class SecurityConfig {
 
 	@Bean
 	SecurityFilterChain configure(HttpSecurity http) throws Exception {
+		AuthenticationFailureHandler AuthenticationFailureHandler;
 		http
 			.csrf().disable()	// csrf 토큰 비활성화 (테스트시 걸어두는 게 좋음)
 			.authorizeRequests()
@@ -60,7 +61,12 @@ public class SecurityConfig {
 			.formLogin()
 			.loginPage("/auth/loginForm")
 			.loginProcessingUrl("/auth/loginProc")
-			.defaultSuccessUrl("/"); // 스프링 시큐리티가 해당 주소로 요청오는 로그인을 가로채서 대신 로그인 해준다.
+				.usernameParameter("email")
+				.passwordParameter("password")
+			//.failureHandler()
+				.failureUrl("/error")
+			.defaultSuccessUrl("/") // 스프링 시큐리티가 해당 주소로 요청오는 로그인을 가로채서 대신 로그인 해준다.
+		;
 
 		return http.build();
 	}
