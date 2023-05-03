@@ -4,14 +4,8 @@
     font-weight: normal;
     font-style: normal;
 }
-@font-face {
-    font-family: 'NanumSquareRound';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/NanumSquareRound.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
 *{
-    font-family: 'NanumSquareRound';
+    font-family: 'GowunBatang-Regular';
 }
 
 body{
@@ -162,7 +156,7 @@ nav a:hover{
 .search-form{
     position: relative;
     width: 250px;
-    margin-left: 300px;
+    margin-left: 200px;
 }
 .nav-search{
     width : 200px;
