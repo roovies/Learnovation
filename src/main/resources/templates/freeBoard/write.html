@@ -23,12 +23,12 @@
     </div>
     <form action="/freeBoard/write" method="post">
         <input type="hidden" th:value="${random}" id="id" name="id">
-        <input type="hidden" value="1" name="adminId">
+        <input type="hidden" value="${#authentication.principal}" name="user">
         <div class="freeBoard-write-title-box">
-            제목 : <input type="text" name="title" class="freeBoard-write-title" required>
+            제목 : <input type="text" name="freeBoardTitle" class="freeBoard-write-title" required>
         </div>
         <div class="freeBoard-write-content-box">
-            <textarea id="summernote" name="content" required></textarea>
+            <textarea id="summernote" name="freeBoardContents" required></textarea>
         </div>
         <div class="freeBoard-write-btn-box">
             <input type="submit" value="작성">
@@ -88,7 +88,7 @@
         $.ajax({
             data : data,
             type : "POST",
-            url : "/notice/ImgFileUpload",
+            url : "/freeBoard/ImgFileUpload",
             contentType : false,
             enctype : 'multipart/form-data',
             processData : false,

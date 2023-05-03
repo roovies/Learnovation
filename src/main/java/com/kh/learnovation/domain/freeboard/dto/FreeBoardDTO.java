@@ -1,30 +1,30 @@
 package com.kh.learnovation.domain.freeboard.dto;
 
+import com.kh.learnovation.domain.admin.entity.Admin;
 import com.kh.learnovation.domain.freeboard.entity.FreeBoardEntity;
 import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.entity.User;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor // 기본생성자
-@AllArgsConstructor // 모든 필드를 매개변수로 하는 생성자
+//@AllArgsConstructor // 모든 필드를 매개변수로 하는 생성자
 public class FreeBoardDTO {
     private Long id;
-
     private Long userId;
-
     private String nickname;
     private String freeBoardTitle;
     private String freeBoardContents;
     private int freeBoardHits;
-    private LocalDateTime freeBoardCreatedTime;
-    private LocalDateTime freeBoardUpdatedTime;
-
+    private Timestamp freeBoardCreatedTime;
+    private Timestamp freeBoardUpdatedTime;
+    private String subject;
     private MultipartFile freeBoardFile; // save.html -> Controller 파일 담는 용도
     private String originalFileName; // 원본 파일 이름
     private String storedFileName; // 서버 저장용 파일 이름
@@ -32,12 +32,26 @@ public class FreeBoardDTO {
 
 
 
-    public FreeBoardDTO(Long id, String freeBoardTitle, int freeBoardHits, LocalDateTime freeBoardCreatedTime) {
+    public FreeBoardDTO(Long id, String freeBoardTitle, int freeBoardHits, Timestamp freeBoardCreatedTime) {
         this.id = id;
         this.freeBoardTitle = freeBoardTitle;
         this.freeBoardHits = freeBoardHits;
         this.freeBoardCreatedTime = freeBoardCreatedTime;
     }
+    @Builder
+    public FreeBoardDTO(long id, Long userId, String nickname, String freeBoardTitle, String freeBoardContents, Timestamp freeBoardCreatedTime, Timestamp freeBoardUpdatedTime,  String subject){
+        this.id = id;
+        this.userId = userId;
+        this.nickname = nickname;
+        this.freeBoardTitle = freeBoardTitle;
+        this.freeBoardContents = freeBoardContents;
+        this.freeBoardCreatedTime = freeBoardCreatedTime;
+        this.freeBoardUpdatedTime = freeBoardUpdatedTime;
+//        this.status = status;
+        this.subject = subject;
+    }
+
+
 
     public static FreeBoardDTO toBoardDTO(FreeBoardEntity freeBoardEntity) {
         FreeBoardDTO freeBoardDTO = new FreeBoardDTO();

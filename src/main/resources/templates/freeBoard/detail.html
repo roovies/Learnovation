@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>자유게시판 상세보기</title>
+  <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/common/css/nav.css">
+  <link rel="stylesheet" href="/notice/css/detail.css">
+</head>
+<body>
+<nav th:replace="~{common/nav.html :: nav}"></nav>
+<main>
+  <div class="freeBoard-theme-box">
+    <div class="freeBoard-theme-content"><a href="/freeBoard/list"><p>자유게시판</p></a></div>
+    <div class="freeBoard-theme-line"><hr></div>
+  </div>
+  <div class="freeBoard-info-box">
+    <div class="freeBoard-info-btn">
+      <a class="blue" th:href="@{/freeBoard/modify(freeBoardNo=${freeBoard.getId()})}">수정</a>
+      <a href="" class="sky" id="freeBoardRemoveBtn">삭제</a>
+    </div>
+    <div class="freeBoard-info-content">
+      <div class="freeBoard-nickname">
+        <span th:text="${freeBoard.adminName}"></span>
+      </div>
+      <div class="freeBoard-subject">
+        <span th:text="${freeBoard.getUpdatedAt()}"></span>
+      </div>
+    </div>
+  </div>
+  <div class="freeBoard-detail-title">
+    <p th:text="${freeBoard.getTitle()}"></p>
+  </div>
+  <div class="freeBoard-detail-content" th:utext="${freeBoard.getContent()}"></div>
+  <div class="index-btn-area">
+    <a class="index-btn" th:if="${keyword == null}" th:href="@{/notice/list(page=${page})}">목록으로</a>
+    <a class="index-btn" th:if="${keyword != null}" th:href="@{/notice/list(page=${page},keyword=${keyword})}">목록으로</a>
+  </div>
+</main>
+<div class="remove-modal-box" id="removeModalBox">
+  <div class="remove-modal-bg" id="removeModalBg"></div>
+  <div class="remove-modal">
+    <div>
+      <span>정말 삭제하시겠습니까?</span>
+    </div>
+    <div class="freeBoard-modal-btn">
+      <a th:href="@{/freeBoard/delete(noticeNo=${freeBoard.getId()})}">삭제</a>
+      <a href="#" id="modalInClose">취소</a>
+    </div>
+  </div>
+</div>
+<script src="/common/js/nav.js"></script>
+<script>
+  document.getElementById('freeBoardRemoveBtn').addEventListener('click', function(e){
+    e.preventDefault();
+    document.querySelector('body').style.overflow = 'hidden';
+    document.getElementById("removeModalBox").style.display = 'block';
+  })
+
+  document.getElementById("modalInClose").addEventListener('click',function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    modalClose();
+  })
+
+  document.getElementById("removeModalBg").addEventListener('click', function(e){
+    e.stopPropagation();
+    modalClose();
+  });
+
+  function modalClose(){
+    document.querySelector('body').style.overflow = 'scroll';
+    document.getElementById("removeModalBox").style.display = 'none';
+  }
+</script>
+</body>
+</html>

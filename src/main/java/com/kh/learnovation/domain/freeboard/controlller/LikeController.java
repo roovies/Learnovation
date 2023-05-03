@@ -2,6 +2,7 @@ package com.kh.learnovation.domain.freeboard.controlller;
 
 
 import com.kh.learnovation.domain.freeboard.dto.LikeDTO;
+import com.kh.learnovation.domain.freeboard.service.LikeService;
 import com.kh.learnovation.domain.freeboard.service.LikeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/like")
 public class LikeController {
 
-    private final LikeServiceImpl likeService;
+    private final LikeService likeService;
 
 
     @PostMapping("/check")

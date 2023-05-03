@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface FreeBoardService {
 
-    void save(FreeBoardDTO freeBoardDTO) throws IOException;
+    FreeBoardDTO insertFreeBoard(FreeBoardDTO freeBoardDTO) throws IOException;
 
     List<FreeBoardDTO> findAll();
 

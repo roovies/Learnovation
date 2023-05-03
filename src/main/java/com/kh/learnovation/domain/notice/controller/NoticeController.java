@@ -65,6 +65,7 @@ public class NoticeController {
         if(!diretory.exists()){
             diretory.mkdirs();
         }
+
         File file = new File("C:\\img\\" + id);
         if(file.exists()){ //파일존재여부확인
             if(file.isDirectory()){ //파일이 디렉토리인지 확인
@@ -235,6 +236,7 @@ public class NoticeController {
         // <p><img src="/image/notice/와우/efc877df-84ff-4495-9cad-7189dfe92d42플차.png"><img src="/image/notice/와우/f4e42ed1-ec45-4a05-a562-ab9fb06666be제목 없음.png"><br></p>
         // 썸머노트 글 작성시 내용 예시
         // "로 시작하는거로 짜름
+
         String[] sList = content.split("\"");
         List<String> fileList = new ArrayList<String>();
         for(String aa : sList){
