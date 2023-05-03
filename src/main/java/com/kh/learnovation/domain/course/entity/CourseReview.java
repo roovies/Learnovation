@@ -1,11 +1,10 @@
 package com.kh.learnovation.domain.course.entity;
 
 import com.kh.learnovation.domain.user.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -14,10 +13,12 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="course_reviews")
+@ToString
+@Table(name="course_reviews", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "course_id"})})
+@DynamicInsert
+@DynamicUpdate
 public class CourseReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,9 +39,16 @@ public class CourseReview {
     @UpdateTimestamp
     @Column(name="updated_at", nullable = false)
     private Timestamp updatedAt;
-    @Column(name="deleted", nullable = false)
-    private Boolean deleted;
-    @Column(name="deleted_at")
-    private Timestamp deletedAt;   // 강의 삭제일
+
+    @Builder
+    public CourseReview(Long id, User user, Course course, String content, BigDecimal rating, Timestamp createdAt, Timestamp updatedAt){
+        this.id = id;
+        this.user = user;
+        this.course = course;
+        this.content = content;
+        this.rating = rating;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 
 }

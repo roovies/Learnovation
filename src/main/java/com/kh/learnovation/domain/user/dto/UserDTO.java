@@ -3,6 +3,7 @@ package com.kh.learnovation.domain.user.dto;
 import com.kh.learnovation.domain.user.entity.User;
 import lombok.*;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @NoArgsConstructor
@@ -11,24 +12,31 @@ import java.sql.Timestamp;
 @Setter
 public class UserDTO {
     private Long id;
-    private String socialId;
-    private String socialProvider;
+
     private String email;
+
     private String password;
+
     private String name;
+
     private String nickname;
+
     private String phoneNumber;
+
     private String profileImage;
+
     private Timestamp createdAt;
+
     private Timestamp updatedAt;
+
     private String status;
+
     private Timestamp deletedAt;
+    private String oauth;
 
     public User toEntity() {
         User user = User.builder()
                 .id(id)
-                .socialId(socialId)
-                .socialProvider(socialProvider)
                 .email(email)
                 .password(password)
                 .name(name)
@@ -39,15 +47,14 @@ public class UserDTO {
                 .updatedAt(updatedAt)
                 .status(status)
                 .deletedAt(deletedAt)
+                .oauth(oauth)
                 .build();
         return user;
     }
 
     @Builder
-    public UserDTO(Long id, String socialId, String socialProvider, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt) {
+    public UserDTO(Long id, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt, String oauth) {
         this.id = id;
-        this.socialId = socialId;
-        this.socialProvider = socialProvider;
         this.email = email;
         this.password = password;
         this.name = name;
@@ -58,5 +65,6 @@ public class UserDTO {
         this.updatedAt = updatedAt;
         this.status = status;
         this.deletedAt = deletedAt;
+        this.oauth = oauth;
     }
 }

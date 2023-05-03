@@ -2,10 +2,16 @@ package com.kh.learnovation.domain.user.service;
 
 import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.entity.User;
+import com.kh.learnovation.domain.user.model.RoleType;
 import com.kh.learnovation.domain.user.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,9 +22,12 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService{
 
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+    private User user;
     private final UserRepository userRepository;
     private static final int BLOCK_PAGE_NUM_COUNT = 5; // 블럭에 존재하는 페이지 수
-    private static final int PAGE_POST_COUNT = 4; // 한 페이지에 존재하는 게시글 수
+    private static final int PAGE_POST_COUNT = 10; // 한 페이지에 존재하는 게시글 수
 
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -38,8 +47,6 @@ public class UserServiceImpl implements UserService{
         for(User user : users) {
             UserDTO userDTO = UserDTO.builder()
                     .id(user.getId())
-                    .socialId(user.getSocialId())
-                    .socialProvider(user.getSocialProvider())
                     .email(user.getEmail())
                     .password(user.getPassword())
                     .name(user.getName())
@@ -125,12 +132,15 @@ public class UserServiceImpl implements UserService{
         return userRepository.save(userDTO.toEntity()).getId();
     }
 
+    @Override
+    public void pwUpdate(UserDTO userDTO) {
+        String encryptPassword = encoder.encode(userDTO.getPassword());
+    }
+
 
     private UserDTO convertEntityToDto(User user) {
         return UserDTO.builder()
                 .id(user.getId())
-                .socialId(user.getSocialId())
-                .socialProvider(user.getSocialProvider())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .name(user.getName())
@@ -146,8 +156,83 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     public Long getUserCount() {
-        return userRepository.count();
+    return userRepository.count();
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public User 회원찾기(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user.isPresent()){
+            return user.get();
+        }
+        else{
+            return new User();
+        }
+    }
 
+    @Transactional
+    @Override
+    public void 회원가입(User user) {
+        String rawPassword = user.getPassword(); // 1234 원문
+        String encPassword = encoder.encode(rawPassword); // 해쉬
+        user.setPassword(encPassword);
+        user.setRole(RoleType.USER);
+        userRepository.save(user);
+    }
+
+     @Transactional
+     @Override
+     public void 회원수정(User user) {
+  		// 수정시에는 영속성 컨텍스트 User 오브젝트를 영속화시키고, 영속화된 User 오브젝트를 수정
+  		// select를 해서 User오브젝트를 DB로부터 가져오는 이유는 영속화를 하기 위해서!!
+  		// 영속화된 오브젝트를 변경하면 자동으로 DB에 update문을 날려주거든요.
+  		User persistance = userRepository.findById(user.getId()).orElseThrow(()->{
+  			return new IllegalArgumentException("회원 찾기 실패");
+         });
+
+  		// Validate 체크 => oauth 필드에 값이 없으면 수정 가능
+  		if(persistance.getOauth() == null || persistance.getOauth().equals("")) {
+  		String rawPassword = user.getPassword();
+  		String encPassword = encoder.encode(rawPassword);
+  		persistance.setPassword(encPassword);
+  		persistance.setEmail(user.getEmail());
+         }
+
+
+  		// 회원수정 함수 종료시 = 서비스 종료 = 트랜잭션 종료 = commit이 자동으로 됩니다.n
+  		// 영속화된 persistance 객체의 변화가 감지되면 더티체킹이 되어 update문을 날려줌.
+     }
+
+    @Override
+    public Optional<UserDTO>  getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername();
+            Optional<User> foundUser = userRepository.findByEmail(email);
+            if (foundUser.isPresent()){
+                UserDTO userDTO = UserDTO.builder()
+                        .id(foundUser.get().getId())
+                        .email(foundUser.get().getEmail())
+                        .password(foundUser.get().getPassword())
+                        .name(foundUser.get().getName())
+                        .nickname(foundUser.get().getNickname())
+                        .phoneNumber(foundUser.get().getPhoneNumber())
+                        .profileImage(foundUser.get().getProfileImage())
+                        .createdAt(foundUser.get().getCreatedAt())
+                        .updatedAt(foundUser.get().getUpdatedAt())
+                        .status(foundUser.get().getStatus())
+                        .deletedAt(foundUser.get().getDeletedAt())
+                        .oauth(foundUser.get().getOauth())
+                        .build();
+                return Optional.of(userDTO);
+            } else{
+                return Optional.empty();
+            }
+        }
+        else {
+            return Optional.empty();
+        } // optional 객체가 존재하는지 (isPresent()) 여부 체크 하세요.
+    }
 }

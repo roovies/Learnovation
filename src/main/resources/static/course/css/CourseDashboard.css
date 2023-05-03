@@ -1,0 +1,343 @@
+@font-face {
+    font-family: 'GowunBatang-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+    margin: 0;
+    font-family: 'GowunBatang-Regular';
+}
+
+/* =========================================
+/             인강 헤더부분                 /
+==========================================*/
+#course-header{
+    height: 350px;
+    background-color: #191924;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+}
+#header-thumbnail{
+    margin-top: 40px;
+}
+        #thumbnails{
+            width: 470px;
+            height: 300px;
+            border-radius: 10px;
+        }
+#header-title{
+    display: flex;
+    flex-direction: column;
+    width: 750px;
+    margin-top: 50px;
+    height: 100%;
+    color: #ffffff;
+    justify-content: center;
+}
+        #title-category{
+            display: flex;
+        }
+        #hot{
+            background-color: rgb(255, 75, 75);
+            padding: 0px 5px 0px 5px;
+            font-weight: bolder;
+            margin-right: 10px;
+        }
+        #seperate{
+            margin: 0px 10px 0px 10px;
+        }
+        .category, .level{
+            text-decoration: none;
+            color: white;
+        }
+#title{
+    font-size: 35px;
+}
+.subtitle{
+    font-size: 130%;
+    margin-bottom: 20px;
+}
+
+#title-review{
+    margin-left: 10px;
+    text-decoration: none;
+    color: white;
+}
+
+.title-user{
+    margin-right: 10px;
+}
+#title-teacher{
+    display: flex;
+}
+#teacher{
+    color: white;
+}
+
+/* ==========================================
+/             메인 - 커리큘럼                 /
+==========================================*/
+#course-main{
+    background-color: white;
+    width: 1000px;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+#curriculum{
+    padding-top: 20px;
+}
+        #curriculum span{
+            font-size: 60%;
+            color: #7a7a7a;
+        }
+
+.description{
+    margin: 10px 0px 30px 0px;
+    font-style: italic;
+}
+.modal {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(1.5px);
+    -webkit-backdrop-filter: blur(1.5px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    z-index: 999;
+}
+.modal-body{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+
+    width: 1000px;
+    height: 600px;
+
+    padding: 10px 40px 40px 40px;
+
+    text-align: center;
+
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+
+    transform: translateX(-50%) translateY(-50%);
+}
+        .modal-close{
+            margin-left: 1000px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+        }
+        .modal-category{
+            display: flex;
+            margin-bottom: 20px;
+        }
+        video{
+            width: 1000px;
+            height: 550px;
+        }
+table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+th{
+    padding: 10px 0px 10px 0px;
+    font-size: 120%;
+    background-color: #C7E7FC;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+td{
+    border-top: 1px solid #eee;
+    cursor: pointer;
+}
+        tr:hover{
+            background-color: rgba(25, 27, 31, 0.06);
+        }
+
+tr td:nth-child(1){
+    width: 710px;
+    font-size: 100%;
+    padding: 5px 10px 5px 10px;
+}
+tr td:nth-child(2){
+    width: 90px;
+    font-size: 95%;
+    text-align: center;
+}
+/* ==========================================
+/          메인 - 수강후기                    /
+==========================================*/
+#review{
+    margin-top: 60px;
+}
+.my-review{
+    margin: 20px 0px 70px 0px;
+    width: 960px;
+    height: 100%;
+    background-color: white;
+    padding: 20px;
+}
+/* display none 클래스 */
+.none {
+    display: none;
+}
+/* 작성된 리뷰가 없을 때 메시지 */
+.no-review{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+        .do-write{
+            margin-top: 20px;
+            cursor: pointer;
+        }
+/* 리뷰 작성폼 */
+.input-review{
+    display: flex;
+}
+        .input-review textarea{
+            width: 700px;
+            height: 100px;
+            resize: none;
+            border: 1px solid #d3d3d3;
+            padding: 10px;
+            font-size: 100%;
+        }
+        .input-review textarea:focus{
+            outline: none;
+        }
+.right-aside{
+    display: flex;
+    width: 260px;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+}
+
+.review-area{
+    background-color: white;
+}
+        /* 나의 별점css */
+        .my-rating {
+            position: relative;
+            font-size: 150%;
+            color: #ddd;
+        }
+        .my-rating span{
+            width: 0%;
+            position: absolute;
+            left: 0;
+            color: #FFC807;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        /* 별점 선택css */
+        .star {
+            position: relative;
+            top: -20px;
+            font-size: 2.5rem;
+            color: #ddd;
+        }
+
+        .star input {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .star span {
+            width: 0;
+            position: absolute;
+            left: 0;
+            color: #FFC807;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .rating{
+            position: relative;
+            top: -25px;
+        }
+.right-aside-btn{
+    display: flex;
+    justify-content: center;
+}
+.write{
+    border: none;
+    background-color: #0090F0;
+    font-size: 90%;
+    color: white;
+    border-radius: 5px;
+    padding: 4px 8px 4px 8px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+.cancel{
+    border: 1px solid #0090F0;
+    background-color: white;
+    font-size: 90%;
+    padding: 4px 8px 4px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+/* 리뷰 존재 시, 나의 리뷰 css */
+.review-user{
+    display: flex;
+}
+.user-logo{
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    margin: 0px 10px 10px 0px;
+}
+.user-info{
+    display: flex;
+    flex-direction: column;
+}
+.nickname{
+    color: #929292;
+    font-weight: bolder;
+}
+.review-date{
+    color: #7a7a7a;
+    font-size: 85%;
+}
+.review-controller{
+    position: relative;
+    top: 20px;
+    font-size: 90%;
+}
+    #reviewUpdate{
+        cursor: pointer;
+    }
+        #reviewUpdate:hover{
+            color: deepskyblue;
+        }
+
+    #reviewDelete{
+        cursor: pointer;
+    }
+        #reviewDelete:hover{
+            color: deepskyblue;
+        }

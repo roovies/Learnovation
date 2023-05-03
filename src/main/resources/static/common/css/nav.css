@@ -36,7 +36,7 @@ nav{
     position: relative;
 }
 
-ul{
+nav ul{
     list-style-type : none;
     display : flex;
     align-items: center;

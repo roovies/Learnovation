@@ -1,0 +1,113 @@
+main{
+    width: 1400px;
+    margin: 0 auto;
+    position: relative;
+}
+main > a{
+    text-decoration: none;
+    color: black;
+}
+.explore-main > ul > a{
+    text-decoration: none;
+    color : rgb(133, 204, 252);
+    display: block;
+    width: fit-content;
+}
+.explore-main > ul li{
+    width: fit-content;
+}
+.explore-side-bar{
+    position: sticky;
+    top: 50px;
+    width: 300px;
+    border-radius: 10px;
+    border: 1px solid darkgray;
+    float: right;
+}
+.explore-side-bar-container{
+    margin : 50px 0px;
+    display: flex;
+}
+.explore-side-bar h1{
+    font-size: 32px;
+    padding: 10px 30px
+}
+.explore-side-bar-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    border: 1px solid darkgray;
+}
+.side-bar-icon{
+    font-size: 40px;
+}
+.yellow{
+    color: rgb(255, 218, 18);
+}
+.blue{
+    color: white;
+    background: blue;
+    padding: 5px 10px 10px 10px;
+    border-radius: 50%;
+}
+.explore-side-bar-nav ul{
+    padding: 0px;
+    margin: 0px;
+    border: 1px solid darkgray;
+    border-radius: 10px;
+}
+.explore-side-bar-nav li{
+    font-size: 18px;
+    font-weight: bold;
+    list-style: none;
+    color: black;
+    text-align: center;
+    cursor: pointer;
+}
+.explore-side-bar-nav li:hover{
+    background-color: rgb(133, 204, 252);
+    color: white;
+}
+.explore-side-bar-nav li:first-of-type{
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom: 1px solid darkgray;
+}
+.explore-side-bar-nav li:last-of-type{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top: 1px solid darkgray;
+}
+.explore-main{
+    padding : 20px;
+    border: 1px solid darkgray;
+    border-radius: 10px;
+    width: 1000px;
+    position: relative;
+}
+.chart-box{
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-around;
+    width: 1000px;
+}
+.chart-box>div{
+    border: 1px solid darkgray;
+    width: 450px;
+    border-radius: 10px;
+}
+.chart-box>div>span{
+    text-align: center;
+    width: fit-content;
+    margin: 0 auto;
+    display: block;
+}
+.satisfication-box{
+    width: 500px;
+    height: 100px;
+}
+.satisfication-container{
+    display: flex;
+}

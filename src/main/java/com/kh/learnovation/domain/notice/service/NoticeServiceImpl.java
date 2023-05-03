@@ -103,6 +103,7 @@ public class NoticeServiceImpl implements NoticeService{
                 .updatedAt(notice.getUpdatedAt())
                 .status(notice.getStatus())
                 .subject(notice.getSubject())
+                .createdAt(notice.getCreatedAt())
                 .build();
         return noticeDTO;
     }

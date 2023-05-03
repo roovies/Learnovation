@@ -8,20 +8,25 @@ import com.kh.learnovation.domain.user.entity.User;
 import com.kh.learnovation.domain.user.repository.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.jcodec.api.FrameGrab;
-import org.jcodec.api.JCodecException;
 import org.jcodec.common.io.NIOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.sql.BatchUpdateException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,14 +41,19 @@ public class CourseServiceImpl implements CourseService {
     private final LessonRepository lessonRepository;
     private final VideoRepository videoRepository;
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
     private final JPAQueryFactory jqf;
+    private static final int BLOCK_PAGE_NUM_COUNT = 5; // 블럭에 존재하는 페이지 수
+    private static final int PAGE_POST_COUNT = 10; // 한 페이지에 존재하는 게시글 수
+
 
     @Autowired
     public CourseServiceImpl(ResourceLoader resourceLoader, CourseRepository courseRepository,
                              ImageRepository imageRepository,
                              CategoryRepository categoryRepository, ChapterRepository chapterRepository,
                              LessonRepository lessonRepository, VideoRepository videoRepository,
-                             UserRepository userRepository, EntityManager entityManager) {
+                             UserRepository userRepository, ReviewRepository reviewRepository,
+                             EntityManager entityManager) {
         this.resourceLoader = resourceLoader;
         this.courseRepository = courseRepository;
         this.imageRepository = imageRepository;
@@ -52,6 +62,7 @@ public class CourseServiceImpl implements CourseService {
         this.lessonRepository = lessonRepository;
         this.videoRepository = videoRepository;
         this.userRepository = userRepository;
+        this.reviewRepository = reviewRepository;
         this.jqf = new JPAQueryFactory(entityManager);
     }
 
@@ -62,8 +73,6 @@ public class CourseServiceImpl implements CourseService {
         if (foundUser.isPresent()) {
             UserDTO userResp = UserDTO.builder()
                     .id(foundUser.get().getId())
-                    .socialId(foundUser.get().getSocialId())
-                    .socialProvider(foundUser.get().getSocialProvider())
                     .email(foundUser.get().getEmail())
                     .name(foundUser.get().getName())
                     .nickname(foundUser.get().getNickname())
@@ -347,24 +356,6 @@ public class CourseServiceImpl implements CourseService {
                 .build();
         detailDto.setTotalLessonCount(totalLessonCount);
         detailDto.setTotalVideoTime(convertTimeToString((int)totalVideoTime));
-        System.out.println("강의 카테고리: " + detailDto.getCategory());
-        System.out.println("강의 난이도: " + detailDto.getLevel());
-        System.out.println("강의 제목: " + detailDto.getTitle());
-        System.out.println("강사 닉네임: " + detailDto.getNickname());
-        System.out.println("강의 가격: " + detailDto.getPrice());
-        System.out.println("강의 내용: " + detailDto.getContent());
-        System.out.println("썸네일 저장 폴더: " + detailDto.getSavedPath());
-        System.out.println("썸네일 파일명: " + detailDto.getSavedImageName());
-        int i = 1;
-        for (CourseChapterDTO testchapterDto : detailDto.getChapters()){
-            System.out.println("==================================================");
-            System.out.println(i+"번째 목차 : " + testchapterDto.getTitle());
-            System.out.println("==================================================");
-            for (CourseLessonDTO testlessonDto : testchapterDto.getLessons()){
-                System.out.println(i+". " + testlessonDto.getTitle() + " | /" + testlessonDto.getCourseVideoDTO().getSavedPath() + "/" + testlessonDto.getCourseVideoDTO().getSavedVideoName());
-            }
-            i++;
-        }
         return detailDto;
     }
 
@@ -383,4 +374,151 @@ public class CourseServiceImpl implements CourseService {
         return timeString;
     }
 
+    @Override
+    @Transactional
+    public void createReview(CourseReviewDTO reviewDTO) throws Exception {
+        // builder 패턴 만들고.. save하고.. entity에 unique 제약조건 추가하고..
+        CourseReview toSaveReview = CourseReview.builder()
+                .user(User.builder()
+                        .id(reviewDTO.getUserId())
+                        .build())
+                .course(Course.builder()
+                        .id(reviewDTO.getCourseId())
+                        .build())
+                .content(reviewDTO.getContent())
+                .rating(reviewDTO.getRating())
+                .build();
+        reviewRepository.save(toSaveReview);
+    }
+
+    @Override
+    @Transactional
+    public Optional<CourseReviewDTO> findReviewByUserIdAndCourseId(Long userId, Long courseId) {
+        Optional<CourseReview> foundReview = reviewRepository.findByUserIdAndCourseId(userId, courseId);
+        if(foundReview.isPresent()){
+            CourseReviewDTO reviewDTO = CourseReviewDTO.builder()
+                    .id(foundReview.get().getId())
+                    .userId(foundReview.get().getUser().getId())
+                    .userNickname(foundReview.get().getUser().getNickname())
+                    .courseId(foundReview.get().getCourse().getId())
+                    .content(foundReview.get().getContent())
+                    .rating(foundReview.get().getRating())
+                    .createdAt(foundReview.get().getCreatedAt())
+                    .updatedAt(foundReview.get().getUpdatedAt())
+                    .build();
+            return Optional.of(reviewDTO);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public void updateReview(CourseReviewDTO reviewDTO) throws Exception {
+        Optional<CourseReview> foundReview = reviewRepository.findByIdAndUserId(reviewDTO.getId(), reviewDTO.getUserId());
+        if (foundReview.isPresent()){
+            foundReview.get().setContent(reviewDTO.getContent());
+            foundReview.get().setRating(reviewDTO.getRating());
+            reviewRepository.save(foundReview.get());
+        }
+    }
+
+    @Override
+    @Transactional
+    public int deleteReview(Long id, Long userId) {
+        int result = reviewRepository.deleteByIdAndUserId(id, userId);
+        return result;
+    }
+
+    @Override
+    public List<CourseReviewDTO> findReviewByPaging(Long courseId, int page) {
+        PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Slice<CourseReview> slicedReviews = reviewRepository.findByCourseId(courseId, pageRequest);
+        List<CourseReview> reviews = slicedReviews.getContent();
+        return reviews.stream()
+                .map(review -> {
+                CourseReviewDTO reviewDTO = CourseReviewDTO.builder()
+                        .id(review.getId())
+                        .userNickname(review.getUser().getNickname())
+                        .content(review.getContent())
+                        .rating(review.getRating())
+                        .createdAt(review.getCreatedAt())
+                        .updatedAt(review.getUpdatedAt())
+                        .build();
+                return reviewDTO;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Long countReviewByCourseId(Long courseId) {
+        QCourseReview qReview = QCourseReview.courseReview;
+        Long totalCount = jqf
+                .selectFrom(qReview)
+                .where(qReview.course.id.eq(courseId))
+                .fetchCount();
+        return totalCount;
+    }
+
+    @Override
+    public String averageRatingByCourseId(Long courseId) {
+        QCourseReview qReview = QCourseReview.courseReview;
+        Double avgRating = jqf
+                .select(qReview.rating.avg())
+                .from(qReview)
+                .where(qReview.course.id.eq(courseId))
+                .fetchOne();
+        return String.format("%.1f", avgRating);
+    }
+    /* 강의 리스트 */
+    @Override
+    public List<CourseDetailDTO> getCourseList(Integer pageNum) {
+
+        Page<Course> page = courseRepository
+                .findAll(PageRequest.of(pageNum-1, PAGE_POST_COUNT, Sort.by(Sort.Direction.ASC, "createdAt")));
+
+        List<Course> courses = page.getContent();
+        List<CourseDetailDTO> courseDetailDTOList = new ArrayList<>();
+
+        for(Course course : courses) {
+            CourseDetailDTO courseDetailDTO = CourseDetailDTO.builder()
+                    .id(course.getId())
+                    .category(course.getCourseCategory().getName())
+                    .level(course.getLevel())
+                    .title(course.getTitle())
+                    .nickname(course.getUser().getNickname())
+                    .price(course.getPrice())
+                    .content(course.getContent())
+                    .savedPath(course.getCourseImage().getSavedPath())
+                    .savedImageName(course.getCourseImage().getSavedImageName())
+                    .build();
+
+            courseDetailDTOList.add(courseDetailDTO);
+        }
+        return courseDetailDTOList;
+    }
+
+    /* 강의 리스트 페이징 */
+    @Override
+    @Transactional
+    public Integer[] getPageList(Integer curPageNum) {
+        Integer[] pageList = new Integer[BLOCK_PAGE_NUM_COUNT];
+
+        Double coursesTotalCount = Double.valueOf(this.getCourseCount());
+
+        Integer totalLastPageNum = (int)(Math.ceil((coursesTotalCount/PAGE_POST_COUNT)));
+
+        Integer blockLastPageNum = (totalLastPageNum > curPageNum + BLOCK_PAGE_NUM_COUNT)
+                ? curPageNum + BLOCK_PAGE_NUM_COUNT
+                : totalLastPageNum;
+
+        curPageNum = (curPageNum<=3) ? 1 : curPageNum-2;
+
+        for(int val=curPageNum, i=0;val<=blockLastPageNum;val++, i++) {
+            pageList[i] = val;
+        }
+
+        return pageList;
+    }
+
+    public Long getCourseCount() {
+        return courseRepository.count();
+    }
 }

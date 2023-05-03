@@ -78,9 +78,40 @@
             </form>
         </div>
     </div>
+<!--    <div id="pwUpdate">-->
+<!--        <form>-->
+<!--            <input type="password" id="spw" name="password" th:value="${user.phoneNumber}">-->
+<!--            <button onclick="pwUpdate()">수우정</button>-->
+<!--        </form>-->
+<!--    </div>-->
     <script>
         function gohome() {
             location.href = '/admin/userList';
+        }
+
+        function pwUpdate() {
+            const password = $('#spw').val();
+
+            const confirmCheck = confirm("제발 바껴라");
+
+            if(confirmCheck == true){
+                $.ajax({
+                    type: 'PUT',
+                    url: '/admin/pwUpdate',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data)
+                }).done(function(result){
+                    if(result){
+                        alert("회원 수정이 완료되었습니다.");
+                        window.location.href="/admin/userList";
+                    }
+                    else {
+                        alert("실패");
+                    }
+                }).fail(function(error){
+                    alert(JSON.stringify(error));
+                });
+            }
         }
     </script>
 </body>

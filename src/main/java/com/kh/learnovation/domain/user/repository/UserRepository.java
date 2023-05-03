@@ -11,4 +11,13 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     List<User> findByNameContaining(String keyword);
+    // SELECT * FROM user WHERE username = 1?;
 }
+
+
+//JPA Naming 전략
+// SELECT * FROM user WHERE username = ?1 AND password = ?2;
+//User findByUsernameAndPassword(String username, String password);
+
+//	@Query(value="SELECT * FROM user WHERE username = ?1 AND password = ?2", nativeQuery = true)
+//	User login(String username, String password);

@@ -21,7 +21,7 @@ public class QuestionDTO {
     private Long viewCount;
 
     public Question toEntity() {
-        Question build = Question.builder()
+        Question question = Question.builder()
                 .id(id)
                 .userId(userId)
                 .title(title)
@@ -32,7 +32,7 @@ public class QuestionDTO {
                 .deletedAt(deletedAt)
                 .viewCount(viewCount)
                 .build();
-        return build;
+        return question;
     }
 
     @Builder
