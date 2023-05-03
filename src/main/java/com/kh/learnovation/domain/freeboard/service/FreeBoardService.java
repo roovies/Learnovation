@@ -17,7 +17,7 @@ public interface FreeBoardService {
 
     FreeBoardDTO findById(Long id);
 
-    FreeBoardDTO update(FreeBoardDTO freeBoardDTO);
+//    FreeBoardDTO update(FreeBoardDTO freeBoardDTO);
 
     void delete(Long id);
 

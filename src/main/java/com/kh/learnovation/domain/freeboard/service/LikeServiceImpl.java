@@ -82,28 +82,28 @@ public class LikeServiceImpl implements LikeService {
 
 
     }
-    @Override
-    public Integer likeCheck(Long id) {
-        Optional<FreeBoardEntity> optionalFreeBoardEntity = freeBoardRepository.findById(id);
-        if (optionalFreeBoardEntity.isPresent()) {
-            FreeBoardEntity freeBoardEntity = optionalFreeBoardEntity.get();
-            Optional<User> optionalUser = userRepository.findById(user.getUserId());
-            if (optionalUser.isPresent()) {
-                User userEntity = optionalUser.get();
-                LikeEntity likeEntity = LikeEntity.toSaveEntity(userEntity, freeBoardEntity);
-                Optional<LikeEntity> optionalLikeEntity = likeRepository.findByUserAndFreeBoard(likeEntity.getUser(), likeEntity.getFreeBoardEntity()); // 동작 안하면 다음엔 get해서 ID값을 넣어보자
-                if (optionalLikeEntity.isPresent()){
-                    return 1;
-                }else {
-                    return 0;
-                }
-            } else {
-                return null;
-            }
-        } else {
-            return null;
-        }
-
-
-    }
+//    @Override
+//    public Integer likeCheck(Long id) {
+//        Optional<FreeBoardEntity> optionalFreeBoardEntity = freeBoardRepository.findById(id);
+//        if (optionalFreeBoardEntity.isPresent()) {
+//            FreeBoardEntity freeBoardEntity = optionalFreeBoardEntity.get();
+//            Optional<User> optionalUser = userRepository.findById(user.getUserId());
+//            if (optionalUser.isPresent()) {
+//                User userEntity = optionalUser.get();
+//                LikeEntity likeEntity = LikeEntity.toSaveEntity(userEntity, freeBoardEntity);
+//                Optional<LikeEntity> optionalLikeEntity = likeRepository.findByUserAndFreeBoard(likeEntity.getUser(), likeEntity.getFreeBoardEntity()); // 동작 안하면 다음엔 get해서 ID값을 넣어보자
+//                if (optionalLikeEntity.isPresent()){
+//                    return 1;
+//                }else {
+//                    return 0;
+//                }
+//            } else {
+//                return null;
+//            }
+//        } else {
+//            return null;
+//        }
+//
+//
+//    }
 }

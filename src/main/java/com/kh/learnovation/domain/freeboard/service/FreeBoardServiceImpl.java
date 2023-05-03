@@ -63,13 +63,9 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
         return freeBoardDTO;
 
-
-
-
-
         }
 
-    }
+
     @Override
     @Transactional
     public List<FreeBoardDTO> findAll() {
@@ -98,12 +94,12 @@ public class FreeBoardServiceImpl implements FreeBoardService {
             return null;
         }
     }
-    @Override
-    public FreeBoardDTO update(FreeBoardDTO freeBoardDTO) {
-        FreeBoardEntity freeBoardEntity = FreeBoardEntity.toUpdateEntity(freeBoardDTO);
-        freeBoardRepository.save(freeBoardEntity);
-        return findById(freeBoardDTO.getId());
-    }
+//    @Override
+//    public FreeBoardDTO update(FreeBoardDTO freeBoardDTO) {
+//        FreeBoardEntity freeBoardEntity = FreeBoardEntity.toUpdateEntity(freeBoardDTO);
+//        freeBoardRepository.save(freeBoardEntity);
+//        return findById(freeBoardDTO.getId());
+//    }
     @Override
     public void delete(Long id) {
         freeBoardRepository.deleteById(id);

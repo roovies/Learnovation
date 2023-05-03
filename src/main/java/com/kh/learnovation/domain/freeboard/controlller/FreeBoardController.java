@@ -166,8 +166,8 @@ public class FreeBoardController {
         FreeBoardDTO freeBoardDTO = freeBoardService.findById(id);
         /* 댓글 목록 가져오기 */
         List<CommentDTO> commentDTOList = commentService.findAll(id);
-        int result = likeService.likeCheck(id);
-        model.addAttribute("result", result);
+//        int result = likeService.likeCheck(id);
+//        model.addAttribute("result", result);
         model.addAttribute("commentList", commentDTOList);
         model.addAttribute("freeBoard", freeBoardDTO);
         model.addAttribute("page", pageable.getPageNumber());
@@ -181,13 +181,13 @@ public class FreeBoardController {
         return "/freeBoard/update";
     }
 
-    @PostMapping("/update")
-    public String update(@ModelAttribute FreeBoardDTO freeBoardDTO, Model model) {
-        FreeBoardDTO freeBoard = freeBoardService.update(freeBoardDTO);
-        model.addAttribute("freeBoard", freeBoard);
-        return "/freeBoard/detail";
-//        return "redirect:/board/" + boardDTO.getId();
-    }
+//    @PostMapping("/update")
+//    public String update(@ModelAttribute FreeBoardDTO freeBoardDTO, Model model) {
+//        FreeBoardDTO freeBoard = freeBoardService.update(freeBoardDTO);
+//        model.addAttribute("freeBoard", freeBoard);
+//        return "/freeBoard/detail";
+////        return "redirect:/board/" + boardDTO.getId();
+//    }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
@@ -215,10 +215,10 @@ public class FreeBoardController {
         // 7 8 9
         // 보여지는 페이지 갯수 3개
         // 총 페이지 갯수 8개
-        model.addAttribute("list", list);
+        model.addAttribute("freeBoardDTOList", list);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
-        return "/freeBoard/paging";
+        return "/freeBoard/list";
     }
 
 //    @PostMapping("/like")

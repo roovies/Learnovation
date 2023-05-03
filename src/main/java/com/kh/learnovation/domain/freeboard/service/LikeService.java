@@ -10,5 +10,5 @@ public interface LikeService {
 
     void delete(LikeDTO likeDTO);
 
-    Integer likeCheck(Long id);
+//    Integer likeCheck(Long id);
 }
