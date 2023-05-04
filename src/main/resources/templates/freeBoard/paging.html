@@ -18,7 +18,6 @@
   <tr th:each="freeBoard: ${list}">
     <td th:text="${freeBoard.id}"></td>
     <td><a th:href="@{|/freeBoard/${freeBoard.id}|(page=${list.number + 1})}" th:text="${freeBoard.freeBoardTitle}"></a></td>
-    <td th:text="${freeBoard.freeBoardWriter}"></td>
     <td th:text="*{#temporals.format(freeBoard.freeBoardCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
     <td th:text="${freeBoard.freeBoardHits}"></td>
   </tr>

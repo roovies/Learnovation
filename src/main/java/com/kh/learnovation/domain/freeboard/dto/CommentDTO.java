@@ -3,6 +3,7 @@ package com.kh.learnovation.domain.freeboard.dto;
 import com.kh.learnovation.domain.freeboard.entity.CommentEntity;
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,18 +13,23 @@ import java.time.LocalDateTime;
 @AllArgsConstructor // 모든 필드를 매개변수로 하는 생성자
 public class CommentDTO {
     private Long id;
-    private String commentWriter;
+    private Long userId;
+    private String nickname;
     private String commentContents;
     private Long freeBoardId;
-    private LocalDateTime commentCreatedTime;
+    private Timestamp commentCreatedTime;
 
-    public static CommentDTO toCommentDTO(CommentEntity commentEntity, Long freeBoardId) {
-        CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setId(commentEntity.getId());
-        commentDTO.setCommentWriter(commentEntity.getCommentWriter());
-        commentDTO.setCommentContents(commentEntity.getCommentContents());
-        commentDTO.setCommentCreatedTime(commentEntity.getCreatedTime());
-        commentDTO.setFreeBoardId(freeBoardId);
-        return commentDTO;
+
+    @Builder
+    public CommentDTO(long id, Long userId, String nickname, String commentContents, Long freeBoardId, Timestamp commentCreatedTime){
+        this.id = id;
+        this.userId = userId;
+        this.nickname = nickname;
+        this.commentContents = commentContents;
+        this.freeBoardId = freeBoardId;
+        this.commentCreatedTime = commentCreatedTime;
     }
+
+
+
 }

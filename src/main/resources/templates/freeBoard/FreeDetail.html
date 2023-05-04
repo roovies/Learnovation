@@ -32,18 +32,25 @@
         <th>contents</th>
         <td th:text="${freeBoard.freeBoardContents}"></td>
     </tr>
-<!--    <tr>-->
-<!--        <th>like</th>-->
-<!--        <td><a th:href="#" onclick="like()"><img th:src="" alt="하트"></a></td>-->
-<!--    </tr>-->
+    <tr>
+        <th>좋아요</th>
+        <td><a href="#" onclick="like()"><img id="heart-icon" src="emptyHeartIconPath.png" alt="하트"></a></td>
+    </tr>
+    </tr>
+    <!--    <tr>-->
+    <!--        <th>like</th>-->
+    <!--        <td><a th:href="#" onclick="like()"><img th:src="" alt="하트"></a></td>-->
+    <!--    </tr>-->
     <tr th:if="${freeBoard.fileAttached == 1}">
         <th>image</th>
         <td><img th:src="@{|/upload/${freeBoard.storedFileName}|}" alt=""></td>
     </tr>
+
 </table>
 <button onclick="listReq()">목록</button>
 <button onclick="updateReq()">수정</button>
 <button onclick="deleteReq()">삭제</button>
+
 
 <!-- 댓글 작성 부분 -->
 <div id="comment-write">
@@ -74,44 +81,20 @@
 <script th:inline="javascript">
 
 
-    // const like = () => {
-    //     const writer = [[${freeBoard.freeBoardWriter}]];
-    //     const id = [[${freeBoard.id}]];
-    //     $.ajax({
-    //         // 요청방식: post, 요청주소: /comment/save, 요청데이터: 작성자, 작성내용, 게시글번호
-    //         type: "post",
-    //         url: "/like/save",
-    //         data: {
-    //             "commentWriter": writer,
-    //             "freeBoardId": id
-    //         },
-    //         success: function (res) {
-    //             console.log("요청성공", res);
-    //             let output = "<table>";
-    //             output += "<tr><th>댓글번호</th>";
-    //             output += "<th>작성자</th>";
-    //             output += "<th>내용</th>";
-    //             output += "<th>작성시간</th></tr>";
-    //             for (let i in res) {
-    //                 output += "<tr>";
-    //                 output += "<td>" + res[i].id + "</td>";
-    //                 output += "<td>" + res[i].commentWriter + "</td>";
-    //                 output += "<td>" + res[i].commentContents + "</td>";
-    //                 output += "<td>" + res[i].commentCreatedTime + "</td>";
-    //                 output += "</tr>";
-    //             }
-    //             output += "</table>";
-    //             document.getElementById('comment-list').innerHTML = output;
-    //             document.getElementById('commentWriter').value = '';
-    //             document.getElementById('commentContents').value = '';
-    //         },
-    //         error: function (err) {
-    //             console.log("요청실패", err);
-    //         }
-    //     });
-    //
-    // }
-    //
+    const like = () => {
+        const heartIcon = document.getElementById("heart-icon");
+        const result = [[${result}]];
+        let isLiked = false;
+        if (result == 1) {
+            // 이미 좋아요한 경우, 빈 하트로 변경
+            heartIcon.src = emptyHeartIconPath;
+            isLiked = false;
+        } else {
+            // 좋아요하지 않은 경우, 빨간색 하트로 변경
+            heartIcon.src = redHeartIconPath;
+            isLiked = true;
+        }
+    }
 
     const commentWrite = () => {
         const writer = document.getElementById("commentWriter").value;

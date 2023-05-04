@@ -3,6 +3,7 @@ package com.kh.learnovation.domain.freeboard.controlller;
 
 import com.kh.learnovation.domain.freeboard.dto.LikeDTO;
 import com.kh.learnovation.domain.freeboard.service.LikeService;
+import com.kh.learnovation.domain.freeboard.service.LikeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +18,23 @@ public class LikeController {
     private final LikeService likeService;
 
 
-//    @PostMapping
-//    public ResponseEntity save(@ModelAttribute LikeDTO likeDTO) {
-//        likeService.save(likeDTO);
-//        return new ResponseEntity<>(commentDTOList, HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping
-//    public ResponseEntity delete(@RequestBody @Valid HeartRequestDTO heartRequestDTO) {
-//        heartService.delete(heartRequestDTO);
-//        return new ResponseEntity<>(commentDTOList, HttpStatus.OK);
-//    }
+    @PostMapping("/check")
+    public ResponseEntity check(@ModelAttribute LikeDTO likeDTO){
+        int result =likeService.check(likeDTO);
+        if(result==0){
+            likeService.save(likeDTO);
+            int count = 1;
+            return new ResponseEntity<>(count, HttpStatus.OK);
+        }else {
+            likeService.delete(likeDTO);
+            int count = 0;
+            return new ResponseEntity<>(count, HttpStatus.OK);
+        }
+    }
+
 
 }
+
+
 
 

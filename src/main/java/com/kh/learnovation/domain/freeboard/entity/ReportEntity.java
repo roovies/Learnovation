@@ -1,8 +1,6 @@
 package com.kh.learnovation.domain.freeboard.entity;
 
 
-import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
-import com.kh.learnovation.domain.freeboard.dto.LikeDTO;
 import com.kh.learnovation.domain.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,11 +13,11 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "like_table")
-public class LikeEntity {
+@Table(name = "report_table")
+public class ReportEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "like_id")
+    @Column(name = "report_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,12 +29,17 @@ public class LikeEntity {
     @JoinColumn(name = "freeBoard_id")
     private FreeBoardEntity freeBoardEntity;
 
+    @Column
+    private String reportTitle;
+
+    @Column(length = 500)
+    private String reportContents;
 
 
-    public static LikeEntity toSaveEntity(User userEntity, FreeBoardEntity freeBoardEntity) {
-        LikeEntity likeEntity = new LikeEntity();
-        likeEntity.setUser(userEntity);
-        likeEntity.setFreeBoardEntity(freeBoardEntity);
-        return likeEntity;
+    public static ReportEntity toSaveEntity(User userEntity, FreeBoardEntity freeBoardEntity) {
+        ReportEntity reportEntity = new ReportEntity();
+        reportEntity.setUser(userEntity);
+        reportEntity.setFreeBoardEntity(freeBoardEntity);
+        return reportEntity;
     }
 }
