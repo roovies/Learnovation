@@ -17,7 +17,7 @@
       <nav>
         <div class="nav-content">
           <ul>
-            <li><img src='' alt=''></img><span>Learnovation</span></li>
+            <li><img src='' alt=''><a href="/">Learnovation</a></li>
             <li>
               <div class="a-nav-course-box" id="aNavCourse">
                 <a href='#' id="navCourse">강의</a>
@@ -41,7 +41,7 @@
                   <div class="a-nav-community-modal-diamond"></div>
                   <div class="a-nav-community-modal-list">
                     <a href="#">질문 게시판</a>
-                    <a href="#">자유 게시판</a>
+                    <a href="/freeBoard/">자유 게시판</a>
                   </div>
                 </div>
               </div>
@@ -70,8 +70,8 @@
             <li>
               <!-- dto 던져서 체크-->
                   <div th:if="${#authentication.principal == 'anonymousUser'}" class="nav-content-box">
-                    <button class='btn'>Login</button>
-                    <button class='btn'>회원가입</button>
+                    <a href="/auth/loginForm"><button class='btn'>Login</button></a>
+                    <a href="/auth/joinForm"><button class='btn'>회원가입</button></a>
                   </div>
                   <div th:if="${#authentication.principal != 'anonymousUser'}" class="nav-login-icons">
                     <div id="userIconBox" class="user-icon-box">

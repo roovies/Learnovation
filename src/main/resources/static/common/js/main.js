@@ -76,6 +76,12 @@ document.getElementById('prev-swipe').addEventListener('click',function(e){
     document.getElementById('swipeNavIndex')
     e.preventDefault();
     if(!timer){
+        if(interval != null){
+            clearInterval(interval);
+            interval = setInterval(function(){
+                nextSwipe();
+            },4000);
+        }
         prevSwipe();
         timer = setTimeout(function(){
             timer = null;
@@ -86,6 +92,12 @@ document.getElementById('next-swipe').addEventListener('click', function(e){
     e.preventDefault();
     if(!timer){
         nextSwipe();
+        if(interval != null){
+            clearInterval(interval);
+            interval = setInterval(function(){
+                nextSwipe();
+            },4000);
+        }
         timer = setTimeout(function(){
             timer = null;
         }, 1000);

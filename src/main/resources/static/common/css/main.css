@@ -1,3 +1,4 @@
+
 .swipe-box{
     width: 1920px;
     height: 600px;
@@ -67,52 +68,70 @@
     z-index: 3;
     left: 1920px;
 }
-.job-recommand{
-    margin: 0 auto;
-    margin-top: 100px;
-    width: 1400px;
-    height: 1200px;
-}
-.recommand{
-    text-align: center;
-}
-.recommand h1{
-    font-weight: 900;
-}
-.recommand h2{
-    font-weight: 400;
-}
 .recommand-list-box{
     width: 1400px;
-    height: 1020px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    margin: 0 auto 60px;
 }
 .job-category-link{
     color: black;
     text-decoration: none;
+    margin : 30px 0px;
 }
-.job-category-link:hover{
-    color: white;
-}
+
 .job-category{
     width: 372px;
-    height: 302px;
+    height: 600px;
     background-color: azure;
     border-radius: 15px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 .job-category:hover{
     background-color: antiquewhite;
 }
 .job-category:hover .recommand-detail{
-    color: white;
+    color: #ffc839;
 }
 .job-category h1{
     margin-top: 0;
+}
+.job-subject{
+    height: 100px;
+    width : 100%;
+    background-color: #bdf6f6;
+    border-top: 1px solid darkgray;
+    display: flex;
+    border-radius: 10px;
+    position: absolute;
+    bottom: 0px;
+}
+.yellow{
+    color: rgb(255, 218, 18);
+}
+.skin{
+    color: rgb(239, 199, 164);
+}
+.brown{
+    color : rgb(194, 101, 34);
+}
+.job-category:hover .job-subject{
+    background-color: #ffddb3;
+}
+.job-subject div{
+    width : 124px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.job-subject-icon{
+    font-size : 40px
 }
 .recommand-detail::after{
     content: '\f061';
@@ -121,6 +140,9 @@
 }
 .recommand-detail{
     color: rgb(101, 197, 197);
+}
+.recommand-detail:hover{
+    color : white !important;
 }
 .job-posting{
     margin: 0 auto;

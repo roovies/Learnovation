@@ -234,6 +234,10 @@ nav a:hover{
     justify-content: space-between;
     margin-left: 70px;
 }
+    .nav-content-box a > button:hover{
+        background-color: #0090F0;
+        color: white;
+    }
 .nav-login-icons{
     margin-left: 100px;
     display: flex;

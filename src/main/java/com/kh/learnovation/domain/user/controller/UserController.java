@@ -1,8 +1,20 @@
 package com.kh.learnovation.domain.user.controller;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.kh.learnovation.domain.jobexplore.dto.JobExploreDTO;
+import com.kh.learnovation.domain.notice.entity.Notice;
+import com.kh.learnovation.domain.notice.service.NoticeService;
 import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.entity.User;
 import com.kh.learnovation.domain.user.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,7 +24,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,10 +38,6 @@ import com.kh.learnovation.domain.user.model.OAuthToken;
 import com.kh.learnovation.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,10 +48,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import org.springframework.web.util.UriComponentsBuilder;
 
 
 // 인증이 안된 사용자들이 출입할 수 있는 경로를 /auth/** 허용
@@ -51,7 +60,8 @@ public class UserController {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
-
+	@Autowired
+	private NoticeService nService;
 	//HttpURLConnection con = (HttpURLConnection) url.openConnection();
 	private String cosKey = "cos1234";
 
@@ -112,7 +122,76 @@ public class UserController {
 	 * 승현파트
 	 * */
 	@GetMapping("/")
-	public String indexForm() {
+	public String indexForm(Model model) {
+
+		// 메인페이지 공지사항 ---------------------------------
+		Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC,"updatedAt"));
+		Page<Notice> pNotice = nService.selectAllNotice(pageable);
+		List<Notice> nList = pNotice.stream().collect(Collectors.toList());
+		model.addAttribute("nList", nList);
+		// ----------------------------------------------------
+		// 메인페이지 직업 정보 ---------------------------------
+		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+		factory.setConnectTimeout(5000); // 타임아웃 설정 5초
+		factory.setReadTimeout(5000);
+
+		RestTemplate restTemplate = new RestTemplate(factory);
+
+		// url 생성
+		int randomPage = (int)(Math.random() * 6) + 1;
+		URI url = UriComponentsBuilder.fromHttpUrl("https://career.go.kr/cnet/front/openapi/jobs.json")
+				.queryParam("apiKey", "dcbceba3669ac12190c6af8572955b13")
+				.queryParam("searchThemeCode", 102421)
+				.queryParam("pageIndex", randomPage)
+				.build().toUri();
+		// 헤더 생성
+		HttpHeaders headers = new HttpHeaders();
+		// 받을 데이터 타입 명시
+		headers.setContentType(new MediaType("application","json", Charset.forName("UTF-8")));
+		headers.setAccept(Arrays.asList(new MediaType[] { MediaType.APPLICATION_JSON }));
+
+		// resttemplate api 호출 통신
+		ResponseEntity<String> response = restTemplate.exchange(url.toString()
+				, HttpMethod.GET, new HttpEntity<>(headers), String.class);
+		System.out.println(response.getStatusCode());
+		// 통신 성공시
+		if(response.getStatusCode().is2xxSuccessful()) {
+			JsonParser jsonParser = new JsonParser();
+			// response body Json 데이터 파싱
+			JsonObject jsonObject = (JsonObject) JsonParser.parseString(response.getBody());
+			String pageSize = jsonObject.get("pageSize").toString().replaceAll("\"", "");
+			String totalCount = jsonObject.get("count").toString().replaceAll("\"", "");
+			String apipage = jsonObject.get("pageIndex").toString().replaceAll("\"", "");
+			int totalPage = (int) Math.ceil((double) Integer.parseInt(totalCount) / Integer.parseInt(pageSize));
+			int page = Integer.parseInt(apipage);
+			List<JobExploreDTO> jList = new ArrayList<JobExploreDTO>();
+			JsonArray jsonArray = (JsonArray) jsonObject.get("jobs");
+			for (int i = 0; i < jsonArray.size(); i++) {
+				JobExploreDTO job = new JobExploreDTO();
+				JsonObject object = (JsonObject) jsonArray.get(i);
+				job.setJobId(object.get("job_cd").toString().replaceAll("\"", ""));
+				if (object.get("social") != null) {
+					job.setSocial(object.get("social").toString().replaceAll("\"", ""));
+				} else {
+					job.setSocial("알 수 없음");
+				}
+				job.setWork(object.get("work").toString().replaceAll("\"", ""));
+				if (object.get("wage") != null) {
+					job.setSalary(object.get("wage").toString().replaceAll("\"", ""));
+				} else {
+					job.setSalary("알 수 없음");
+				}
+				job.setJobName(object.get("job_nm").toString().replaceAll("\"", ""));
+				if (object.get("wlb") != null) {
+					job.setWorkLifeBalance(object.get("wlb").toString().replaceAll("\"", ""));
+				} else {
+					job.setWorkLifeBalance("알 수 없음");
+				}
+				jList.add(job);
+			}
+			model.addAttribute("jList", jList);
+		}
+		// ------------------- 직업정보 ----------------------------------
 		Optional<UserDTO> userDTO = userService.getCurrentUser();
 		if (userDTO.isPresent()){
 				System.out.println(userDTO.toString());

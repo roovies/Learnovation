@@ -24,121 +24,65 @@
                 </div>
                 <a href="">
                     <div class="pre-end" id="preEnd">
-                        <img src="/web.png" alt="">
+                        <img src="/common/img/web.png" alt="">
                     </div>
                 </a>
                 <a href="">
                     <div class="first-page" id="firstPage">
-                        <img src="/mobile.png" alt="">
+                        <img src="/common/img/mobile.png" alt="">
                     </div>
                 </a>
                 <a href="">
                     <div class="swipe-img-box one">
-                        <img src="/mobile.png" alt="">
+                        <img src="/common/img/mobile.png" alt="">
                     </div>
                 </a>
                 <a href="">
                     <div class="swipe-img-box two">
-                        <img src="/PC_Page.png" alt="">
+                        <img src="/common/img/PC_Page.png" alt="">
                     </div>
                 </a>
                 <a href="">
                     <div class="swipe-img-box three">
-                        <img src="/responsiveweb.jpeg" alt="">
+                        <img src="/common/img/responsiveweb.jpeg" alt="">
                     </div>
                 </a>
                 <a href="">
                     <div class="swipe-img-box four">
-                        <img src="/secure_coding.jpg" alt="">
+                        <img src="/common/img/secure_coding.jpg" alt="">
                     </div>
                 </a>
                 <a href="">
                     <div class="swipe-img-box five">
-                        <img src="/web.png" alt="">
+                        <img src=/common/img"/web.png" alt="">
                     </div>
                 </a>
                 <a href="">
                     <div class="end-page" id="endPage">
-                        <img src="/web.png" alt="">
+                        <img src="/common/img/web.png" alt="">
                     </div>
                 </a>
                 <a href="">
                     <div class="next-first" id="nextFirst">
-                        <img src="/mobile.png" alt="">
+                        <img src="/common/img/mobile.png" alt="">
                     </div>
                 </a>
             </div>
-            <div class="job-recommand">
-                <div class="recommand">
-                    <h1>내게 맞는 직업을 찾아보세요</h1>
-                    <h2>개발자부터 프로덕트 매니저, 마케터까지</h2>
-                    <h2>IT 취업에 특화된 직업을 소개합니다.</h2>
-                </div>
-                <div class="recommand-list-box">
-                    <a href="#" class="job-category-link">
-                        <div class="job-category">
-                            <div>
-                                <h1>직업명</h1>
-                                <h2>대충 설명</h2>
-                                <span class="recommand-detail">더 알아보기 </span>
-                            </div>
+            <div class="recommand-list-box">
+                <a th:each="job : ${jList}" th:href="@{/explore/detail(jobcode=${job.getJobId()})}" class="job-category-link">
+                    <div class="job-category">
+                        <div>
+                            <h1 th:text="${job.getJobName()}"></h1>
+                            <h2 th:text="${job.getWork()}"></h2>
+                            <span class="recommand-detail">더 알아보기 </span>
                         </div>
-                    </a>
-                    <a href="#" class="job-category-link">
-                        <div class="job-category">
-                            <div>
-                                <h1>직업명</h1>
-                                <h2>대충 설명</h2>
-                                <span class="recommand-detail">더 알아보기 </span>
-                            </div>
+                        <div class="job-subject">
+                            <div><span>평균연봉</span><span class="job-subject-icon"><i class="fa-solid fa-coins yellow"></i></span><span th:text="${job.getSalary()}"></span></div>
+                            <div><span>사회공헌</span><span class="job-subject-icon"><i class="fa-solid fa-handshake-angle skin"></i></span><span th:text="${job.getSocial()}"></span></div>
+                            <div><span>워라밸</span><span class="job-subject-icon"><i class="fa-solid fa-scale-balanced brown"></i></span><span th:text="${job.getWorkLifeBalance()}"></span></div>
                         </div>
-                    </a>
-                    <a href="#" class="job-category-link">
-                        <div class="job-category">
-                            <div>
-                                <h1>직업명</h1>
-                                <h2>대충 설명</h2>
-                                <span class="recommand-detail">더 알아보기 </span>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="job-category-link">
-                        <div class="job-category">
-                            <div>
-                                <h1>직업명</h1>
-                                <h2>대충 설명</h2>
-                                <span class="recommand-detail">더 알아보기 </span>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="job-category-link">
-                        <div class="job-category">
-                            <div>
-                                <h1>직업명</h1>
-                                <h2>대충 설명</h2>
-                                <span class="recommand-detail">더 알아보기 </span>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="job-category-link">
-                        <div class="job-category">
-                            <div>
-                                <h1>직업명</h1>
-                                <h2>대충 설명</h2>
-                                <span class="recommand-detail">더 알아보기 </span>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="#" class="job-category-link">
-                        <div class="job-category">
-                            <div>
-                                <h1>직업명</h1>
-                                <h2>대충 설명</h2>
-                                <span class="recommand-detail">더 알아보기 </span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                    </div>
+                </a>
             </div>
             <div class="job-posting"></div>
             <div class="board-list-container">
@@ -329,57 +273,16 @@
                 </div>
                 <div class="board-list-box">
                     <div class="board-list-title">
-                        <a href="">공지사항</a>
+                        <a href="/notice/list"><b>공지사항</b></a>
                     </div>
-                    <div class="board-content">
-                        <div class="board-content">
+                    <div class="board-content" th:each="notice : ${nList}">
+                        <div class="board-content" >
                             <div>
-                                <span class="board-writer">설석현</span>
-                                <span class="board-time">2020/03/28</span>
-                                <span class="board-comment">3</span>
+                                <span class="board-writer" th:text="${notice.getAdmin().getName()}">설석현</span>
+                                <span class="board-time" th:text="${notice.getUpdatedAt()}">2020/03/28</span>
                             </div>
                             <div class="board-title">
-                                <a href="#">하라라라라라라라라라라라</a>
-                            </div>
-                        </div>
-                        <div class="board-content">
-                            <div>
-                                <span class="board-writer">설석현</span>
-                                <span class="board-time">2020/03/28</span>
-                                <span class="board-comment">3</span>
-                            </div>
-                            <div class="board-title">
-                                <a href="#">하라라라라라라라라라라라</a>
-                            </div>
-                        </div>
-                        <div class="board-content">
-                            <div>
-                                <span class="board-writer">설석현</span>
-                                <span class="board-time">2020/03/28</span>
-                                <span class="board-comment">3</span>
-                            </div>
-                            <div class="board-title">
-                                <a href="#">하라라라라라라라라라라라</a>
-                            </div>
-                        </div>
-                        <div class="board-content">
-                            <div>
-                                <span class="board-writer">설석현</span>
-                                <span class="board-time">2020/03/28</span>
-                                <span class="board-comment">3</span>
-                            </div>
-                            <div class="board-title">
-                                <a href="#">하라라라라라라라라라라라</a>
-                            </div>
-                        </div>
-                        <div class="board-content">
-                            <div>
-                                <span class="board-writer">설석현</span>
-                                <span class="board-time">2020/03/28</span>
-                                <span class="board-comment">3</span>
-                            </div>
-                            <div class="board-title">
-                                <a href="#">하라라라라라라라라라라라</a>
+                                <a th:href="@{/notice/detail(noticeNo=${notice.getId()})}"><span th:text="${notice.getTitle()}">하라라라라라라라라라라라</span></a>
                             </div>
                         </div>
                     </div>
