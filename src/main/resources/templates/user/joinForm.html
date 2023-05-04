@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -8,8 +9,12 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="/css/user/sign.css">
+
 </head>
 <body>
+<!--
   <div class="container">
     <form action="/user/join" method="POST">
       <div class="form-group">
@@ -42,7 +47,65 @@
       <button id="btn-save" class="btn btn-primary">회원가입완료</button>
 
   </div>
+-->
+
+  <div class="wrapper">
+    <div class="title"><h1 style="font-size: 21px;">회원가입</h1></div>
+
+    <div class="email">
+      <label for="email">Email</label>
+      <input id="email" type="text" placeholder="이메일 형식으로 입력해 주세요.">
+      <div id="emailError" class="error"></div>
+    </div>
+
+    <div class="password">
+      <label for="password">Password</label>
+      <input id="password" type="password" placeholder="비밀번호를 입력해 주세요.">
+      <div id="passwordError" class="error"></div>
+    </div>
+    <div class="passwordCheck">
+      <input id="passwordCheck" type="password" placeholder="비밀번호를 다시 입력해 주세요.">
+      <div id="passwordCheckError" class="error"></div>
+    </div>
+
+    <div class="name">
+      <label for="name">Name</label>
+      <input id="name"  type="text" placeholder="이름을 입력해 주세요.">
+      <div id="nameError" class="error"></div>
+    </div>
+
+    <div class="nickname">
+      <label for="nickname">Nickname</label>
+      <input id="nickname"  type="text" placeholder="닉네임을 입력해 주세요.">
+      <div id="nicknameError" class="error"></div>
+    </div>
+
+    <div class="phone">
+      <label>Phone</label>
+      <input id="phone_number1" type="text" size="1" maxlength="3" oninput="changePhone1()"> -
+      <input id="phone_number2" type="text" size="3" maxlength="4" oninput="changePhone2()"> -
+      <input id="phone_number3" type="text" size="3" maxlength="11" oninput="changePhone3()">
+      <div id="phoneError" class="error"></div>
+    </div>
+
+    <div class="signUp">
+      <button id="btn-save">가입하기</button>
+    </div>
+
+
+  </div>
+
+<script th:inline="javascript"  sec:authorize-expr="isAuthenticated()">
+  /*<![CDATA[*/
+  window.onload = function () {
+    location.href = '/';
+  }
+  /*]]>*/
+</script>
+
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="/js/user.js"></script>
+  <script src="/js/sign.js"></script>
 </body>
 </html>

@@ -31,6 +31,8 @@ public class UserDTO {
 
     private String status;
 
+    private String oauth;
+
     private Timestamp deletedAt;
 
     public User toEntity() {
@@ -46,12 +48,13 @@ public class UserDTO {
                 .updatedAt(updatedAt)
                 .status(status)
                 .deletedAt(deletedAt)
+                .oauth(oauth)
                 .build();
         return user;
     }
 
     @Builder
-    public UserDTO(Long id, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt) {
+    public UserDTO(Long id, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt, String oauth) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -63,5 +66,6 @@ public class UserDTO {
         this.updatedAt = updatedAt;
         this.status = status;
         this.deletedAt = deletedAt;
+        this.oauth = oauth;
     }
 }

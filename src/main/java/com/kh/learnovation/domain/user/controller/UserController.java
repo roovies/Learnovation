@@ -131,7 +131,7 @@ public class UserController {
 	}
 
 	@GetMapping("/auth/kakao/callback")
-	public String kakaoCallback(String code) { // Data를 리턴해주는 컨트롤러 함수
+	public String kakaoCallback(String code, Model model) { // Data를 리턴해주는 컨트롤러 함수, model추가
 
 		// POST방식으로 key=value 데이터를 요청 (카카오쪽으로)
 		// Retrofit2
@@ -216,17 +216,17 @@ public class UserController {
 		UUID garbagePassword = UUID.randomUUID();
 		// UUID란 -> 중복되지 않는 어떤 특정 값을 만들어내는 알고리즘
 		System.out.println("블로그서버 패스워드 : "+cosKey);
-
+		KakaoProfile.Properties properties = kakaoProfile.properties;
 		User kakaoUser = User.builder()
 				.email(kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId())
 				.password(cosKey)
 
-				/*.name()
-				.nickname()
-				.phoneNumber()
-*/
+				//.name("설석현")
+				.nickname(properties.getNickname())
+				//.phoneNumber("010")
 
-				.email(kakaoProfile.getKakao_account().getEmail())
+
+				//.email(kakaoProfile.getKakao_account().getEmail())
 				.oauth("kakao")
 				.build();
 
@@ -234,8 +234,10 @@ public class UserController {
 		User originUser = userService.회원찾기(kakaoUser.getEmail());
 
 		if(originUser.getEmail() == null) {
+			model.addAttribute("user", kakaoUser);
 			System.out.println("기존 회원이 아니기에 자동 회원가입을 진행합니다");
-			userService.회원가입(kakaoUser);
+			return "user/socialForm";
+			//userService.회원가입(kakaoUser);
 		}
 
 		System.out.println("자동 로그인을 진행합니다.");
@@ -249,6 +251,21 @@ public class UserController {
 	@GetMapping("/user/updateForm")
 	public String updateForm(@AuthenticationPrincipal PrincipalDetail principal) {
 		return "user/updateForm";
+	}
+
+	@PostMapping("/user/socialForm")
+	public String socialForm(@AuthenticationPrincipal PrincipalDetail principal, UserDTO userDTO) {
+		User user = User.builder()
+				.email(userDTO.getEmail())
+				.password(userDTO.getPassword())
+				.name(userDTO.getName())
+				.nickname(userDTO.getNickname())
+				.phoneNumber(userDTO.getPhoneNumber())
+				.oauth(userDTO.getOauth())
+				.build();
+		userService.회원가입(user);
+		// 로그인 처리
+		return "redirect:https://kauth.kakao.com/oauth/authorize?client_id=0c7a67f1f4fcb8912b7d917baa9f87ee&redirect_uri=http://localhost:9999/auth/kakao/callback&response_type=code";
 	}
 
 	/*
