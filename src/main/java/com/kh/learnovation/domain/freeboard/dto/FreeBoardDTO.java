@@ -24,6 +24,7 @@ public class FreeBoardDTO {
     private int freeBoardHits;
     private Timestamp freeBoardCreatedTime;
     private Timestamp freeBoardUpdatedTime;
+    private int status;
     private String subject;
     private MultipartFile freeBoardFile; // save.html -> Controller 파일 담는 용도
     private String originalFileName; // 원본 파일 이름
@@ -39,16 +40,17 @@ public class FreeBoardDTO {
         this.freeBoardCreatedTime = freeBoardCreatedTime;
     }
     @Builder
-    public FreeBoardDTO(long id, Long userId, String nickname, String freeBoardTitle, String freeBoardContents, Timestamp freeBoardCreatedTime, Timestamp freeBoardUpdatedTime,  String subject){
+    public FreeBoardDTO(long id, Long userId, String nickname, String freeBoardTitle, String freeBoardContents,int freeBoardHits, Timestamp freeBoardCreatedTime, Timestamp freeBoardUpdatedTime,  String subject, int status){
         this.id = id;
         this.userId = userId;
         this.nickname = nickname;
         this.freeBoardTitle = freeBoardTitle;
         this.freeBoardContents = freeBoardContents;
+        this.freeBoardHits = freeBoardHits;
         this.freeBoardCreatedTime = freeBoardCreatedTime;
         this.freeBoardUpdatedTime = freeBoardUpdatedTime;
-//        this.status = status;
         this.subject = subject;
+        this.status = status;
     }
 
 
@@ -63,19 +65,6 @@ public class FreeBoardDTO {
         freeBoardDTO.setNickname(freeBoardEntity.getUser().getNickname());
         freeBoardDTO.setFreeBoardCreatedTime(freeBoardEntity.getCreatedTime());
         freeBoardDTO.setFreeBoardUpdatedTime(freeBoardEntity.getUpdatedTime());
-        if (freeBoardEntity.getFileAttached() == 0) {
-            freeBoardDTO.setFileAttached(freeBoardEntity.getFileAttached()); // 0
-        } else {
-            freeBoardDTO.setFileAttached(freeBoardEntity.getFileAttached()); // 1
-            // 파일 이름을 가져가야 함.
-            // orginalFileName, storedFileName : board_file_table(BoardFileEntity)
-            // join
-            // select * from board_table b, board_file_table bf where b.id=bf.board_id
-            // and where b.id=?
-            freeBoardDTO.setOriginalFileName(freeBoardEntity.getFreeBoardFileEntityList().get(0).getOriginalFileName());
-            freeBoardDTO.setStoredFileName(freeBoardEntity.getFreeBoardFileEntityList().get(0).getStoredFileName());
-        }
-
         return freeBoardDTO;
     }
 }

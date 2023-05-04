@@ -24,4 +24,6 @@ public interface FreeBoardService {
     Page<FreeBoardDTO> freeBoardList(Pageable pageable);
 
     Page<FreeBoardDTO> freeBoardSearchList(Pageable pageable, String searchKeyword);
+
+
 }

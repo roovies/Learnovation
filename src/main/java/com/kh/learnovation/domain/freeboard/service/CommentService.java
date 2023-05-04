@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface CommentService {
 
-    Long save(CommentDTO commentDTO);
-
+//    Long save(CommentDTO commentDTO);
+//
     List<CommentDTO> findAll(Long freeBoardId);
-
-    CommentDTO update(CommentDTO commentDTO);
-
-    void delete(CommentDTO commentDTO);
+//
+//    CommentDTO update(CommentDTO commentDTO);
+//
+//    void delete(CommentDTO commentDTO);
 
 }

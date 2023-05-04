@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "freeBoard_table")
+@Table(name = "test_freeBoard_table")
 public class FreeBoardEntity extends BaseEntity {
     @Id // pk 컬럼 지정. 필수
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
@@ -43,7 +43,7 @@ public class FreeBoardEntity extends BaseEntity {
     private int freeBoardHits;
 
     @Column
-    private int fileAttached; // 1 or 0
+    private int status; // 1 or 0
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -57,7 +57,7 @@ public class FreeBoardEntity extends BaseEntity {
     private List<CommentEntity> commentEntityList = new ArrayList<>();
 
     @Builder
-    public FreeBoardEntity(long id, String freeBoardTitle, String freeBoardContents, int freeBoardHits, int fileAttached
+    public FreeBoardEntity(long id, String freeBoardTitle, String freeBoardContents, int freeBoardHits, int status
             , User user, Timestamp createdAt, Timestamp updatedAt, String subject
             , List<FreeBoardFileEntity> freeBoardFileEntityList, List<CommentEntity> commentEntityList) {
         this.id = id;
@@ -67,7 +67,7 @@ public class FreeBoardEntity extends BaseEntity {
         this.updatedAt = updatedAt;
         this.subject = subject;
         this.freeBoardHits = freeBoardHits;
-        this.fileAttached = fileAttached;
+        this.status = status;
         this.user = user;
         this.freeBoardFileEntityList = freeBoardFileEntityList;
         this.commentEntityList = commentEntityList;

@@ -2,15 +2,11 @@ package com.kh.learnovation.domain.freeboard.controlller;
 
 
 import com.google.gson.JsonObject;
-import com.kh.learnovation.domain.admin.entity.Admin;
 import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
 import com.kh.learnovation.domain.freeboard.dto.FreeBoardDTO;
-import com.kh.learnovation.domain.freeboard.service.CommentServiceImpl;
-import com.kh.learnovation.domain.freeboard.service.FreeBoardService;
-import com.kh.learnovation.domain.freeboard.service.FreeBoardServiceImpl;
-import com.kh.learnovation.domain.freeboard.service.LikeServiceImpl;
-import com.kh.learnovation.domain.notice.dto.NoticeDTO;
+import com.kh.learnovation.domain.freeboard.service.*;
 import com.kh.learnovation.domain.user.dto.UserDTO;
+import com.kh.learnovation.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,8 +31,9 @@ import java.util.UUID;
 @RequestMapping("/freeBoard")
 public class FreeBoardController {
     private final FreeBoardService freeBoardService;
-    private final CommentServiceImpl commentService;
+    private final CommentService commentService;
     private final LikeServiceImpl likeService;
+    private final UserService userService;
 
 
 
@@ -52,7 +49,7 @@ public class FreeBoardController {
     public ModelAndView save(ModelAndView mv
             , @RequestParam("freeBoardContents") String freeBoardContents
             , @RequestParam("freeBoardTitle") String freeBoardTitle
-            , @RequestParam("user") UserDTO userDTO
+            , @RequestParam("email") String email
             , @RequestParam("id") String id) throws IOException {
         if(freeBoardContents.equals("") || freeBoardTitle.equals("")){
             mv.setViewName("redirect:/freeBoard/list");
@@ -113,10 +110,11 @@ public class FreeBoardController {
         System.out.println(sb);*/
         String subject = freeBoardContents.replaceAll("<[^>]*>?","");
         //NoticeDTO noticeDTO = NoticeDTO.builder().title(title).content(content).admin(admin).status(0).subject(subject).createdAt(ts).build();
+        UserDTO userDTO=userService.getCurrentUser().get();
         FreeBoardDTO freeBoardDTO = FreeBoardDTO.builder().freeBoardTitle(freeBoardTitle).freeBoardContents(freeBoardContents)
-                .userId(userDTO.getId()).nickname(userDTO.getNickname()).subject(subject).freeBoardCreatedTime(ts).build();
-        long freeBoardNo = freeBoardService.insertFreeBoard(freeBoardDTO).getId();
-        mv.setViewName("redirect:/freeBoard/detail?freeBoardNo=" + freeBoardNo);
+                .userId(userDTO.getId()).nickname(userDTO.getNickname()).status(0).subject(subject).freeBoardCreatedTime(ts).build();
+        Long freeBoardId = freeBoardService.insertFreeBoard(freeBoardDTO).getId();
+        mv.setViewName("redirect:/freeBoard/detail/" + freeBoardId);
         return mv;
     }
 
@@ -155,8 +153,9 @@ public class FreeBoardController {
         return "/freeBoard/list";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/detail/{id}")
     public String findById(@PathVariable Long id, Model model,
+                           @RequestParam (value="searchKeyword", required = false, defaultValue = "") String searchKeyword,
                            @PageableDefault(page=1) Pageable pageable) {
         /*
             해당 게시글의 조회수를 하나 올리고
@@ -170,15 +169,16 @@ public class FreeBoardController {
 //        model.addAttribute("result", result);
         model.addAttribute("commentList", commentDTOList);
         model.addAttribute("freeBoard", freeBoardDTO);
+        model.addAttribute("keyword", searchKeyword);
         model.addAttribute("page", pageable.getPageNumber());
-        return "/freeBoard/FreeDetail";
+        return "/freeBoard/detail";
     }
 
-    @GetMapping("/update/{id}")
-    public String updateForm(@PathVariable Long id, Model model) {
+    @GetMapping("/modify/{id}")
+    public ModelAndView updateForm(ModelAndView mv, @PathVariable Long id) {
         FreeBoardDTO freeBoardDTO = freeBoardService.findById(id);
-        model.addAttribute("freeBoardUpdate", freeBoardDTO);
-        return "/freeBoard/update";
+        mv.addObject("freeBoard", freeBoardDTO).addObject("random", UUID.randomUUID()).setViewName("freeBoard/modify");
+        return mv;
     }
 
 //    @PostMapping("/update")
@@ -215,6 +215,7 @@ public class FreeBoardController {
         // 7 8 9
         // 보여지는 페이지 갯수 3개
         // 총 페이지 갯수 8개
+        model.addAttribute("keyword", searchKeyword);
         model.addAttribute("freeBoardDTOList", list);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);

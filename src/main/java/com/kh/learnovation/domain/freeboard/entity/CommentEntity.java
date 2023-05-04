@@ -1,11 +1,13 @@
 package com.kh.learnovation.domain.freeboard.entity;
 
 import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
+import com.kh.learnovation.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,16 +15,18 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "comment_table")
-public class CommentEntity extends BaseEntity {
+public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(length = 20, nullable = false)
-    private String commentWriter;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private User user;
     @Column
     private String commentContents;
+    @Column
+    private Timestamp commentCreatedTime;
+
 
     /* Board:Comment = 1:N */
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,29 +43,38 @@ public class CommentEntity extends BaseEntity {
 //    @OneToMany(mappedBy = "parent", orphanRemoval = true)
 //    private List<CommentEntity> childrenCommentEntity = new ArrayList<>();
 
-    public static CommentEntity toSaveEntity(CommentDTO commentDTO, FreeBoardEntity freeBoardEntity) {
-        CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setCommentWriter(commentDTO.getCommentWriter());
-        commentEntity.setCommentContents(commentDTO.getCommentContents());
-        commentEntity.setFreeBoardEntity(freeBoardEntity);
-        return commentEntity;
+    @Builder
+    public CommentEntity(long id, User user, String commentContents, FreeBoardEntity freeBoardEntity, Timestamp commentCreatedTime){
+        this.id = id;
+        this.user = user;
+        this.commentContents = commentContents;
+        this.freeBoardEntity = freeBoardEntity;
+        this.commentCreatedTime = commentCreatedTime;
     }
 
-    public static CommentEntity toUpdateEntity(CommentDTO commentDTO, FreeBoardEntity freeBoardEntity) {
-        CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setCommentWriter(commentDTO.getCommentWriter());
-        commentEntity.setCommentContents(commentDTO.getCommentContents());
-        commentEntity.setFreeBoardEntity(freeBoardEntity);
-        return commentEntity;
-
-    }
-
-    public static CommentEntity toDeleteEntity(CommentDTO commentDTO, FreeBoardEntity freeBoardEntity) {
-        CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setCommentWriter(commentDTO.getCommentWriter());
-        commentEntity.setCommentContents(commentDTO.getCommentContents());
-        commentEntity.setFreeBoardEntity(freeBoardEntity);
-        return commentEntity;
-
-    }
+//    public static CommentEntity toSaveEntity(CommentDTO commentDTO, FreeBoardEntity freeBoardEntity) {
+//        CommentEntity commentEntity = new CommentEntity();
+//        commentEntity.setCommentWriter(commentDTO.getCommentWriter());
+//        commentEntity.setCommentContents(commentDTO.getCommentContents());
+//        commentEntity.setFreeBoardEntity(freeBoardEntity);
+//        return commentEntity;
+//    }
+//
+//    public static CommentEntity toUpdateEntity(CommentDTO commentDTO, FreeBoardEntity freeBoardEntity) {
+//        CommentEntity commentEntity = new CommentEntity();
+//        commentEntity.setCommentWriter(commentDTO.getCommentWriter());
+//        commentEntity.setCommentContents(commentDTO.getCommentContents());
+//        commentEntity.setFreeBoardEntity(freeBoardEntity);
+//        return commentEntity;
+//
+//    }
+//
+//    public static CommentEntity toDeleteEntity(CommentDTO commentDTO, FreeBoardEntity freeBoardEntity) {
+//        CommentEntity commentEntity = new CommentEntity();
+//        commentEntity.setCommentWriter(commentDTO.getCommentWriter());
+//        commentEntity.setCommentContents(commentDTO.getCommentContents());
+//        commentEntity.setFreeBoardEntity(freeBoardEntity);
+//        return commentEntity;
+//
+//    }
 }
