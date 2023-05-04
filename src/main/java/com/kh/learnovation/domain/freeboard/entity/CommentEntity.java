@@ -4,6 +4,7 @@ import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
 import com.kh.learnovation.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "comment_table")
+@NoArgsConstructor
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
