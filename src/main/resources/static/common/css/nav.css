@@ -156,7 +156,7 @@ nav a:hover{
 .search-form{
     position: relative;
     width: 250px;
-    margin-left: 300px;
+    margin-left: 200px;
 }
 .nav-search{
     width : 200px;
@@ -233,8 +233,11 @@ nav a:hover{
     display: flex;
     justify-content: space-between;
     margin-left: 70px;
-    display: none;
 }
+    .nav-content-box a > button:hover{
+        background-color: #0090F0;
+        color: white;
+    }
 .nav-login-icons{
     margin-left: 100px;
     display: flex;
