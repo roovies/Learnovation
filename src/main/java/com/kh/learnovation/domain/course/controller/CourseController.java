@@ -129,26 +129,26 @@ public class CourseController {
     @GetMapping("/purchased/{id}")
     public String showMyCourseDetail(@PathVariable Long id, Model model){
         /** 로그인 정보를 받고, 해당 회원 id를 토대로 "인강 구매내역 테이블"에 넘어오는 인강 고유 id 값이 있는지 확인한 후, 있으면 findDetailById를 하면 될듯. */
-        // userId가 13인 회원 하드코딩으로 세션 설정
-        UserDTO tmpUser = UserDTO.builder()
-                .id(13L)
-                .name("이현준")
-                .nickname("고수되고싶다")
-                .build();
-
-
-
-        CourseDetailDTO detailDTO = courseService.findDetailById(id);
-        Optional<CourseReviewDTO> reviewDTO = courseService.findReviewByUserIdAndCourseId(tmpUser.getId(), id);
-        model.addAttribute("detail", detailDTO);
-        model.addAttribute("loginUser", tmpUser);
-        if(reviewDTO.isPresent()){ //작성한 리뷰가 존재할 시
-            model.addAttribute("review", reviewDTO.get());
-            return "course/CourseDashboard";
-        }
-        else { //작성한 리뷰가 존재하지 않을 시
-            model.addAttribute("review", new CourseReviewDTO());
-            return "course/CourseDashboard";
+        Optional<UserDTO> currentUser = userService.getCurrentUser();
+        if (currentUser.isPresent()){
+            /**==============================================================================================
+             * 해당 위치에 결제테이블을 기준으로 결제여부 확인해야 함. (즉 구매한 유저만 접근할 수 있도록)
+             * ============================================================================================ */
+            CourseDetailDTO detailDTO = courseService.findDetailById(id);
+            Optional<CourseReviewDTO> reviewDTO = courseService.findReviewByUserIdAndCourseId(currentUser.get().getId(), id);
+            model.addAttribute("detail", detailDTO);
+            model.addAttribute("loginUser", currentUser.get());
+            if(reviewDTO.isPresent()){ //작성한 리뷰가 존재할 시
+                model.addAttribute("review", reviewDTO.get());
+                return "course/CourseDashboard";
+            }
+            else { //작성한 리뷰가 존재하지 않을 시
+                model.addAttribute("review", new CourseReviewDTO());
+                return "course/CourseDashboard";
+            }
+        } else {
+            // 로그인한 회원 정보가 없을 경우 (잘못된 접근)
+            return "common/error";
         }
     }
 
@@ -161,12 +161,17 @@ public class CourseController {
     @PostMapping("/review/register")
     @ResponseBody
     public String registerReview(@RequestBody CourseReviewDTO reviewDTO){
-        // 로그인 안되어 있으므로 다음과 같이 userId를 13로 고정떄림
-        reviewDTO.setUserId(13L);
-        try {
-            courseService.createReview(reviewDTO);
-            return "success";
-        } catch (Exception e){
+        Optional<UserDTO> currentUser = userService.getCurrentUser();
+        if(currentUser.isPresent()){
+            try {
+                reviewDTO.setUserId(currentUser.get().getId());
+                courseService.createReview(reviewDTO);
+                return "success";
+            } catch (Exception e){
+                return "failed";
+            }
+        }
+        else{
             return "failed";
         }
     }
@@ -175,12 +180,16 @@ public class CourseController {
     @PostMapping("/review/update")
     @ResponseBody
     public String updateReview(@RequestBody CourseReviewDTO reviewDTO){
-        // 로그인 안되어 있으므로 다음과 같이 userId를 13로 고정떄림
-        reviewDTO.setUserId(13L);
-        try {
-            courseService.updateReview(reviewDTO);
-            return "success";
-        } catch (Exception e) {
+        Optional<UserDTO> currentUser = userService.getCurrentUser();
+        if(currentUser.isPresent()){
+            try {
+                reviewDTO.setUserId(currentUser.get().getId());
+                courseService.updateReview(reviewDTO);
+                return "success";
+            } catch (Exception e) {
+                return "failed";
+            }
+        } else{
             return "failed";
         }
     }
@@ -189,12 +198,17 @@ public class CourseController {
     @PostMapping("/review/delete")
     @ResponseBody
     public String deleteReview(@RequestBody CourseReviewDTO reviewDTO){
-        // 로그인 안되어 있으므로 다음과 같이 userId를 13로 고정떄림
-        reviewDTO.setUserId(13L);
-        int result = courseService.deleteReview(reviewDTO.getId(), reviewDTO.getUserId());
-        if(result>0){
-            return "success";
-        } else{
+        Optional<UserDTO> currentUser = userService.getCurrentUser();
+        if (currentUser.isPresent()){
+            reviewDTO.setUserId(currentUser.get().getId());
+            int result = courseService.deleteReview(reviewDTO.getId(), reviewDTO.getUserId());
+            if(result>0){
+                return "success";
+            } else{
+                return "failed";
+            }
+        }
+        else{
             return "failed";
         }
     }
@@ -205,13 +219,6 @@ public class CourseController {
     public List<CourseReviewDTO> moreReview(@PathVariable Long courseId, @RequestBody Map<String, String> map){
         int page = Integer.parseInt(map.get("page"));
         List<CourseReviewDTO> reviewDTOs = courseService.findReviewByPaging(courseId, page);
-        if (!reviewDTOs.isEmpty()){
-            System.out.println("@@@@@@@@@@@@@@@@@@@@@");
-            System.out.println("비어있다~~");
-        }
-//        for (CourseReviewDTO reviewDTO : reviewDTOs){
-//            System.out.println(reviewDTO.toString());
-//        }
         return reviewDTOs;
     }
 

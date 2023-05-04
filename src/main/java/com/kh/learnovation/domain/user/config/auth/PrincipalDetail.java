@@ -28,6 +28,17 @@ public class PrincipalDetail implements UserDetails{
 		return user.getEmail();
 	}
 
+	public Long getId(){
+		return user.getId();
+	}
+	public String getNickname(){
+		return user.getNickname();
+	}
+
+	public String getName(){
+		return user.getName();
+	}
+
 	// 계정이 만료되지 않았는지 리턴한다. (true: 만료안됨)
 	@Override
 	public boolean isAccountNonExpired() {

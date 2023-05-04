@@ -7,10 +7,16 @@
     <link rel="stylesheet" href="/course/css/CourseDetail.css">
     <!--fontawesome-->
     <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <!-- nav import -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/nav.css">
     <!-- jQUery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
+    <nav th:replace="~{common/nav.html :: nav}"></nav>
     <div id="course-header">
         <div id="header-thumbnail">
             <img th:src="@{/course/upload/thumbnails/} + ${detail.savedPath} +@{/} + ${detail.savedImageName}" id="thumbnails" alt="">
@@ -145,8 +151,8 @@
     // ======================================================
     // 네비게이션 관련
     // ======================================================
-    let curriculumLocation = (document.querySelector("#left-curriculum").getBoundingClientRect().top + window.scrollY)-150;
-    let reviewLocation = (document.querySelector("#left-review").getBoundingClientRect().top + window.scrollY)-150;
+    let curriculumLocation = (document.querySelector("#left-curriculum").getBoundingClientRect().top + window.scrollY)-200;
+    let reviewLocation = (document.querySelector("#left-review").getBoundingClientRect().top + window.scrollY)-200;
     /* 1. 스크롤 이벤트 관련 */
     window.addEventListener("scroll", () => {
         // 1-1. 스크롤 시 네비게이션 상단 고정
@@ -194,7 +200,7 @@
     /* 3-2. 네비로 커리큘럼 항목 클릭 */
     let moveCurriculum = ()=>{
         let location = document.querySelector("#left-curriculum").offsetTop;
-        window.scrollTo({top:location-100, behavior:'smooth'});
+        window.scrollTo({top:location-150, behavior:'smooth'});
         clearNavColor();
         let curriculumTag = document.querySelector('#course-nav p:nth-child(2)');
         curriculumTag.className = 'nav-basic nav-focus';
@@ -203,7 +209,7 @@
     /* 3-3. 네비로 수강후기 항목 클릭 */
     let moveReview = () =>{
         let location = document.querySelector("#left-review").offsetTop;
-        window.scrollTo({top:location-100, behavior:'smooth'});
+        window.scrollTo({top:location-150, behavior:'smooth'});
         clearNavColor();
         let curriculumTag = document.querySelector('#course-nav p:nth-child(3)');
         curriculumTag.className = 'nav-basic nav-focus';
@@ -283,4 +289,5 @@
         });
     });
 </script>
+<script src="/common/js/nav.js"></script>
 </html>

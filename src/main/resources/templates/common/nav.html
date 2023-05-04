@@ -157,7 +157,70 @@
         </div>
       </nav>
       <div class="nav-block"></div>
-      <div class="chat-bot-box"></div>
+      <!-- 챗봇 버튼 -->
+      <div class="chat-bot-box">
+        <img th:src="@{/common/image/chatbot.png}" alt="">
+        <h4>HELP</h4>
+      </div>
+      <!-- 챗봇 모달창 -->
+      <div class="chat-bot-modal">
+        <div class="chat-bot-modal-header">
+          <img th:src="@{/common/image/logo.png}" alt="">
+          <span class="chat-bot-modal-header-name">Learnovation</span>
+          <span id="chat-bot-close-btn" class="chat-bot-modal-header-close">×</span>
+        </div>
+        <!-- 챗봇 모달창 (안내 메시지) -->
+        <div class="chat-bot-modal-notice">
+          <p>반갑습니다. <b>러노베이션</b>입니다. 👋</p><br>
+          <p><b>📌 1:1 문의 운영 시간 안내</b></p>
+          <p> - 평일 : 10:00 ~ 18:00</p>
+          <p> - 점심 : 13:00 ~ 14:00</p>
+          <p>주말, 공휴일은 휴무입니다.</p><br>
+          <p>
+            접수된 순서대로 답변을 드리고 있어요.<br>
+            그러나, 문의량이 많을 경우 상담연결까지 지연될 수 있다는 점 양해 부탁드립니다. 😢
+          </p><br>
+          <p><b>챗봇 상담은 24시간 이용 가능합니다. 😊</b></p>
+        </div>
+        <!-- 챗봇 모달창 (액션 버튼) -->
+        <button class="chat-bot-modal-qna">자주 묻는 질문</button>
+        <button id="startChat" class="chat-bot-modal-start">🚀 문의 시작하기</button>
+        <!-- 챗봇 모달창 (채팅 시작) -->
+        <div class="chat-bot-modal-chatting">
+          <div class="chat-bot-modal-chatting-receive">
+            <img class="chat-bot-modal-chatting-receiverImg" th:src="@{/common/image/logo.png}" alt="">
+            <div class="chat-bot-modal-chatting-receiverMsg">
+              <th:block th:if="${#authentication.principal == 'anonymousUser'}">
+                <p>안녕하세요!</p>
+                <p class="userId" th:data-id="0">아직 러노베이션 가족이 아니네요. 😢</p>
+                <p>지금 바로 <b>회원가입</b>을 하신 후에</p>
+                <p>러노베이션의 <b>다양한 혜택과 소식</b>을</p>
+                <p>받아보세요. 🤩</p>
+                <button class="chat-bot-modal-chatting-btn" th:onclick="location.href='/auth/joinForm'">바로 회원가입 하기</button>
+              </th:block>
+              <th:block th:if="${#authentication.principal != 'anonymousUser'}">
+                <p class="userId" th:utext="'안녕하세요 ! <b>' + ${#authentication.principal.name} + '</b>님'" th:data-id="${#authentication.principal.id}"></p>
+                <p><b>🎁 이달의 이벤트 소식이 도착했어요.</b></p>
+                <button class="chat-bot-modal-chatting-btn" th:onclick="location.href='/notice/list'">소식 보러 가기</button>
+              </th:block>
+              <p><b>[챗봇 이용 방법]</b></p>
+              <p>- 원하는 서비스를 직접 요청해보세요!</p>
+              <p>- 예를 들어, 상담원 연결이 필요하면 <b>"상담받고 싶어"</b> 또는 <b>"상담원을 연결해줘"</b>라 말해보세요!</p>
+            </div>
+          </div>
+          <div class="chat-bot-modal-chatting-receive">
+            <img class="chat-bot-modal-chatting-receiverImg" th:src="@{/common/image/logo.png}" alt="">
+            <div class="chat-bot-modal-chatting-receiverMsg">
+              <p>지워야함</p>
+            </div>
+          </div>
+        </div>
+        <div class="chat-bot-modal-chatting-input">
+          <textarea name="" id="chatbotMsg"></textarea>
+          <i class="fa-regular fa-face-smile chat-bot-modal-chatting-emojiIcon" style="color: #9f9e9e;"></i>
+          <i class="fa-solid fa-paper-plane chat-bot-modal-chatting-sendIcon" style="color: #0090F0;"></i>
+        </div>
+      </div>
     </div>
 
     <script src="../../static/common/js/nav.js"/>
