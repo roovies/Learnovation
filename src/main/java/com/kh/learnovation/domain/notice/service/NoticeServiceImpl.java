@@ -4,6 +4,7 @@ import com.kh.learnovation.domain.admin.entity.Admin;
 import com.kh.learnovation.domain.notice.dto.NoticeDTO;
 import com.kh.learnovation.domain.notice.entity.Notice;
 import com.kh.learnovation.domain.notice.repository.NoticeRepository;
+import com.kh.learnovation.domain.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,9 +24,9 @@ public class NoticeServiceImpl implements NoticeService{
     @Override
     @Transactional
     public NoticeDTO insertNotice(NoticeDTO noticeDTO) {
-        Admin admin = Admin.builder().id(noticeDTO.getAdminId()).build();
+        User user = User.builder().id(noticeDTO.getUserid()).build();
         Notice notice = Notice.builder()
-                .admin(admin)
+                .user(user)
                 .title(noticeDTO.getTitle())
                 .content(noticeDTO.getContent())
                 .createdAt(noticeDTO.getCreatedAt())
@@ -36,7 +37,7 @@ public class NoticeServiceImpl implements NoticeService{
         notice = noticeRepository.save(notice);
         noticeDTO = NoticeDTO.builder()
                 .id(notice.getId())
-                .admin(notice.getAdmin())
+                .user(notice.getUser())
                 .title(notice.getTitle())
                 .content(notice.getTitle())
                 .createdAt(notice.getCreatedAt())
@@ -50,10 +51,10 @@ public class NoticeServiceImpl implements NoticeService{
     @Override
     @Transactional
     public NoticeDTO updateNotice(NoticeDTO noticeDTO) {
-        Admin admin = Admin.builder().id(noticeDTO.getAdminId()).build();
+        User user = User.builder().id(noticeDTO.getUserid()).build();
         Notice notice = Notice.builder()
                 .id(noticeDTO.getId())
-                .admin(admin)
+                .user(user)
                 .title(noticeDTO.getTitle())
                 .content(noticeDTO.getContent())
                 .createdAt(noticeDTO.getCreatedAt())
@@ -64,7 +65,7 @@ public class NoticeServiceImpl implements NoticeService{
         notice = noticeRepository.save(notice);
         noticeDTO = NoticeDTO.builder()
                 .id(notice.getId())
-                .admin(notice.getAdmin())
+                .user(notice.getUser())
                 .title(notice.getTitle())
                 .content(notice.getContent())
                 .createdAt(notice.getCreatedAt())
@@ -76,14 +77,16 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
+    @Transactional
     public Page<Notice> selectAllNotice(Pageable pageable) {
         Page<Notice> pNotice = noticeRepository.findAllByStatus(0,pageable);
         return pNotice;
     }
 
     @Override
+    @Transactional
     public Page<Notice> selectAllNotice(String keyword, Pageable pageable) {
-        Page<Notice> pNotice = noticeRepository.findAllByStatusAndSubjectLikeOrTitleLike(0,keyword,keyword,pageable);
+        Page<Notice> pNotice = noticeRepository.findAllByStatusAndTitleLike(0,keyword,pageable);
         return pNotice;
     }
 
@@ -97,7 +100,7 @@ public class NoticeServiceImpl implements NoticeService{
         }
         NoticeDTO noticeDTO = NoticeDTO.builder()
                 .id(notice.getId())
-                .admin(notice.getAdmin())
+                .user(notice.getUser())
                 .title(notice.getTitle())
                 .content(notice.getContent())
                 .updatedAt(notice.getUpdatedAt())

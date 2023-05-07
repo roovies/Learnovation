@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>상세보기</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/common/css/nav.css">
+        <link rel="stylesheet" href="/matching/css/detail.css">
+    </head>
+    <body>
+        <nav th:replace="~{common/nav.html :: nav}"></nav>
+        <main>
+            <div class="hidden-div" th:if="${#authentication.principal != 'anonymousUser'}">
+                <input id="userNo" type="hidden" th:value="${#authentication.principal.id}">
+            </div>
+            <div class="matching-theme-box">
+                <div class="matching-theme-content"><a href="/matching/list"><p>매칭게시판</p></a></div>
+                <div class="matching-theme-line"><hr></div>
+            </div>
+            <div class="matching-info-box">
+                <div th:if="${#authentication.principal != 'anonymousUser'}">
+                    <div class="matching-info-btn" th:if="${#authentication.principal.getId() == matching.getUser().getId() || #authentication.principal.Authorities.get(0).Authority == 'ROLE_ADMIN'}">
+                        <a class="blue" th:href="@{/matching/modify(matchingNo=${matching.getId()})}">수정</a>
+                        <a href="" class="sky" id="noticeRemoveBtn">삭제</a>
+                    </div>
+                </div>
+                <div class="matching-info-content">
+                    <div class="matching-nickname">
+                        <span th:text="${matching.getUser().getNickname()}"></span>
+                    </div>
+                    <div class="matching-subject">
+                        <span th:text="${matching.getCreatedAt()}"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="matching-detail-title" id="matchingTitle" th:data-matchingno="${matching.getId()}">
+                <p th:text="${matching.getTitle()}"></p>
+            </div>
+            <div class="matching-detail-content" th:utext="${matching.getContent()}"></div>
+            <div class="matching-reply-container">
+                <div class="matching-reply-input-box">
+                    <textarea id="replyInput" cols="30" rows="10" class="reply-input"></textarea>
+                    <button id="replyWrite"class="reply-btn">작성</button>
+                </div>
+                <div id="matchingReplyList">
+
+                </div>
+                <div class="matching-reply-box" id="matchingReplyBox">
+                    <div class="matching-reply-subject">
+                        <div class="matching-reply-title">
+                            <a href="#" onclick="switchModal(this)"><div class="nicknamebox"><span class="replyNickname">닉네임</span></div></a>
+                            <span class="replyDate">2023-05-07 21:58:56.0</span>
+                        </div>
+                        <div class="matching-reply-btn">
+                            <button class="blue" onclick="modifyBtn(this)">수정</button>
+                            <button class="sky" onclick="deleteBtn(this)">삭제</button>
+                        </div>
+                    </div>
+                    <div class="matching-reply-content replyContent">
+                        ㅇㄴㅁㅁㅁㅁㅁㅁㅁㅇㄴㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㄴㅇㄴㅁㅇㄴㅁㅁㅁㅁㅁㅁㅁㅇㄴㅁㅁㅁㅇㄴㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㄴㅇㄴㅁㅇㄴㅁㅁㅁㅁㅁㅁㅁㅇㄴㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㄴㅇㄴㅁㅇㄴㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㄴㅇㄴㅁㅇㄴㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㄴㅇㄴㅁㅇㄴㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㄴㅇㄴㅁㅇㄴㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㄴㅇㄴㅁㅇㄴㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㄴㅇㄴㅁㅇㄴㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㄴㅇㄴㅁ
+                    </div>
+                </div>
+            </div>
+            <div class="group-invite-modal" id="groupModal">
+                <h2>그룹 초대</h2>
+                <select name="" id="abc">
+                    <option value="">1</option>
+                    <option value="">2</option>
+                    <option value="">3</option>
+                </select>
+                <button>초대하기</button>
+            </div>
+            <div class="index-btn-area">
+                <a class="index-btn" th:if="${keyword == null}" th:href="@{/matching/list(page=${page})}">목록으로</a>
+                <a class="index-btn" th:if="${keyword != null}" th:href="@{/matching/list(page=${page},keyword=${keyword})}">목록으로</a>
+            </div>
+
+        </main>
+        <div class="remove-modal-box" id="removeModalBox">
+            <div class="remove-modal-bg" id="removeModalBg"></div>
+            <div class="remove-modal">
+                <div>
+                    <span>정말 삭제하시겠습니까?</span>
+                </div>
+                <div class="matching-modal-btn">
+                    <a th:href="@{/matching/delete(matchingNo=${matching.getId()})}">삭제</a>
+                    <a href="#" id="modalInClose">취소</a>
+                </div>
+            </div>
+        </div>
+        <script src="/common/js/nav.js"></script>
+        <script>
+            if(document.getElementById('noticeRemoveBtn') != null){
+                document.getElementById('noticeRemoveBtn').addEventListener('click', function(e){
+                    e.preventDefault();
+                    document.querySelector('body').style.overflow = 'hidden';
+                    document.getElementById("removeModalBox").style.display = 'block';
+                })
+
+                document.getElementById("modalInClose").addEventListener('click',function(e){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    modalClose();
+                })
+
+                document.getElementById("removeModalBg").addEventListener('click', function(e){
+                    e.stopPropagation();
+                    modalClose();
+                });
+
+                function modalClose(){
+                    document.querySelector('body').style.overflow = 'scroll';
+                    document.getElementById("removeModalBox").style.display = 'none';
+                }
+            }
+            // 댓글
+            document.querySelector('body').addEventListener('click', function(){
+                groupModal.style.display = 'none';
+                this.append(groupModal);
+            })
+            const groupModal = document.getElementById('groupModal');
+            function switchModal(btn){
+                window.event.preventDefault();
+                window.event.stopPropagation();
+                let titleBox = btn.parentElement;
+                let span = btn.firstElementChild;
+                let left = span.clientWidth;
+                groupModal.style.left = (left + 10) +'px';
+                if(titleBox.lastElementChild == groupModal){
+                    titleBox.after(groupModal);
+                    groupModal.style.display = "none";
+                }else{
+                    groupModal.style.display = "block";
+                    titleBox.append(groupModal);
+                }
+            }
+            groupModal.addEventListener("click", function(e){
+                e.stopPropagation();
+            })
+
+            function getCommentList(){
+                let matchingNo = document.getElementById('matchingTitle').dataset.matchingno;
+                $.ajax({
+                    data : {matchingNo : matchingNo},
+                    type : "POST",
+                    url : "/matching/comment/list",
+                    success : function(data){
+                        let cList = JSON.parse(data);
+                        let replyList = document.getElementById("matchingReplyList");
+                        replyList.innerHTML = "";
+                        for(let i = 0; i < cList.length; i++){
+                            let matchingReplyBox = document.getElementById('matchingReplyBox').cloneNode(true);
+                            matchingReplyBox.dataset.id = cList[i].id;
+                            matchingReplyBox.querySelector(".replyNickname").innerHTML = cList[i].user.nickname;
+                            matchingReplyBox.querySelector(".replyContent").innerHTML = cList[i].content;
+                            matchingReplyBox.querySelector(".replyDate").innerHTML = cList[i].createdAt;
+                            matchingReplyBox.dataset.userid = cList[i].user.id;
+                            matchingReplyBox.style.display = "block";
+                            replyList.append(matchingReplyBox);
+                        }
+                    },error : function(data){
+                        console.log(data);
+                    }
+                })
+            }
+            /////버튼 이벤트
+
+            //댓글 작성
+            document.getElementById('replyWrite').addEventListener('click', function(e){
+                e.preventDefault();
+                let content = document.getElementById('replyInput').value;
+                let matchingNo = document.getElementById('matchingTitle').dataset.matchingno;
+                if(content != ""){
+                    $.ajax({
+                        data : {content : content, matchingNo : matchingNo},
+                        type : "POST",
+                        url : "/matching/comment/insert",
+                        success : function(data){
+                            getCommentList();
+                        },error : function(data){
+                            console.log(data);
+                        }
+                    })
+                }
+            })
+            //댓글 수정
+            function modifyBtn(btn){
+                let replyBox = btn.parentElement.parentElement.parentElement;
+                let userNo = replyBox.dataset.userid;
+                let curUserNo = document.getElementById("userNo");
+                if(curUserNo != null){
+                    if(userNo == curUserNo.value){
+                        let contentBox = replyBox.querySelector(".matching-reply-content");
+                        let modiBtn = replyBox.querySelector(".blue");
+                        if(contentBox.firstElementChild == null){
+                            let values = contentBox.innerText;
+                            let textArea = document.createElement("textarea");
+                            let submitBtn = document.createElement("button");
+                            submitBtn.innerHTML = "작성";
+                            submitBtn.className = "reply-modify-btn"
+                            submitBtn.setAttribute("onclick", "submitModify(this)")
+                            textArea.value = values;
+                            textArea.className = "reply-modify";
+                            contentBox.innerHTML = "";
+                            contentBox.append(textArea);
+                            contentBox.append(submitBtn);
+                            contentBox.dataset.content = values;
+                            modiBtn.innerText = "취소";
+                        }else{
+                            contentBox.innerHTML = contentBox.dataset.content;
+                            modiBtn.innerText = "수정";
+                        }
+                    }else{
+                        alert("권한없음");
+                    }
+                }else{
+                    alert("권한없음")
+                }
+
+            }
+            //댓글 삭제
+            function deleteBtn(btn){
+                let replyBox = btn.parentElement.parentElement.parentElement;
+                let id = replyBox.dataset.id;
+                let userId = replyBox.dataset.userid;
+                $.ajax({
+                    data : {id : id, userId : userId},
+                    type : "GET",
+                    url : "/matching/comment/delete",
+                    success : function(data){
+                        if(data == "success"){
+                            getCommentList();
+                        }else if(data == "noPermission"){
+                            alert("권한없음");
+                        }
+                    },error : function(data){
+                        console.log(data);
+                    }
+                })
+            }
+            //그룹 초대
+            document.getElementById('replyWrite').addEventListener('click', function(e){
+                e.preventDefault();
+
+            })
+            //수정댓글 제출
+            function submitModify(btn){
+                let replyBox = btn.parentElement.parentElement;
+                let id = replyBox.dataset.id;
+                let userId = replyBox.dataset.userid;
+                let content = replyBox.querySelector(".reply-modify").value;
+                $.ajax({
+                    data : {id : id, userId : userId, content : content},
+                    type : "POST",
+                    url : "/matching/comment/modify",
+                    success : function(data){
+                        if(data == "success"){
+                            getCommentList();
+                        }else if(data == "noPermission"){
+                            alert("권한없음");
+                        }
+                    },error : function(data){
+                        console.log(data);
+                    }
+                })
+            }
+            getCommentList();
+        </script>
+    </body>
+</html>

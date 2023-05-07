@@ -194,7 +194,7 @@ public class UserController {
 		// ------------------- 직업정보 ----------------------------------
 		Optional<UserDTO> userDTO = userService.getCurrentUser();
 		if (userDTO.isPresent()){
-				System.out.println(userDTO.toString());
+				//System.out.println(userDTO.toString());
 			}
 		return "index";
 	}

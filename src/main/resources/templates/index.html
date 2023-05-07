@@ -9,6 +9,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/common/css/nav.css">
         <link rel="stylesheet" href="/common/css/main.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     </head>
     <body>
         <nav th:replace="~{common/nav.html :: nav}"></nav>
@@ -278,7 +279,7 @@
                     <div class="board-content" th:each="notice : ${nList}">
                         <div class="board-content" >
                             <div>
-                                <span class="board-writer" th:text="${notice.getAdmin().getName()}">설석현</span>
+                                <span class="board-writer" th:text="${notice.getUser().getName()}">설석현</span>
                                 <span class="board-time" th:text="${notice.getUpdatedAt()}">2020/03/28</span>
                             </div>
                             <div class="board-title">

@@ -1,6 +1,7 @@
 package com.kh.learnovation.domain.notice.dto;
 
 import com.kh.learnovation.domain.admin.entity.Admin;
+import com.kh.learnovation.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,8 @@ import java.sql.Timestamp;
 public class NoticeDTO {
 
     private long id;
-    private long adminId;
-    private String adminName;
+    private long userid;
+    private String userName;
     private String title;
     private String content;
     private Timestamp createdAt;
@@ -24,10 +25,10 @@ public class NoticeDTO {
     private int status;
     private String subject;
     @Builder
-    public NoticeDTO(long id, Admin admin, String title, String content, Timestamp createdAt, Timestamp updatedAt, int status, String subject){
+    public NoticeDTO(long id, User user, String title, String content, Timestamp createdAt, Timestamp updatedAt, int status, String subject){
         this.id = id;
-        this.adminId = admin.getId();
-        this.adminName = admin.getName();
+        this.userid = user.getId();
+        this.userName = user.getName();
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
@@ -40,8 +41,8 @@ public class NoticeDTO {
     public String toString() {
         return "NoticeDTO{" +
                 "id=" + id +
-                ", adminId=" + adminId +
-                ", adminName='" + adminName + '\'' +
+                ", userid=" + userid +
+                ", userName='" + userName + '\'' +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", createdAt=" + createdAt +

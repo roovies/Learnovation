@@ -190,4 +190,33 @@ document.querySelector("#startChat").addEventListener("click", ()=>{
         $(".chat-bot-box").show();
     });
 
+
+
 });
+
+// --------------------------------- 알람 웹소켓 --------------------------------
+const alarm = new WebSocket("ws://localhost:9999/ws/alarm");
+
+alarm.onopen = function(e) {
+    console.log('알람소켓 open');
+};
+
+alarm.onmessage = function(event) {
+    console.log(`[message] 서버로부터 전송받은 데이터: ${event.data}`);
+};
+
+alarm.onclose = function(event) {
+    if (event.wasClean) {
+        console.log(`[close] 커넥션이 정상적으로 종료되었습니다(code=${event.code} reason=${event.reason})`);
+    } else {
+        // 예시: 프로세스가 죽거나 네트워크에 장애가 있는 경우
+        // event.code가 1006이 됩니다.
+        console.log('[close] 커넥션이 죽었습니다.');
+    }
+};
+
+alarm.onerror = function(error) {
+    alert(`[error]`);
+};
+
+//alarm.send(`{msg: "${msg}", sender: "${sender}"}`);

@@ -59,6 +59,7 @@ public class User {
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
+
     /** 승현 User Entity 항목 추가*/
     // @ColumnDefault("user")
     // DB는 RoleType이라는게 없다.

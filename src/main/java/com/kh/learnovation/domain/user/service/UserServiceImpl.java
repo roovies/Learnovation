@@ -225,6 +225,7 @@ public class UserServiceImpl implements UserService{
                         .status(foundUser.get().getStatus())
                         .deletedAt(foundUser.get().getDeletedAt())
                         .oauth(foundUser.get().getOauth())
+                        .role(foundUser.get().getRole())
                         .build();
                 return Optional.of(userDTO);
             } else{

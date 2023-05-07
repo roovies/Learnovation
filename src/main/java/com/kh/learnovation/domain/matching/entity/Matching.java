@@ -1,68 +1,62 @@
-package com.kh.learnovation.domain.notice.entity;
+package com.kh.learnovation.domain.matching.entity;
 
-
+import com.kh.learnovation.domain.admin.entity.Admin;
 import com.kh.learnovation.domain.user.entity.User;
-import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.persistence.Table;
 import java.sql.Timestamp;
 
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name="notices")
-public class Notice {
+@Table(name="MATCHING_BOARD")
+public class Matching {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "ID")
     private Long id;
     @ManyToOne
-    @JoinColumn(name="admin_id")
+    @JoinColumn(name="USER_ID")
     private User user;
-    @Column(name="title", nullable = false)
+    @Column(name="TITLE", nullable = false)
     private String title;
-    @Column(name="content", nullable = false)
+    @Column(name="CONTENT", nullable = false)
     private String content;
-    @Column(name="created_at")
-    private Timestamp createdAt;
-    @Column(name="updated_at")
-    @UpdateTimestamp
-    private Timestamp updatedAt;
-    @Column(name="status")
-    private int status;
-    @Column
+    @Column(name="SUBJECT")
     private String subject;
+    @Column(name="CREATE_AT")
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    @Column(name="STATUS")
+    private int status;
 
     @Builder
-    public Notice(long id, User user, String title, String content, Timestamp createdAt, Timestamp updatedAt, int status, String subject){
+    public Matching(long id, User user ,String title, String content, String subject, Timestamp createdAt, int status){
         this.id = id;
         this.user = user;
         this.title = title;
         this.content = content;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.status = status;
         this.subject = subject;
+        this.createdAt = createdAt;
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        return "Notice{" +
+        return "Matching{" +
                 "id=" + id +
                 ", user=" + user +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
+                ", subject='" + subject + '\'' +
                 ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
                 ", status=" + status +
-                ", subject=" + subject +
                 '}';
     }
 }

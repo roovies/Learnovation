@@ -42,6 +42,7 @@
                   <div class="a-nav-community-modal-list">
                     <a href="#">질문 게시판</a>
                     <a href="/freeBoard/">자유 게시판</a>
+                    <a href="/matching/list">그룹 매칭</a>
                   </div>
                 </div>
               </div>
@@ -85,8 +86,8 @@
                       <div class="info-modal" id="infoModal">
                         <div class="user-diamond"></div>
                         <div class="modal-user-info">
-                      <span>
-                        <a class="modal-nickname" href="">닉네임님</a>
+                      <span th:if="${#authentication.principal != 'anonymousUser'}">
+                        <a class="modal-nickname" href="" th:text="${#authentication.principal.getNickname()}">닉네임님</a>
                         <a class="modal-alarm" href=""><i class="fa-solid fa-bell bell"></i></a>
                       </span>
                         </div>
@@ -153,6 +154,13 @@
                           </div>
                         </div>
                       </div>
+                    </div>
+                    <div>
+                      <span id="asdas">
+                      <a href="">
+                        <i class="fa-solid fa-user-group fa-lg"></i>
+                      </a>
+                    </span>
                     </div>
                   </div>
             </li>

@@ -19,8 +19,10 @@
             <a class="reset-a" href="/notice/list"><p class="board-title">공지사항</p></a>
             <p>새소식, 이벤트, 행사 정보를 공유하는 공간입니다.</p>
         </div>
-        <div class="write-btn-box">
+        <div th:if="${#authentication.principal != 'anonymousUser'}">
+        <div class="write-btn-box" th:if="${#authentication.principal.Authorities.get(0).Authority == 'ROLE_ADMIN'}">
             <a href="/notice/write" class="notice-write-btn"><i class="fa-solid fa-pencil"></i>&#32;글 쓰기</a>
+        </div>
         </div>
         <div class="notice-list-box">
             <div class="notice-top-nav">
@@ -53,7 +55,7 @@
             <div th:each="notice : ${nList}" class="notice-content-box">
                 <div>
                     <span>작성자 : </span>
-                    <span th:text="${notice.getAdmin().getName()}"></span>
+                    <span th:text="${notice.getUser().getNickname()}"></span>
                     <span>수정 일 : </span>
                     <span th:text="${notice.getUpdatedAt()}"></span>
                 </div>

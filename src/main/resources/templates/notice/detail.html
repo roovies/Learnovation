@@ -20,13 +20,15 @@
             <div class="notice-theme-line"><hr></div>
         </div>
         <div class="notice-info-box">
-            <div class="notice-info-btn">
-                <a class="blue" th:href="@{/notice/modify(noticeNo=${notice.getId()})}">수정</a>
-                <a href="" class="sky" id="noticeRemoveBtn">삭제</a>
+            <div th:if="${#authentication.principal != 'anonymousUser'}">
+                <div class="notice-info-btn" th:if="${#authentication.principal.Authorities.get(0).Authority == 'ROLE_ADMIN'}">
+                    <a class="blue" th:href="@{/notice/modify(noticeNo=${notice.getId()})}">수정</a>
+                    <a href="" class="sky" id="noticeRemoveBtn">삭제</a>
+                </div>
             </div>
             <div class="notice-info-content">
                 <div class="notice-nickname">
-                    <span th:text="${notice.adminName}"></span>
+                    <span th:text="${notice.userName}"></span>
                 </div>
                 <div class="notice-subject">
                     <span th:text="${notice.getUpdatedAt()}"></span>
@@ -56,27 +58,30 @@
     </div>
     <script src="/common/js/nav.js"></script>
     <script>
-        document.getElementById('noticeRemoveBtn').addEventListener('click', function(e){
-            e.preventDefault();
-            document.querySelector('body').style.overflow = 'hidden';
-            document.getElementById("removeModalBox").style.display = 'block';
-        })
+        if(document.getElementById('noticeRemoveBtn') != null){
+            document.getElementById('noticeRemoveBtn').addEventListener('click', function(e){
+                e.preventDefault();
+                document.querySelector('body').style.overflow = 'hidden';
+                document.getElementById("removeModalBox").style.display = 'block';
+            })
 
-        document.getElementById("modalInClose").addEventListener('click',function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            modalClose();
-        })
+            document.getElementById("modalInClose").addEventListener('click',function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                modalClose();
+            })
 
-        document.getElementById("removeModalBg").addEventListener('click', function(e){
-            e.stopPropagation();
-            modalClose();
-        });
+            document.getElementById("removeModalBg").addEventListener('click', function(e){
+                e.stopPropagation();
+                modalClose();
+            });
 
-        function modalClose(){
-            document.querySelector('body').style.overflow = 'scroll';
-            document.getElementById("removeModalBox").style.display = 'none';
+            function modalClose(){
+                document.querySelector('body').style.overflow = 'scroll';
+                document.getElementById("removeModalBox").style.display = 'none';
+            }
         }
+
     </script>
   </body>
 </html>

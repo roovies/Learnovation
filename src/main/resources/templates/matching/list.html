@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/common/css/nav.css">
+        <link rel="stylesheet" href="/matching/css/list.css">
+    </head>
+    <body>
+        <nav th:replace="~{common/nav.html :: nav}"></nav>
+        <main>
+            <div class="matching-title-box">
+                <a class="reset-a" href="/matching/list"><p class="board-title">매칭게시판</p></a>
+                <p>채팅방 이용을 위한 그룹 매칭 공간입니다.</p>
+            </div>
+            <div th:if="${#authentication.principal != 'anonymousUser'}">
+                <div class="write-btn-box" th:if="${#authentication.principal != 'anonymousUser'}">
+                    <a href="/matching/write" class="matching-write-btn"><i class="fa-solid fa-pencil"></i>&#32;글 쓰기</a>
+                </div>
+            </div>
+            <div class="matching-list-box">
+                <div class="matching-top-nav">
+                    <div class="matching-search-box">
+                        <form action='/matching/list' method="get" class="matching-search-form">
+                            <input type='text' name="keyword" placeholder='그룹게시판 내 검색' class='nav-search'>
+                            <label for="noticeSearch">
+                                <i class="fa-solid fa-magnifying-glass search-glass"></i>
+                            </label>
+                            <input type="submit" class="search-btn" id="noticeSearch">
+                        </form>
+                    </div>
+                    <div class="matching-top-nav-content">
+                        <a th:if="${page > 1 && keyword != null}" th:href="@{/matching/list(page=${page - 1},keyword=${keyword})}"><i class="fa-solid fa-arrow-left"></i></a>
+                        <a th:if="${page
+                            <= 1 && keyword != null}" th:href="@{/matching/list(page=1,keyword=${keyword})}"><i class="fa-solid fa-arrow-left"></i></a>
+                        <a th:if="${page > 1 && keyword == null}" th:href="@{/matching/list(page=${page - 1})}"><i class="fa-solid fa-arrow-left"></i></a>
+                        <a th:if="${page <= 1 && keyword == null}" th:href="@{/matching/list(page=1)}"><i class="fa-solid fa-arrow-left"></i></a>
+
+                        <span th:text="${page}"></span>
+                        <span>/</span>
+                        <span th:text="${totalPage}"></span>
+
+                        <a th:if="${page < totalPage && keyword == null}" th:href="@{/matching/list(page=${page + 1})}"><i class="fa-solid fa-arrow-right"></i></a>
+                        <a th:if="${page >= totalPage && keyword == null}" th:href="@{/matching/list(page=${totalPage})}"><i class="fa-solid fa-arrow-right"></i></a>
+                        <a th:if="${page < totalPage && keyword != null}" th:href="@{/matching/list(page=${page + 1},keyword=${keyword})}"><i class="fa-solid fa-arrow-right"></i></a>
+                        <a th:if="${page >= totalPage && keyword != null}" th:href="@{/matching/list(page=${totalPage},keyword=${keyword})}"><i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div th:each="matching : ${mList}" class="matching-content-box">
+                    <div>
+                        <span>작성자 : </span>
+                        <span th:text="${matching.getUser().getNickname()}"></span>
+                        <span>등록 일 : </span>
+                        <span th:text="${matching.getCreatedAt()}"></span>
+                    </div>
+                    <div>
+                        <a th:if="${keyword == null}" th:href="@{/matching/detail(matchingNo=${matching.getId()},page=${page})}"><span th:text="${matching.getTitle()}"></span></a>
+                        <a th:if="${keyword != null}" th:href="@{/matching/detail(matchingNo=${matching.getId()},page=${page},keyword=${keyword})}"><span th:text="${matching.getTitle()}"></span></a>
+                    </div>
+                </div>
+                <div class="matching-bottom-nav">
+                    <a th:if="${keyword == null}" href="/matching/list?page=1" class="matching-bottom-nav-prev">처음으로</a>
+                    <a th:if="${keyword != null}" th:href="@{/matching/list(page=1,keyword=${keyword})}" class="matching-bottom-nav-prev">처음으로</a>
+                    <div class="matching-bottom-nav-content">
+                        <a th:if="${page > 1 && keyword == null}" th:href="@{/matching/list(page=${page - 1})}">&lt;</a>
+                        <a th:if="${page <= 1 && keyword == null}" th:href="@{/matching/list(page=1)}">&lt;</a>
+                        <a th:if="${keyword == null}" th:each="nav : ${navCount}" th:href="@{/matching/list(page=${nav})}">
+                            <span th:if="${page == nav}" class="matching-nav-check" th:text="${nav}"></span>
+                            <span th:if="${page != nav}" th:text="${nav}"></span>
+                        </a>
+                        <a th:if="${page < totalPage && keyword == null}" th:href="@{/matching/list(page=${page + 1})}">&gt;</a>
+                        <a th:if="${page >= totalPage && keyword == null}" th:href="@{/matching/list(page=${totalPage})}">&gt;</a>
+
+                        <a th:if="${page > 1 && keyword != null}" th:href="@{/matching/list(page=${page - 1},keyword=${keyword})}">&lt;</a>
+                        <a th:if="${page <= 1 && keyword != null}" th:href="@{/matching/list(page=1,keyword=${keyword})}">&lt;</a>
+                        <a th:if="${keyword != null}" th:each="nav : ${navCount}" th:href="@{/matching/list(page=${nav},keyword=${keyword})}">
+                            <span th:if="${page == nav}" class="matching-nav-check" th:text="${nav}"></span>
+                            <span th:if="${page != nav}" th:text="${nav}"></span>
+                        </a>
+                        <a th:if="${page < totalPage && keyword != null}" th:href="@{/matching/list(page=${page + 1},keyword=${keyword})}">&gt;</a>
+                        <a th:if="${page >= totalPage && keyword != null}" th:href="@{/matching/list(page=${totalPage},keyword=${keyword})}">&gt;</a>
+                    </div>
+                    <a th:if="${keyword == null}" th:href="@{/matching/list(page=${totalPage})}" class="matching-bottom-nav-next">마지막으로</a>
+                    <a th:if="${keyword != null}" th:href="@{/matching/list(page=${totalPage},keyword=${keyword})}" class="matching-bottom-nav-next">마지막으로</a>
+                </div>
+            </div>
+        </main>
+        <script src="/common/js/nav.js"></script>
+    </body>
+</html>
