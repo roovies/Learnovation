@@ -19,6 +19,7 @@ public class FreeBoardDTO {
     private Long id;
     private Long userId;
     private String nickname;
+    private String email;
     private String freeBoardTitle;
     private String freeBoardContents;
     private int freeBoardHits;
@@ -40,10 +41,11 @@ public class FreeBoardDTO {
         this.freeBoardCreatedTime = freeBoardCreatedTime;
     }
     @Builder
-    public FreeBoardDTO(long id, Long userId, String nickname, String freeBoardTitle, String freeBoardContents,int freeBoardHits, Timestamp freeBoardCreatedTime, Timestamp freeBoardUpdatedTime,  String subject, int status){
+    public FreeBoardDTO(long id, Long userId, String nickname,String email, String freeBoardTitle, String freeBoardContents,int freeBoardHits, Timestamp freeBoardCreatedTime, Timestamp freeBoardUpdatedTime,  String subject, int status){
         this.id = id;
         this.userId = userId;
         this.nickname = nickname;
+        this.email =email;
         this.freeBoardTitle = freeBoardTitle;
         this.freeBoardContents = freeBoardContents;
         this.freeBoardHits = freeBoardHits;
@@ -63,8 +65,8 @@ public class FreeBoardDTO {
         freeBoardDTO.setFreeBoardHits(freeBoardEntity.getFreeBoardHits());
         freeBoardDTO.setUserId(freeBoardEntity.getUser().getId());
         freeBoardDTO.setNickname(freeBoardEntity.getUser().getNickname());
-        freeBoardDTO.setFreeBoardCreatedTime(freeBoardEntity.getCreatedTime());
-        freeBoardDTO.setFreeBoardUpdatedTime(freeBoardEntity.getUpdatedTime());
+        freeBoardDTO.setFreeBoardCreatedTime(freeBoardEntity.getCreatedAt());
+        freeBoardDTO.setFreeBoardUpdatedTime(freeBoardEntity.getUpdatedAt());
         return freeBoardDTO;
     }
 }

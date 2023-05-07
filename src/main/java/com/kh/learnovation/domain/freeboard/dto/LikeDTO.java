@@ -1,6 +1,7 @@
 package com.kh.learnovation.domain.freeboard.dto;
 
 
+import com.kh.learnovation.domain.freeboard.entity.FreeBoardEntity;
 import com.kh.learnovation.domain.freeboard.entity.LikeEntity;
 import com.kh.learnovation.domain.user.entity.User;
 import lombok.*;
@@ -15,11 +16,11 @@ public class LikeDTO {
     private Long userId;
     private Long freeBoardId;
 
-    public static LikeDTO toLikeDTO(LikeEntity likeEntity, Long freeBoardId) {
+    public static LikeDTO toLikeDTO(LikeEntity likeEntity) {
         LikeDTO likeDTO = new LikeDTO();
         likeDTO.setId(likeEntity.getId());
         likeDTO.setUserId(likeEntity.getUser().getId());
-        likeDTO.setFreeBoardId(freeBoardId);
+        likeDTO.setFreeBoardId(likeEntity.getFreeBoardEntity().getId());
         return likeDTO;
     }
 

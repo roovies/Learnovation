@@ -76,7 +76,46 @@
         </tr>
     </table>
 </div>
+<!-- 리뷰 -->
+<div id="dynamic-review-area">
+    <div class="review-area" th:each="review : ${reviews}">
+        <div class="review-user">
+            <img th:src="@{/course/image/user_logo.png}" alt="" class="user-logo">
+            <div class="user-info">
+                <span class="nickname" th:text="${review.userNickname}"></span>
+                <span class="review-date" th:text="${#dates.format(review.createdAt, 'yyyy-MM-dd')}"></span>
+            </div>
+        </div>
+        <div>
+                            <span class="star">
+                                ★★★★★
+                                <span th:style="'width: ' + ${review.rating * 20} + '%;'">★★★★★</span>
+                            </span>
+        </div>
+        <div>
+            <p th:text="${review.content}"></p>
+        </div>
+    </div>
+</div>
 
+
+
+
+
+<!--<div id="dynamic-review-area">-->
+<!--    <div class="review-area" th:each="comment : ${commentDTOList}">-->
+<!--        <div class="review-user">-->
+<!--            <img th:src="@{/freeBoard/image/user-logo.png}" alt="" class="user-logo">-->
+<!--            <div class="user-info">-->
+<!--                <span class="nickname" th:text="${comment.nickname}"></span>-->
+<!--                <span class="review-date" th:text="${#dates.format(comment.commentCreatedTime, 'yyyy-MM-dd')}"></span>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <p th:text="${comment.commentContents}"></p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 </body>
 <script th:inline="javascript">
 

@@ -2,9 +2,11 @@ package com.kh.learnovation.domain.freeboard.controlller;
 
 
 import com.google.gson.JsonObject;
+import com.kh.learnovation.domain.admin.entity.Admin;
 import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
 import com.kh.learnovation.domain.freeboard.dto.FreeBoardDTO;
 import com.kh.learnovation.domain.freeboard.service.*;
+import com.kh.learnovation.domain.notice.dto.NoticeDTO;
 import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -40,7 +43,12 @@ public class FreeBoardController {
 
     @GetMapping("/write")
     public ModelAndView freeBoardWriteView(ModelAndView mv){
-        mv.addObject("random", UUID.randomUUID()).setViewName("freeBoard/write");
+        Optional<UserDTO> userDTO =userService.getCurrentUser();
+        if (userDTO.isPresent()){
+            mv.addObject("random", UUID.randomUUID()).setViewName("freeBoard/write");
+        }else {
+            mv.setViewName("user/loginForm");
+        }
         return mv;
     }
 
@@ -68,7 +76,7 @@ public class FreeBoardController {
                 fileList.add(aa.substring(7));
             }
         }
-        File diretory = new File("C:\\img\\freeBoard\\"+ time);
+        File diretory = new File("C:\\img\\freeBoard\\"+ freeBoardTitle + time);
         if(!diretory.exists()){
             diretory.mkdirs();
         }
@@ -79,7 +87,7 @@ public class FreeBoardController {
                 for(int i = 0; i < files.length; i++){
                     for(String fileName : fileList) {
                         if ((id + "/" + files[i].getName()).equals(fileName)) {
-                            files[i].renameTo(new File("C:\\img\\freeBoard\\" + time + "\\" + files[i].getName()));
+                            files[i].renameTo(new File("C:\\img\\freeBoard\\" + freeBoardTitle + time + "\\" + files[i].getName()));
                         }
                     }
                     if (files[i].delete()) {
@@ -97,7 +105,7 @@ public class FreeBoardController {
         }else{
             // 임시 폴더가 없을 시
         }
-        freeBoardContents = freeBoardContents.replaceAll(id, "freeBoard/" + time);
+        freeBoardContents = freeBoardContents.replaceAll(id, "freeBoard/" + freeBoardTitle + time);
         /*String[] trueContent = content.split("<");
         StringBuilder sb = new StringBuilder("");
         for(String tContent : trueContent){
@@ -111,10 +119,12 @@ public class FreeBoardController {
         String subject = freeBoardContents.replaceAll("<[^>]*>?","");
         //NoticeDTO noticeDTO = NoticeDTO.builder().title(title).content(content).admin(admin).status(0).subject(subject).createdAt(ts).build();
         UserDTO userDTO=userService.getCurrentUser().get();
+        String userEmail =userDTO.getEmail();
+        System.out.println(userEmail);
         FreeBoardDTO freeBoardDTO = FreeBoardDTO.builder().freeBoardTitle(freeBoardTitle).freeBoardContents(freeBoardContents)
                 .userId(userDTO.getId()).nickname(userDTO.getNickname()).status(0).subject(subject).freeBoardCreatedTime(ts).build();
         Long freeBoardId = freeBoardService.insertFreeBoard(freeBoardDTO).getId();
-        mv.setViewName("redirect:/freeBoard/detail/" + freeBoardId);
+        mv.addObject("userEmail", userEmail).setViewName("redirect:/freeBoard/detail/" + freeBoardId);
         return mv;
     }
 
@@ -145,13 +155,13 @@ public class FreeBoardController {
     }
 
 
-    @GetMapping("/list")
-    public String findAll(Model model) {
-        // DB에서 전체 게시글 데이터를 가져와서 list.html에 보여준다.
-        List<FreeBoardDTO> freeBoardDTOList = freeBoardService.findAll();
-        model.addAttribute("freeBoardDTOList", freeBoardDTOList);
-        return "/freeBoard/list";
-    }
+//    @GetMapping("/list")
+//    public String findAll(Model model) {
+//        // DB에서 전체 게시글 데이터를 가져와서 list.html에 보여준다.
+//        List<FreeBoardDTO> freeBoardDTOList = freeBoardService.findAll();
+//        model.addAttribute("freeBoardDTOList", freeBoardDTOList);
+//        return "/freeBoard/list";
+//    }
 
     @GetMapping("/detail/{id}")
     public String findById(@PathVariable Long id, Model model,
@@ -162,12 +172,15 @@ public class FreeBoardController {
             게시글 데이터를 가져와서 detail.html에 출력
          */
         freeBoardService.updateHits(id);
+        Long countLike = freeBoardService.countLikesByFreeBoardId(id);
         FreeBoardDTO freeBoardDTO = freeBoardService.findById(id);
         /* 댓글 목록 가져오기 */
         List<CommentDTO> commentDTOList = commentService.findAll(id);
 //        int result = likeService.likeCheck(id);
+        freeBoardDTO.getEmail();
 //        model.addAttribute("result", result);
-        model.addAttribute("commentList", commentDTOList);
+        model.addAttribute("countLike", countLike);
+        model.addAttribute("commentDTOList", commentDTOList);
         model.addAttribute("freeBoard", freeBoardDTO);
         model.addAttribute("keyword", searchKeyword);
         model.addAttribute("page", pageable.getPageNumber());
@@ -181,22 +194,165 @@ public class FreeBoardController {
         return mv;
     }
 
-//    @PostMapping("/update")
-//    public String update(@ModelAttribute FreeBoardDTO freeBoardDTO, Model model) {
-//        FreeBoardDTO freeBoard = freeBoardService.update(freeBoardDTO);
-//        model.addAttribute("freeBoard", freeBoard);
-//        return "/freeBoard/detail";
-////        return "redirect:/board/" + boardDTO.getId();
-//    }
+    @PostMapping("/modify")
+    public ModelAndView update (ModelAndView mv
+            , @RequestParam("freeBoardContents") String freeBoardContents
+            , @RequestParam("freeBoardTitle") String freeBoardTitle
+            , @RequestParam("id") String id
+            , @RequestParam("userId") String userId
+            , @RequestParam("freeBoardId") String freeBoardId
+            , @RequestParam("createTime") Timestamp ts
+            , @RequestParam("originalTitle") String originalTitle) {
+        if(freeBoardContents.equals("") || freeBoardTitle.equals("")){
+            mv.setViewName("redirect:/freeBoard/list");
+            return mv;
+        }
+        String time = ts.toString().replaceAll(":", "");
+        if(!freeBoardTitle.equals(originalTitle)){
+            File originDirectory = new File("C:\\img\\freeBoard\\" + originalTitle + time);
+            File newDirectory = new File("C:\\img\\freeBoard\\" + freeBoardTitle + time);
+            File[] originFiles = originDirectory.listFiles();
+            if(originFiles != null){
+                for(int i = 0; i < originFiles.length; i++){
+                    originFiles[i].renameTo(new File("C:\\img\\freeBoard\\" + freeBoardTitle + time + "\\" + originFiles[i].getName()));
+                }
+                originDirectory.renameTo(newDirectory);
+            }
+        }
+        // <p><img src="/image/notice/와우/efc877df-84ff-4495-9cad-7189dfe92d42플차.png"><img src="/image/notice/와우/f4e42ed1-ec45-4a05-a562-ab9fb06666be제목 없음.png"><br></p>
+        // 썸머노트 글 작성시 내용 예시
+        // "로 시작하는거로 짜름
 
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
+        String[] sList = freeBoardContents.split("\"");
+        List<String> fileList = new ArrayList<String>();
+        for(String aa : sList){
+            // /로 시작하는거 찾음
+            if(aa.startsWith("/")){
+                // /image/부분 공통이라 짜름
+                fileList.add(aa.substring(7));
+            }
+        }
+        // c 아래 img 아래 noitce아래 제목으로 파일 객체 생성
+        File diretory = new File("C:\\img\\freeBoard\\" + freeBoardTitle + time);
+        if(!diretory.exists()){
+            // 객체가 존재하지않으면 해당경로에 폴더 생성
+            diretory.mkdirs();
+        }
+        // 해당 폴더에 이미지 파일들 파일 배열로 저장
+        File[] originalFiles = diretory.listFiles();
+        // 해당 폴더에 파일에서 수정된 게시글에서 지워진 이미지 판단 할 배열
+        int[] valid = new int[originalFiles.length];
+        // 기존 폴더에서 수정된 게시글과 비교해 삭제되지 않은거 배열에 저장
+        for(int i = 0; i < originalFiles.length; i++){
+            for(String fileName : fileList){
+                if(("freeBoard/" + freeBoardTitle + time + "/" + originalFiles[i].getName()).equals(fileName)){
+                    valid[i] = 1;
+                }
+            }
+        }
+        // 수정된 게시글에서 삭제된 이미지 삭제
+        for (int i = 0; i < originalFiles.length; i++){
+            if(valid[i] != 1){
+                if(originalFiles[i].delete()){
+                    //원 파일 삭제 성공
+                }else{
+                    //원 파일 삭제 실패
+                }
+            }
+        }
+        // 임시 이미지 파일 저장된 폴더 파일 객체에 담음
+        File file = new File("C:\\img\\" + id);
+        // 임시 이미지 파일 담은 폴더가 존재 여부 확인
+        if(file.exists()){ //파일존재여부확인
+            // 폴더가 폴더인지 확인
+            if(file.isDirectory()){ //파일이 디렉토리인지 확인
+                // 폴더에 파일들 담은 배열 생성
+                File[] files = file.listFiles();
+                // 임시 파일중 게시글 내용에 포함된거 제목으로 된 폴더로 이동 나머지는 삭제
+                for(int i = 0; i < files.length; i++){
+                    for(String fileName : fileList) {
+                        if ((id + "/" + files[i].getName()).equals(fileName)) {
+                            files[i].renameTo(new File("C:\\img\\freeBoard\\" + freeBoardTitle + time + "\\" + files[i].getName()));
+                        }
+                    }
+                    if (files[i].delete()) {
+                        // 폴더 안 파일 삭제 성공시
+                    } else {
+                        // 삭제 실패시
+                    }
+                }
+            }
+            if(file.delete()){
+                // 폴더 삭제시
+            }else{
+                // 폴더 삭제 실패시
+            }
+        }else{
+            // 폴더가 있을시
+        }
+        // 썸머노트 내용중 임시저장 경로였던 id값들 실 저장된 폴더로 경로 내용 변경
+        freeBoardContents = freeBoardContents.replaceAll(id, "freeBoard/" + freeBoardTitle + time);
+        // 글 내용 검색용으로 만들기 위해 html 태그들 삭제
+        String subject = freeBoardContents.replaceAll("<[^>]*>?", "");
+        UserDTO userDTO=userService.getCurrentUser().get();
+        FreeBoardDTO OriginalFreeBoardDTO = freeBoardService.findById(Long.parseLong(freeBoardId));
+        FreeBoardDTO freeBoardDTO = FreeBoardDTO.builder().freeBoardTitle(freeBoardTitle).freeBoardContents(freeBoardContents)
+                .userId(userDTO.getId()).nickname(userDTO.getNickname()).subject(subject).freeBoardCreatedTime(OriginalFreeBoardDTO.getFreeBoardUpdatedTime()).build();
+         freeBoardDTO = freeBoardService.update(freeBoardDTO);
+         System.out.println(freeBoardDTO);
+        Long freeBoardNo =freeBoardDTO.getId();
+        mv.setViewName("redirect:/freeBoard/detail/" + freeBoardNo);
+        return mv;
+
+    }
+
+
+    @PostMapping("/removeTemporary")
+    @ResponseBody
+    public String removeTemporaryFile(@RequestParam(value = "id") String id){
+        File file = new File("C:\\img\\" + id);
+        if(file.exists()){ //파일존재여부확인
+            if(file.isDirectory()){ //파일이 디렉토리인지 확인
+                File[] files = file.listFiles();
+                for(int i = 0; i < files.length; i++){
+                    if (files[i].delete()) {
+                        // 폴더 안 파일 삭제 성공시
+                    } else {
+                        // 삭제 실패시
+                    }
+                }
+            }
+            if(file.delete()){
+                // 폴더 삭제시
+            }else{
+                // 폴더 삭제 실패시
+            }
+        }else{
+            // 임시 폴더가 없을 시
+        }
+        return "sucess";
+    }
+
+
+    @GetMapping("/delete")
+    public ModelAndView delete(ModelAndView mv, @RequestParam("freeBoardId") Long id) {
+//        freeBoardService.delete(id);
+        FreeBoardDTO freeBoardDTO = freeBoardService.findById(id);
+        id=freeBoardDTO.getId();
+        System.out.println(id);
         freeBoardService.delete(id);
-        return "redirect:/freeBoard/";
+//        String title = freeBoardDTO.getFreeBoardTitle();
+//        String time = freeBoardDTO.getFreeBoardCreatedTime().toString().replaceAll(":","");
+//        File file = new File("C:\\img\\freeBoard\\" + title + time);
+//        if(file.exists()){
+//            file.renameTo(new File("C:\\img\\freeBoard\\삭제예정[" + title + time +  "]"));
+//        }
+        mv.setViewName("redirect:/freeBoard/list");
+        return mv;
     }
 
     // /board/paging?page=1
-    @GetMapping("/paging")
+    @GetMapping("/list")
     public String paging(@PageableDefault(page = 1) Pageable pageable, Model model, String searchKeyword) {
 
         Page<FreeBoardDTO> list = null;

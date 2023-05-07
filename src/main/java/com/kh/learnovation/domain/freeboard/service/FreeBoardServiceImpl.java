@@ -1,14 +1,9 @@
 package com.kh.learnovation.domain.freeboard.service;
 
 
-import com.kh.learnovation.domain.admin.entity.Admin;
 import com.kh.learnovation.domain.freeboard.dto.FreeBoardDTO;
 import com.kh.learnovation.domain.freeboard.entity.FreeBoardEntity;
-import com.kh.learnovation.domain.freeboard.entity.FreeBoardFileEntity;
-import com.kh.learnovation.domain.freeboard.repository.FreeBoardFileRepository;
 import com.kh.learnovation.domain.freeboard.repository.FreeBoardRepository;
-import com.kh.learnovation.domain.notice.dto.NoticeDTO;
-import com.kh.learnovation.domain.notice.entity.Notice;
 import com.kh.learnovation.domain.user.entity.User;
 import com.kh.learnovation.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +27,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
     private final FreeBoardRepository freeBoardRepository;
     private final UserRepository userRepository;
-    private final FreeBoardFileRepository freeBoardFileRepository;
+
 
 
     @Override
@@ -56,6 +49,7 @@ public class FreeBoardServiceImpl implements FreeBoardService {
                 .id(freeBoardEntity.getId())
                 .userId(freeBoardEntity.getUser().getId())
                 .nickname(freeBoardEntity.getUser().getNickname())
+                .email(freeBoardEntity.getUser().getEmail())
                 .freeBoardTitle(freeBoardEntity.getFreeBoardTitle())
                 .freeBoardContents(freeBoardEntity.getFreeBoardContents())
                 .freeBoardCreatedTime(freeBoardEntity.getCreatedAt())
@@ -63,7 +57,6 @@ public class FreeBoardServiceImpl implements FreeBoardService {
                 .status(freeBoardEntity.getStatus())
                 .subject(freeBoardEntity.getSubject())
                 .build();
-
         return freeBoardDTO;
 
         }
@@ -95,12 +88,14 @@ public class FreeBoardServiceImpl implements FreeBoardService {
                     .id(freeBoardEntity.getId())
                     .userId(freeBoardEntity.getUser().getId())
                     .nickname(freeBoardEntity.getUser().getNickname())
+                    .email(freeBoardEntity.getUser().getEmail())
                     .freeBoardTitle(freeBoardEntity.getFreeBoardTitle())
                     .freeBoardContents(freeBoardEntity.getFreeBoardContents())
                     .freeBoardHits(freeBoardEntity.getFreeBoardHits())
+                    .status(freeBoardEntity.getStatus())
                     .freeBoardCreatedTime(freeBoardEntity.getCreatedAt())
                     .freeBoardUpdatedTime(freeBoardEntity.getUpdatedAt())
-//                  .status(freeBoard.getStatus())
+                    .status(freeBoardEntity.getStatus())
                     .subject(freeBoardEntity.getSubject())
                     .build();
             return freeBoardDTO;
@@ -112,14 +107,39 @@ public class FreeBoardServiceImpl implements FreeBoardService {
 
 
 
+    @Override
+    public FreeBoardDTO update(FreeBoardDTO freeBoardDTO) {
+        User user = userRepository.findById(freeBoardDTO.getUserId()).get();
+        Optional<FreeBoardEntity> optionalFreeBoardEntity = freeBoardRepository.findById(freeBoardDTO.getId());
+        if (optionalFreeBoardEntity.isPresent()) {
+            FreeBoardEntity freeBoardEntity = optionalFreeBoardEntity.get();
+            freeBoardEntity.setUser(user);
+            freeBoardEntity.setFreeBoardTitle(freeBoardDTO.getFreeBoardTitle());
+            freeBoardEntity.setFreeBoardContents(freeBoardDTO.getFreeBoardContents());
+            freeBoardEntity.setCreatedAt(freeBoardDTO.getFreeBoardCreatedTime());
+            freeBoardEntity.setUpdatedAt(freeBoardDTO.getFreeBoardUpdatedTime());
+            freeBoardEntity.setSubject(freeBoardDTO.getSubject());
+            freeBoardEntity.setStatus(freeBoardDTO.getStatus());
+            freeBoardEntity = freeBoardRepository.save(freeBoardEntity);
+            FreeBoardDTO freeBoard = FreeBoardDTO.builder()
+                    .id(freeBoardEntity.getId())
+                    .userId(freeBoardEntity.getUser().getId())
+                    .nickname(freeBoardEntity.getUser().getNickname())
+                    .email(freeBoardEntity.getUser().getEmail())
+                    .freeBoardTitle(freeBoardEntity.getFreeBoardTitle())
+                    .freeBoardContents(freeBoardEntity.getFreeBoardContents())
+                    .freeBoardCreatedTime(freeBoardEntity.getCreatedAt())
+                    .freeBoardUpdatedTime(freeBoardEntity.getUpdatedAt())
+                    .status(freeBoardEntity.getStatus())
+                    .subject(freeBoardEntity.getSubject())
+                    .build();
+            System.out.println(freeBoard);
+            return freeBoard;
+        }else {
+            return null;
+        }
+    }
 
-
-//    @Override
-//    public FreeBoardDTO update(FreeBoardDTO freeBoardDTO) {
-//        FreeBoardEntity freeBoardEntity = FreeBoardEntity.toUpdateEntity(freeBoardDTO);
-//        freeBoardRepository.save(freeBoardEntity);
-//        return findById(freeBoardDTO.getId());
-//    }
     @Override
     public void delete(Long id) {
         freeBoardRepository.deleteById(id);
@@ -147,23 +167,25 @@ public class FreeBoardServiceImpl implements FreeBoardService {
         Page<FreeBoardDTO> freeBoardDTOS = freeBoardEntities.map(freeBoard -> FreeBoardDTO.builder().id(freeBoard.getId())
                 .userId(freeBoard.getUser().getId())
                 .nickname(freeBoard.getUser().getNickname())
+                .email(freeBoard.getUser().getEmail())
                 .freeBoardTitle(freeBoard.getFreeBoardTitle())
                 .freeBoardContents(freeBoard.getFreeBoardContents())
                 .freeBoardCreatedTime(freeBoard.getCreatedAt())
                 .freeBoardUpdatedTime(freeBoard.getUpdatedAt())
-//                .status(freeBoard.getStatus())
+                .status(freeBoard.getStatus())
                 .subject(freeBoard.getSubject())
                 .build());
         return freeBoardDTOS;
     }
     @Override
-    public Page<FreeBoardDTO> freeBoardSearchList(Pageable pageable, String searchKeyword){
+    public Page<FreeBoardDTO> freeBoardSearchList (Pageable pageable, String searchKeyword){
         int page = pageable.getPageNumber() - 1;
         int pageLimit = 20;
         Page<FreeBoardEntity> freeBoardSearchEntities = freeBoardRepository.findByFreeBoardTitleContaining(searchKeyword, PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "id")));
         Page<FreeBoardDTO> freeBoardSearchDTOS = freeBoardSearchEntities.map(freeBoardSearch ->  FreeBoardDTO.builder().id(freeBoardSearch.getId())
                 .userId(freeBoardSearch.getUser().getId())
                 .nickname(freeBoardSearch.getUser().getNickname())
+                .email(freeBoardSearch.getUser().getEmail())
                 .freeBoardTitle(freeBoardSearch.getFreeBoardTitle())
                 .freeBoardContents(freeBoardSearch.getFreeBoardContents())
                 .freeBoardCreatedTime(freeBoardSearch.getCreatedAt())
@@ -174,6 +196,11 @@ public class FreeBoardServiceImpl implements FreeBoardService {
         return freeBoardSearchDTOS;
     }
 
+    @Override
+    public Long countLikesByFreeBoardId(Long id) {
+        Long countLike =freeBoardRepository.countLikesByFreeBoardId(id);
+        return countLike;
+    }
 
 
 }
