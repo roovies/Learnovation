@@ -23,24 +23,24 @@
     </div>
     <div class="freeBoard-info-box">
         <div th:if="${#authentication.principal != 'anonymousUser'}">
-            <div class="freeBoard-info-btn" th:if="${#authentication.principal.getId() == freeBoard.getUser().getId() || #authentication.principal.Authorities.get(0).Authority == 'ROLE_ADMIN'}">
-                <a class="blue" th:href="@{/freeBoard/modify(matchingNo=${matching.getId()})}">수정</a>
+            <div class="freeBoard-info-btn" th:if="${#authentication.principal.getId() == freeBoard.userId || #authentication.principal.Authorities.get(0).Authority == 'ROLE_ADMIN'}">
+                <a class="blue" th:href="@{|/freeBoard/modify/${freeBoard.id}|}">수정</a>
                 <a href="" class="sky" id="freeBoardRemoveBtn">삭제</a>
             </div>
         </div>
         <div class="freeBoard-info-content">
             <div class="freeBoard-nickname">
-                <span th:text="${freeBoard.getUser().getNickname()}"></span>
+                <span th:text="${freeBoard.nickname}"></span>
             </div>
             <div class="freeBoard-subject">
-                <span th:text="${freeBoard.getCreatedAt()}"></span>
+                <span th:text="${freeBoard.freeBoardCreatedTime}"></span>
             </div>
         </div>
     </div>
-    <div class="freeBoard-detail-title" id="freeBoardTitle" th:data-matchingno="${freeBoard.getId()}">
-        <p th:text="${freeBoard.getTitle()}"></p>
+    <div class="freeBoard-detail-title" id="freeBoardTitle" th:data-freeBoardNo="${freeBoard.id}">
+        <p th:text="${freeBoard.freeBoardTitle}"></p>
     </div>
-    <div class="freeBoard-detail-content" th:utext="${freeBoard.getContent()}"></div>
+    <div class="freeBoard-detail-content" th:utext="${freeBoard.freeBoardContents}"></div>
     <div class="freeBoard-reply-container">
         <div class="freeBoard-reply-input-box">
             <textarea id="replyInput" cols="30" rows="10" class="reply-input"></textarea>
@@ -87,7 +87,7 @@
             <span>정말 삭제하시겠습니까?</span>
         </div>
         <div class="freeBoard-modal-btn">
-            <a th:href="@{/freeBoard/delete(matchingNo=${freeBoard.getId()})}">삭제</a>
+            <a th:href="@{/freeBoard/delete(freeBoardId=${freeBoard.getId()})}">삭제</a>
             <a href="#" id="modalInClose">취소</a>
         </div>
     </div>
@@ -144,7 +144,7 @@
                     $.ajax({
                         data : {userNo : curUserNo},
                         type : "GET",
-                        url : "/meeting/list",
+                        url : "/freeBoard/list",
                         success : function(data) {
                             if(data != "fail") {
                                 let mList = JSON.parse(data);
@@ -171,11 +171,11 @@
     })
 
     function getCommentList(){
-        let freeBoardNo = document.getElementById('freeBoardTitle').dataset.freeBoardno;
+        let freeBoardNo = document.getElementById('freeBoardTitle').dataset.freeBoardNo;
         $.ajax({
             data : {freeBoardNo : freeBoardNo},
             type : "POST",
-            url : "/freeBoard/comment/list",
+            url : "/comment/list",
             success : function(data){
                 let cList = JSON.parse(data);
                 let replyList = document.getElementById("freeBoardReplyList");
@@ -201,13 +201,13 @@
     document.getElementById('replyWrite').addEventListener('click', function(e){
         e.preventDefault();
         let content = document.getElementById('replyInput').value;
-        let matchingNo = document.getElementById('matchingTitle').dataset.matchingno;
+        let freeBoardNo = document.getElementById('freeBoardTitle').dataset.freeBoardNo;
         let curUserNo = document.getElementById("userNo");
         if(content != "" && curUserNo != null){
             $.ajax({
-                data : {content : content, matchingNo : matchingNo},
+                data : {content : content, freeBoardNo : freeBoardNo},
                 type : "POST",
-                url : "/matching/comment/insert",
+                url : "/comment/insert",
                 success : function(data){
                     alert("댓글 작성 완료!!");
                     document.getElementById('replyInput').value = "";
@@ -227,7 +227,7 @@
         let curUserNo = document.getElementById("userNo");
         if(curUserNo != null){
             if(userNo == curUserNo.value){
-                let contentBox = replyBox.querySelector(".matching-reply-content");
+                let contentBox = replyBox.querySelector(".freeBoard-reply-content");
                 let modiBtn = replyBox.querySelector(".blue");
                 if(contentBox.firstElementChild == null){
                     let values = contentBox.innerText;
@@ -263,7 +263,7 @@
         $.ajax({
             data : {id : id, userId : userId},
             type : "GET",
-            url : "/matching/comment/delete",
+            url : "/comment/delete",
             success : function(data){
                 if(data == "success"){
                     getCommentList();
@@ -275,29 +275,7 @@
             }
         })
     }
-    //그룹 초대
-    document.getElementById('groupInviteBtn').addEventListener('click', function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        let groupNo = document.getElementById("groupSelect").value
-        let userNo = e.target.parentElement.parentElement.parentElement.parentElement.dataset.userid;
-        $.ajax({
-            data : {groupNo : groupNo, userNo : userNo},
-            type : "POST",
-            url : "/meeting/invite",
-            success : function(data){
-                if(data == "success"){
-                    alert("초대완료");
-                    e.target.parentElement.parentElement.parentElement.parentElement.after(groupModal);
-                    groupModal.style.display = "none";
-                }else if(data == "중복"){
-                    alert("이미 초대된 회원입니다.");
-                }
-            },error : function(data){
-                console.log(data);
-            }
-        })
-    })
+
     //수정댓글 제출
     function submitModify(btn){
         let replyBox = btn.parentElement.parentElement;
@@ -307,7 +285,7 @@
         $.ajax({
             data : {id : id, userId : userId, content : content},
             type : "POST",
-            url : "/matching/comment/modify",
+            url : "/comment/modify",
             success : function(data){
                 if(data == "success"){
                     getCommentList();

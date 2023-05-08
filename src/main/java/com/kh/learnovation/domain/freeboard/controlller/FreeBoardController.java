@@ -174,7 +174,7 @@ public class FreeBoardController {
         Long countLike = freeBoardService.countLikesByFreeBoardId(id);
         FreeBoardDTO freeBoardDTO = freeBoardService.findById(id);
         /* 댓글 목록 가져오기 */
-        List<CommentDTO> commentDTOList = commentService.findAll(id);
+//        List<CommentDTO> commentDTOList = commentService.findAll(id);
 //        int result = likeService.likeCheck(id);
         Optional<UserDTO> optionalUserDTO =userService.getCurrentUser();
         if(optionalUserDTO.isEmpty()) {
@@ -186,11 +186,11 @@ public class FreeBoardController {
 //        model.addAttribute("result", result);
         model.addAttribute("result", result);
         model.addAttribute("countLike", countLike);
-        model.addAttribute("commentDTOList", commentDTOList);
+//        model.addAttribute("commentDTOList", commentDTOList);
         model.addAttribute("freeBoard", freeBoardDTO);
         model.addAttribute("keyword", searchKeyword);
         model.addAttribute("page", pageable.getPageNumber());
-        return "detalil";
+        return "/freeBoard/detail";
     }
 
     @GetMapping("/modify/{id}")
