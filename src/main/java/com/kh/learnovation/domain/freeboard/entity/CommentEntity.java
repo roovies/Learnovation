@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -15,14 +16,14 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "comment_table")
+@Table(name = "comment")
 @NoArgsConstructor
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "user_id")
     private User user;
     @Column
     private String commentContents;
@@ -35,15 +36,7 @@ public class CommentEntity {
     @JoinColumn(name = "freeBoard_id")
     private FreeBoardEntity freeBoardEntity;
 
-    //------------------------------------------ 여긴 실험 -----------------------------------
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "parent_id")
-//    private CommentEntity parentCommentEntity;
-//
-//
-//    @OneToMany(mappedBy = "parent", orphanRemoval = true)
-//    private List<CommentEntity> childrenCommentEntity = new ArrayList<>();
 
     @Builder
     public CommentEntity(long id, User user, String commentContents, FreeBoardEntity freeBoardEntity, Timestamp commentCreatedTime){

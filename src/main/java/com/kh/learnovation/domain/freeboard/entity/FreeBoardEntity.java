@@ -18,8 +18,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "test_freeBoard_table")
-public class FreeBoardEntity extends BaseEntity {
+@Table(name = "freeBoard")
+public class FreeBoardEntity {
     @Id // pk 컬럼 지정. 필수
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     private Long id;
@@ -46,12 +46,12 @@ public class FreeBoardEntity extends BaseEntity {
     private int status; // 1 or 0
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
 
     @OneToMany(mappedBy = "freeBoardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<FreeBoardFileEntity> freeBoardFileEntityList = new ArrayList<>();
+    private List<LikeEntity> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "freeBoardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CommentEntity> commentEntityList = new ArrayList<>();
@@ -59,7 +59,7 @@ public class FreeBoardEntity extends BaseEntity {
     @Builder
     public FreeBoardEntity(long id, String freeBoardTitle, String freeBoardContents, int freeBoardHits, int status
             , User user, Timestamp createdAt, Timestamp updatedAt, String subject
-            , List<FreeBoardFileEntity> freeBoardFileEntityList, List<CommentEntity> commentEntityList) {
+            , List<CommentEntity> commentEntityList) {
         this.id = id;
         this.freeBoardTitle = freeBoardTitle;
         this.freeBoardContents = freeBoardContents;
@@ -69,7 +69,6 @@ public class FreeBoardEntity extends BaseEntity {
         this.freeBoardHits = freeBoardHits;
         this.status = status;
         this.user = user;
-        this.freeBoardFileEntityList = freeBoardFileEntityList;
         this.commentEntityList = commentEntityList;
     }
 }

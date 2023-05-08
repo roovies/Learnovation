@@ -17,4 +17,8 @@ public interface FreeBoardRepository extends JpaRepository<FreeBoardEntity, Long
     void updateHits(@Param("id") Long id);
 
     Page<FreeBoardEntity> findByFreeBoardTitleContaining(String searchKeyword, Pageable pageable);
+
+    @Query("SELECT COUNT(l) FROM LikeEntity l WHERE l.freeBoardEntity.id = :freeBoardId")
+    long countLikesByFreeBoardId(@Param("freeBoardId") Long freeBoardId);
+
 }

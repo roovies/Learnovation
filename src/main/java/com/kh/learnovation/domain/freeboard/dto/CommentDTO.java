@@ -15,16 +15,18 @@ public class CommentDTO {
     private Long id;
     private Long userId;
     private String nickname;
+    private String email;
     private String commentContents;
     private Long freeBoardId;
     private Timestamp commentCreatedTime;
 
 
     @Builder
-    public CommentDTO(long id, Long userId, String nickname, String commentContents, Long freeBoardId, Timestamp commentCreatedTime){
+    public CommentDTO(long id, Long userId, String nickname,String email, String commentContents, Long freeBoardId, Timestamp commentCreatedTime){
         this.id = id;
         this.userId = userId;
         this.nickname = nickname;
+        this.email= email;
         this.commentContents = commentContents;
         this.freeBoardId = freeBoardId;
         this.commentCreatedTime = commentCreatedTime;

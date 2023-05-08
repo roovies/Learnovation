@@ -12,6 +12,7 @@
         <th>writer</th>
         <th>date</th>
         <th>hits</th>
+        //th:if="${userEmail} == ${#authentication.principal.username}" 이거 어떻게 하지?
     </tr>
     <tr th:each="freeBoard : ${freeBoardDTOList}">
         <td th:text="${freeBoard.id}"></td>

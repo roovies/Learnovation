@@ -17,7 +17,7 @@ public interface FreeBoardService {
 
     FreeBoardDTO findById(Long id);
 
-//    FreeBoardDTO update(FreeBoardDTO freeBoardDTO);
+    FreeBoardDTO update(FreeBoardDTO freeBoardDTO);
 
     void delete(Long id);
 
@@ -26,4 +26,5 @@ public interface FreeBoardService {
     Page<FreeBoardDTO> freeBoardSearchList(Pageable pageable, String searchKeyword);
 
 
+    Long countLikesByFreeBoardId(Long id);
 }
