@@ -2,7 +2,6 @@ package com.kh.learnovation.conf;
 
 import com.kh.learnovation.domain.chatbot.handler.ChatbotHandler;
 import com.kh.learnovation.domain.alarm.AlarmHandler;
-import com.kh.learnovation.domain.chatbot.conf.ChatHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
