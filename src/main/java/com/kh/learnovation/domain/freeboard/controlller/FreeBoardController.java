@@ -2,11 +2,9 @@ package com.kh.learnovation.domain.freeboard.controlller;
 
 
 import com.google.gson.JsonObject;
-import com.kh.learnovation.domain.admin.entity.Admin;
 import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
 import com.kh.learnovation.domain.freeboard.dto.FreeBoardDTO;
 import com.kh.learnovation.domain.freeboard.service.*;
-import com.kh.learnovation.domain.notice.dto.NoticeDTO;
 import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -192,7 +190,7 @@ public class FreeBoardController {
         model.addAttribute("freeBoard", freeBoardDTO);
         model.addAttribute("keyword", searchKeyword);
         model.addAttribute("page", pageable.getPageNumber());
-        return "/freeBoard/detail";
+        return "detalil";
     }
 
     @GetMapping("/modify/{id}")
@@ -304,7 +302,7 @@ public class FreeBoardController {
         String subject = freeBoardContents.replaceAll("<[^>]*>?", "");
         UserDTO userDTO=userService.getCurrentUser().get();
         FreeBoardDTO OriginalFreeBoardDTO = freeBoardService.findById(Long.parseLong(freeBoardId));
-        FreeBoardDTO freeBoardDTO = FreeBoardDTO.builder().freeBoardTitle(freeBoardTitle).freeBoardContents(freeBoardContents)
+        FreeBoardDTO freeBoardDTO = FreeBoardDTO.builder().id(Long.parseLong(freeBoardId)).freeBoardTitle(freeBoardTitle).freeBoardContents(freeBoardContents)
                 .userId(userDTO.getId()).nickname(userDTO.getNickname()).subject(subject).freeBoardCreatedTime(OriginalFreeBoardDTO.getFreeBoardUpdatedTime()).build();
          freeBoardDTO = freeBoardService.update(freeBoardDTO);
          System.out.println(freeBoardDTO);
