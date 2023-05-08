@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.kh.learnovation.domain.meeting.dto.MeetingDTO;
 import com.kh.learnovation.domain.meeting.dto.MeetingMemberDTO;
 import com.kh.learnovation.domain.meeting.entity.Meeting;
+import com.kh.learnovation.domain.meeting.entity.MeetingChatting;
 import com.kh.learnovation.domain.meeting.entity.MeetingMemberPk;
 import com.kh.learnovation.domain.meeting.service.MeetingService;
 import com.kh.learnovation.domain.user.dto.UserDTO;
@@ -29,6 +30,9 @@ public class MeetingController {
     @PostMapping("/meeting/create")
     @ResponseBody
     public String MeetingCreate(@RequestParam("groupName") String groupName, @RequestParam("userNo") long userId){
+        if(groupName.equals("")){
+            return "fail";
+        }
         MeetingDTO meetingDTO = MeetingDTO.builder().name(groupName).build();
         Optional<UserDTO> userDTO = userService.getCurrentUser();
         UserDTO curUser = null;
@@ -91,5 +95,15 @@ public class MeetingController {
         MeetingDTO meetingDTO = MeetingDTO.builder().id(groupNo).build();
         meetingService.inviteMeeting(meetingDTO, userDTO);
         return "success";
+    }
+    @GetMapping("/meeting/chat/room")
+    @ResponseBody
+    public String openChattingRoom(@RequestParam("meetingNo") long meetingNo){
+        List<MeetingChatting> mCList = meetingService.chattingList(meetingNo);
+        if(mCList.size() < 1){
+            return "empty";
+        }
+        Gson gson = new Gson();
+        return gson.toJson(mCList);
     }
 }

@@ -282,17 +282,22 @@ if(document.getElementById("groupCreateBtn") !=null){
         let groupInfo = document.getElementById('groupName')
         let groupName = groupInfo.value
         let userNo = groupInfo.dataset.id;
-        $.ajax({
-            data : {groupName : groupName, userNo : userNo},
-            type : "POST",
-            url : "/meeting/create",
-            success : function(data) {
-                groupChatList();
-                console.log(data);
-            },error : function (data){
+        if(groupName == ""){
+            alert("그룹이름을 입력해주세요");
+        }else{
+            $.ajax({
+                data : {groupName : groupName, userNo : userNo},
+                type : "POST",
+                url : "/meeting/create",
+                success : function(data) {
+                    groupChatList();
+                    groupInfo.value = "";
+                    alert('그룹 생성 완료')
+                },error : function (data){
 
-            }
-        });
+                }
+            });
+        }
     })
 }
 
@@ -311,10 +316,9 @@ function groupChatList(){
                 listBox.innerHTML = "";
                 for(let i = 0; i < mList.length; i++){
                     let groupChatContent = document.getElementById("groupChatContent").cloneNode(true);
-                    groupChatContent.style.display = "block";
+                    groupChatContent.style.display = "flex";
                     groupChatContent.querySelector(".group-chat-title").innerText = mList[i].name;
                     groupChatContent.querySelector(".group-chat-title").dataset.id = mList[i].id;
-                    groupChatContent.querySelector(".group-chat-contents").innerText = "최근 내용";
                     listBox.append(groupChatContent);
                 }
             }
@@ -325,7 +329,7 @@ function groupChatList(){
 }
 
 function exitGroup(btn){
-    let groupNo = btn.parentElement.previousElementSibling.dataset.id;
+    let groupNo = btn.parentElement.previousElementSibling.firstElementChild.dataset.id;
     $.ajax({
         data : {groupNo : groupNo},
         type : "GET",
@@ -339,29 +343,156 @@ function exitGroup(btn){
     });
 }
 
-// --------------------------------- 알람 웹소켓 --------------------------------
-const alarm = new WebSocket("ws://localhost:9999/ws/alarm");
+//---------------------------------- 채팅방-------------------------------------
+if(document.getElementById('userIconBox') != null){
+    function openGroupChatting(btn){
+        let meetingNo = btn.firstElementChild.dataset.id;
+        let userNo = document.getElementById('groupName').dataset.id;
+        $.ajax({
+            data : {meetingNo : meetingNo},
+            url : "/meeting/chat/room",
+            type : "GET",
+            success : function (data){
+                if(data != "empty"){
+                    let mCList = JSON.parse(data);
+                    let chatBox = document.getElementById('groupChatBox');
 
-alarm.onopen = function(e) {
-    console.log('알람소켓 open');
-};
+                    for(let i = 0; i < mCList.length; i++){
+                        if(mCList[i].user.id == userNo){
 
-alarm.onmessage = function(event) {
-    console.log(`[message] 서버로부터 전송받은 데이터: ${event.data}`);
-};
+                        }else{
 
-alarm.onclose = function(event) {
-    if (event.wasClean) {
-        console.log(`[close] 커넥션이 정상적으로 종료되었습니다(code=${event.code} reason=${event.reason})`);
-    } else {
-        // 예시: 프로세스가 죽거나 네트워크에 장애가 있는 경우
-        // event.code가 1006이 됩니다.
-        console.log('[close] 커넥션이 죽었습니다.');
+                        }
+                    }
+                }else{
+                    let chatBox = document.getElementById('groupChatBox');
+                    chatBox.innerHTML = "";
+                    let chattingRoom = document.getElementById('groupChatRoomList').cloneNode(false);
+                    let chattingInput = document.getElementById('groupChatInputBox').cloneNode(true);
+                    chattingInput.style.display = 'block';
+                    chattingRoom.append(chattingInput);
+                    chatBox.append(chattingRoom);
+                }
+            },
+            error : function (data){
+
+            }
+        })
     }
-};
+}
 
-alarm.onerror = function(error) {
-    alert(`[error]`);
-};
+
+// --------------------------------- 알람 웹소켓 --------------------------------
+
+let alarm;
+let alarmModal = false;
+const alarmListBox = document.getElementById('alarmListBox');
+if(document.getElementById('userIconBox') != null){
+    getListAlarm();
+    document.getElementById('navAlarmBtn').addEventListener("click", function (e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(!alarmModal){
+            alarmListBox.style.transform = "translate(-400px)";
+        }else{
+            alarmListBox.style.transform = "translate(0px)";
+        }
+        alarmModal = !alarmModal;
+    })
+    function getListAlarm(){
+        let userNo = document.getElementById('groupName').dataset.id;
+        $.ajax({
+            data : {userNo : userNo},
+            type : "GET",
+            url : "/alarm/list",
+            success : function(data){
+                let alarmListBox = document.getElementById("alarmListBox");
+                alarmListBox.innerHTML = "";
+                let alarmCloseBox = document.getElementById('alarmListClose').cloneNode(true);
+                alarmCloseBox.style.display = "block";
+                let alarmCount = document.getElementById('navBellCount');
+                if(data == "empty"){
+                    alarmListBox.innerHTML = "알람이 없습니다."
+                    alarmCount.classList.add('hidden-count');
+                }else{
+                    let aList = JSON.parse(data);
+                    for(let i = 0; i < aList.length; i++){
+                        alarmCount.innerText = aList.length;
+                        alarmCount.classList.remove('hidden-count');
+                        let alarmBox = document.getElementById("alarmContentBox").cloneNode(true);
+                        alarmBox.style.display = 'flex';
+                        alarmBox.querySelector('.alarm-content').innerText = aList[i].content;
+                        alarmBox.querySelector('#alarmRemove').dataset.id = aList[i].id;
+                        alarmListBox.append(alarmBox);
+                    }
+                }
+                alarmListBox.prepend(alarmCloseBox);
+            },error : function(data){
+                console.log(data);
+            }
+        })
+    }
+
+    function removeAlarm(btn){
+        let alarmNo = btn.dataset.id;
+        $.ajax({
+            data : {alarmNo : alarmNo},
+            type : "GET",
+            url : "/alarm/remove",
+            success : function(data){
+                if(data == "success"){
+                    getListAlarm();
+                }
+            },error : function(data){
+                console.log(data);
+            }
+        })
+    }
+
+    function closeAlarmBox(){
+        let e = window.event;
+        e.preventDefault();
+        e.stopPropagation();
+        alarmListBox.style.transform = "translate(0px)";
+        alarmModal = false;
+    }
+
+
+
+
+    alarm = new WebSocket("ws://localhost:9999/ws/alarm");
+
+    alarm.onopen = function(e) {
+        //console.log('알람소켓 open');
+        let userNo = document.getElementById('groupName').dataset.id;
+        alarm.send(`{type: "create", sender: "${userNo}"}`);
+    };
+
+    alarm.onmessage = function(event) {
+        console.log(`[message] 서버로부터 전송받은 데이터: ${event.data}`);
+        if(event.data == '새로운 접속'){
+            // 같은 아이디 중복 접속
+        }
+        if(event.data == 'newAlarm'){
+            getListAlarm();
+            groupChatList();
+        }
+    };
+
+    alarm.onclose = function(event) {
+        if (event.wasClean) {
+            console.log(`[close] 커넥션이 정상적으로 종료되었습니다(code=${event.code} reason=${event.reason})`);
+        } else {
+            // 예시: 프로세스가 죽거나 네트워크에 장애가 있는 경우
+            // event.code가 1006이 됩니다.
+            console.log('[close] 커넥션이 죽었습니다.');
+        }
+    };
+
+    alarm.onerror = function(error) {
+        alert(`[error]`);
+    };
+}
+
 
 //alarm.send(`{msg: "${msg}", sender: "${sender}"}`);

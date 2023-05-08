@@ -3,13 +3,16 @@ package com.kh.learnovation.domain.meeting.service;
 import com.kh.learnovation.domain.meeting.dto.MeetingDTO;
 import com.kh.learnovation.domain.meeting.dto.MeetingMemberDTO;
 import com.kh.learnovation.domain.meeting.entity.Meeting;
+import com.kh.learnovation.domain.meeting.entity.MeetingChatting;
 import com.kh.learnovation.domain.meeting.entity.MeetingMember;
 import com.kh.learnovation.domain.meeting.entity.MeetingMemberPk;
+import com.kh.learnovation.domain.meeting.repository.MeetingChattingRepository;
 import com.kh.learnovation.domain.meeting.repository.MeetingMemberRepository;
 import com.kh.learnovation.domain.meeting.repository.MeetingRepository;
 import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,6 +20,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -27,6 +31,8 @@ public class MeetingServiceImpl implements MeetingService{
 
     @Autowired
     MeetingMemberRepository meetingMemberRepository;
+    @Autowired
+    MeetingChattingRepository meetingChattingRepository;
     @Override
     @Transactional
     public MeetingDTO createMeeting(MeetingDTO meetingDTO) {
@@ -85,6 +91,22 @@ public class MeetingServiceImpl implements MeetingService{
     public void delete(long groupNo) {
         Meeting meeting = Meeting.builder().id(groupNo).build();
         meetingRepository.delete(meeting);
+    }
+
+    @Override
+    public String selectOne(long groupNo) {
+        Optional<Meeting> oMeeting = meetingRepository.findById(groupNo);
+        if(oMeeting.isPresent()){
+            return oMeeting.get().getName();
+        }
+        return "fail";
+    }
+
+    @Override
+    public List<MeetingChatting> chattingList(long meetingNo) {
+        Meeting meeting = Meeting.builder().id(meetingNo).build();
+        List<MeetingChatting> mCList = meetingChattingRepository.findByMeeting(meeting);
+        return mCList;
     }
 
 }

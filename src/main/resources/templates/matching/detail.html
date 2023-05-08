@@ -37,8 +37,8 @@
                     </div>
                 </div>
             </div>
-            <div class="matching-detail-title" id="matchingTitle" th:data-matchingno="${matching.getId()}">
-                <p th:text="${matching.getTitle()}"></p>
+            <div class="matching-detail-title" id="matchingTitle" th:data-userno="${matching.getUser().getId()}" th:data-matchingno="${matching.getId()}">
+                <p id="boardTitle"th:text="${matching.getTitle()}"></p>
             </div>
             <div class="matching-detail-content" th:utext="${matching.getContent()}"></div>
             <div class="matching-reply-container">
@@ -212,6 +212,18 @@
                             alert("댓글 작성 완료!!");
                             document.getElementById('replyInput').value = "";
                             getCommentList();
+                            let boardUserNo = document.getElementById('matchingTitle').dataset.userno;
+                            let boardTitle = document.getElementById('boardTitle').innerText;
+                            $.ajax({
+                                data : {boardUserNo : boardUserNo,boardTitle : boardTitle},
+                                type : "POST",
+                                url : "/alarm/insert",
+                                success : function(data){
+                                    alarm.send(`{type: "alarm", feeder: "${boardUserNo}"}`)
+                                },error : function(data){
+                                    console.log(data);
+                                }
+                            });
                         },error : function(data){
                             console.log(data);
                         }
@@ -290,6 +302,16 @@
                             alert("초대완료");
                             e.target.parentElement.parentElement.parentElement.parentElement.after(groupModal);
                             groupModal.style.display = "none";
+                            $.ajax({
+                                data : {userNo : userNo,groupNo : groupNo},
+                                type : "POST",
+                                url : "/alarm/invite",
+                                success : function(data){
+                                    alarm.send(`{type: "alarm", feeder: "${userNo}"}`)
+                                },error : function(data){
+                                    console.log(data);
+                                }
+                            });
                         }else if(data == "중복"){
                             alert("이미 초대된 회원입니다.");
                         }

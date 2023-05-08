@@ -24,38 +24,50 @@ import java.util.Optional;
 @Component
 public class AlarmHandler extends TextWebSocketHandler {
 
-    public static final Map<String, WebSocketSession> sessionMap = new HashMap<>();
-
+    private static final Map<String, WebSocketSession> sessionMap = new HashMap<>();
+    private static final Map<String, WebSocketSession> anonymous = new HashMap<>();
+    private static final Map<String, String> valid = new HashMap<>();
     @Autowired
     private UserService userService;
-
+    //sendMessage
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage msg) throws Exception{
         String abc = msg.getPayload();
         JsonObject jsonObject = (JsonObject) JsonParser.parseString(abc);
-        for (Map.Entry<String, WebSocketSession> arg : sessionMap.entrySet()) {
-            if(session.getId() != arg.getKey()){
-                arg.getValue().sendMessage(new TextMessage(msg.getPayload()));
+        if(jsonObject.get("type").toString().equals("\"create\"")){
+            String sender = jsonObject.get("sender").toString().replaceAll("\"","");
+            if(sessionMap.get(sender) == null){
+                sessionMap.put(sender, anonymous.get(session.getId()));
+                valid.put(session.getId(), sender);
+            }else{
+                String id = sessionMap.get(sender).getId();
+                TextMessage textMessage = new TextMessage("새로운 접속");
+                sessionMap.get(sender).sendMessage(textMessage);
+                sessionMap.get(sender).close();
+                anonymous.remove(id);
+                sessionMap.remove(sender);
+                sessionMap.put(sender, anonymous.get(session.getId()));
+                valid.put(session.getId(), sender);
+            }
+        }
+        if(jsonObject.get("type").toString().equals("\"alarm\"")){
+            String feeder = jsonObject.get("feeder").toString().replaceAll("\"","");
+            TextMessage textMessage = new TextMessage("newAlarm");
+            if(sessionMap.get(feeder) != null){
+                sessionMap.get(feeder).sendMessage(textMessage);
             }
         }
     }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        Optional<UserDTO> userDTO = userService.getCurrentUser();
-        if (userDTO.isPresent()){
-            sessionMap.put(userDTO.get().getId().toString(), session);
-        }else{
-            sessionMap.put(session.getId(), session);
-        }
-        System.out.println(session + "클라이언트 접속");
+            anonymous.put(session.getId(), session);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-
-        sessionMap.remove(session.getId());
-        System.out.println(session + "클라이언트 접속 해제");
+        anonymous.remove(session.getId());
+        sessionMap.remove(valid.get(session.getId()));
         session.close();
     }
 
