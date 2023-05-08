@@ -65,62 +65,63 @@ public class UserController {
 	//HttpURLConnection con = (HttpURLConnection) url.openConnection();
 	private String cosKey = "cos1234";
 
-    private final UserService userService;
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+	private final UserService userService;
 
-    // 회원 목록 조회
-    @RequestMapping(value = "/admin/userList", method = RequestMethod.GET)
-    public String userList(
-            Model model,
-            @RequestParam(value = "page", defaultValue = "1") Integer pageNum
-    ) {
+	public UserController(UserService userService) {
+		this.userService = userService;
+	}
 
-        List<UserDTO> userList = userService.getUserList(pageNum);
-        Integer[] pageList = userService.getPageList(pageNum);
+	// 회원 목록 조회
+	@RequestMapping(value = "/admin/userList", method = RequestMethod.GET)
+	public String userList(
+			Model model,
+			@RequestParam(value = "page", defaultValue = "1") Integer pageNum
+	) {
 
-        model.addAttribute("userList", userList);
-        model.addAttribute("pageList", pageList);
+		List<UserDTO> userList = userService.getUserList(pageNum);
+		Integer[] pageList = userService.getPageList(pageNum);
 
-        return "admin/userList";
-    }
+		model.addAttribute("userList", userList);
+		model.addAttribute("pageList", pageList);
 
-    // 회원 이름으로 검색
-    @RequestMapping(value = "/admin/search")
-    public String search(@RequestParam(value = "keyword") String keyword, Model model) {
-        List<UserDTO> userDTOList = userService.searchUsers(keyword);
-        model.addAttribute("userList", userDTOList);
+		return "admin/userList";
+	}
 
-        return "admin/userList";
-    }
+	// 회원 이름으로 검색
+	@RequestMapping(value = "/admin/search")
+	public String search(@RequestParam(value = "keyword") String keyword, Model model) {
+		List<UserDTO> userDTOList = userService.searchUsers(keyword);
+		model.addAttribute("userList", userDTOList);
+
+		return "admin/userList";
+	}
 
     // 회원 상세정보 조회(관리자)
     @RequestMapping(value = "/admin/detail/{no}", method = RequestMethod.GET)
     public String detail(@PathVariable("no") Long id, Model model) {
         UserDTO userDTO = userService.getPost(id);
 
-        model.addAttribute("user", userDTO);
-        return "admin/userDetail";
-    }
+		model.addAttribute("user", userDTO);
+		return "admin/userDetail";
+	}
 
-    // 회원 정보 수정
-    @PutMapping("/admin/update/{id}")
-    public String userUpdate(UserDTO userDTO) {
-        userService.savePost(userDTO);
-        return "redirect:/admin/userList";
-    }
+	// 회원 정보 수정
+	@PutMapping("/admin/update/{id}")
+	public String userUpdate(UserDTO userDTO) {
+		userService.savePost(userDTO);
+		return "redirect:/admin/userList";
+	}
 
-    // 회원 탈퇴(삭제)
-    @PostMapping("/admin/delete")
-    public String userDelete(@RequestParam("selectedIds") List<Long> selectedIds) {
-        userService.deleteByIdIn(selectedIds);
-        return "redirect:/admin/userList";
-    }
-	
+	// 회원 탈퇴(삭제)
+	@PostMapping("/admin/delete")
+	public String userDelete(@RequestParam("selectedIds") List<Long> selectedIds) {
+		userService.deleteByIdIn(selectedIds);
+		return "redirect:/admin/userList";
+	}
+
 	/**
 	 * 승현파트
-	 * */
+	 */
 	@GetMapping("/")
 	public String indexForm(Model model) {
 
@@ -209,8 +210,59 @@ public class UserController {
 		return "user/loginForm";
 	}
 
+	@GetMapping("/auth/findId")
+	public String findId() {
+		return "user/findId";
+	}
+
+	@GetMapping("/auth/findPw")
+	public String findPw() {
+		return "user/findPw";
+	}
+
+	@GetMapping("/loginError")
+	public String loginError(@RequestParam(value = "errorMsg", required = false) String errorMsg,
+							 Model model) {
+		model.addAttribute("errorMsg", errorMsg);
+		return "user/loginForm";
+	}
+
+	//아이디 찾기
+	@PostMapping("findIdLogic")
+	@ResponseBody
+	public String findId(@ModelAttribute UserDTO userDTO, Model model) {
+		String name = userDTO.getName();
+		String phoneNumber = userDTO.getPhoneNumber();
+		UserDTO findUserDto = userService.findId(name, phoneNumber);
+		if (findUserDto != null) {
+			return findUserDto.getEmail();
+//			model.addAttribute("id", findUserDto.getEmail());
+		} else {
+			return "실패";
+//			model.addAttribute("id", "일치하는 회원정보가 없습니다.");
+		}
+	}
+
+	/*//비밀번호 찾기
+	@PostMapping("findPwLogic")
+	@ResponseBody
+	public String findPw(@ModelAttribute UserDTO userDTO, Model model) {
+		String email = userDTO.getEmail();
+		String name = userDTO.getName();
+		String phoneNumber = userDTO.getPhoneNumber();
+		UserDTO findUserDto = userService.findPw(email, name, phoneNumber);
+		if (findUserDto != null) {
+			model.addAttribute("id", findUserDto.getEmail());
+			return "user/changePw";
+		} else {
+			model.addAttribute("id", "일치하는 회원정보가 없습니다.");
+			return "user/loginForm";
+		}
+	}*/
+
+
 	@GetMapping("/auth/kakao/callback")
-	public String kakaoCallback(String code) { // Data를 리턴해주는 컨트롤러 함수
+	public String kakaoCallback(String code, Model model) { // Data를 리턴해주는 컨트롤러 함수, model추가
 
 		// POST방식으로 key=value 데이터를 요청 (카카오쪽으로)
 		// Retrofit2
@@ -295,17 +347,17 @@ public class UserController {
 		UUID garbagePassword = UUID.randomUUID();
 		// UUID란 -> 중복되지 않는 어떤 특정 값을 만들어내는 알고리즘
 		System.out.println("블로그서버 패스워드 : "+cosKey);
-
+		KakaoProfile.Properties properties = kakaoProfile.properties;
 		User kakaoUser = User.builder()
 				.email(kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId())
 				.password(cosKey)
 
-				/*.name()
-				.nickname()
-				.phoneNumber()
-*/
+				//.name("설석현")
+				.nickname(properties.getNickname())
+				//.phoneNumber("010")
 
-				.email(kakaoProfile.getKakao_account().getEmail())
+
+				//.email(kakaoProfile.getKakao_account().getEmail())
 				.oauth("kakao")
 				.build();
 
@@ -313,8 +365,10 @@ public class UserController {
 		User originUser = userService.회원찾기(kakaoUser.getEmail());
 
 		if(originUser.getEmail() == null) {
+			model.addAttribute("user", kakaoUser);
 			System.out.println("기존 회원이 아니기에 자동 회원가입을 진행합니다");
-			userService.회원가입(kakaoUser);
+			return "user/socialForm";
+			//userService.회원가입(kakaoUser);
 		}
 
 		System.out.println("자동 로그인을 진행합니다.");
@@ -328,6 +382,21 @@ public class UserController {
 	@GetMapping("/user/updateForm")
 	public String updateForm(@AuthenticationPrincipal PrincipalDetail principal) {
 		return "user/updateForm";
+	}
+
+	@PostMapping("/user/socialForm")
+	public String socialForm(@AuthenticationPrincipal PrincipalDetail principal, UserDTO userDTO) {
+		User user = User.builder()
+				.email(userDTO.getEmail())
+				.password(userDTO.getPassword())
+				.name(userDTO.getName())
+				.nickname(userDTO.getNickname())
+				.phoneNumber(userDTO.getPhoneNumber())
+				.oauth(userDTO.getOauth())
+				.build();
+		userService.회원가입(user);
+		// 로그인 처리
+		return "redirect:https://kauth.kakao.com/oauth/authorize?client_id=0c7a67f1f4fcb8912b7d917baa9f87ee&redirect_uri=http://localhost:9999/auth/kakao/callback&response_type=code";
 	}
 
 	/*

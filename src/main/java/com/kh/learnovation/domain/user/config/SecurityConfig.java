@@ -1,6 +1,7 @@
 package com.kh.learnovation.domain.user.config;
 
 import com.kh.learnovation.domain.user.config.auth.PrincipalDetailService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,12 +13,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
-
+@RequiredArgsConstructor
 @Configuration // IoC
 public class SecurityConfig {
 
 	@Autowired
 	private PrincipalDetailService principalDetailService;
+
+	private final AuthenticationFailureHandler customFailureHandler;
 
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -63,8 +66,8 @@ public class SecurityConfig {
 			.loginProcessingUrl("/auth/loginProc")
 				.usernameParameter("email")
 				.passwordParameter("password")
-			//.failureHandler()
-				.failureUrl("/error")
+				.failureHandler(customFailureHandler)
+				/*.failureUrl("/error")*/
 			.defaultSuccessUrl("/") // 스프링 시큐리티가 해당 주소로 요청오는 로그인을 가로채서 대신 로그인 해준다.
 		;
 

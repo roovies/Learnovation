@@ -3,6 +3,7 @@ package com.kh.learnovation.domain.user.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
+import lombok.Getter;
 
 @JsonIgnoreProperties(ignoreUnknown=true) 
 @Data
@@ -13,6 +14,7 @@ public class KakaoProfile {
 	public KakaoAccount kakao_account;
 
 	@Data
+	@Getter
 	public class Properties {
 		public String nickname;
 		public String profile_image;

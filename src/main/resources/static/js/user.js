@@ -1,7 +1,8 @@
 let index = {
 	init: function() {
 		$("#btn-save").on("click", () => { // function(){} , ()=>{} this를 바인딩하기 위해서!!
-			this.save();
+			if(signUpCheck())
+				this.save();
 		});
 		$("#btn-update").on("click", () => { // function(){} , ()=>{} this를 바인딩하기 위해서!!
 			this.update();
@@ -15,7 +16,7 @@ let index = {
 			password: $("#password").val(),
 			name: $("#name").val(),
 			nickname: $("#nickname").val(),
-			phoneNumber: $("#phone_number").val()
+			phoneNumber: $("#phone_number1").val() + $("#phone_number2").val() + $("#phone_number3").val()
 		};
 		
 		$.ajax({
@@ -38,9 +39,12 @@ let index = {
 		//alert('user의 save함수 호출됨');
 		let data = {
 			id: $("#id").val(),
-			username: $("#username").val(),
+
+			email: $("#email").val(),
 			password: $("#password").val(),
-			email: $("#email").val()
+			name: $("#name").val(),
+			nickname: $("#3").val(),
+			phoneNumber: $("#phoneNumber").val()
 		};
 		
 		$.ajax({
