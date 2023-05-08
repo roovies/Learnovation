@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Learnovation : 채팅상담</title>
+  <!--css & js-->
+  <link rel="stylesheet" href="/admin/css/Chatting.css">
+  <!-- jQUery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <!-- 폰트어썸 -->
+  <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="side-nav">
+  <header>LEARNOVATION</header>
+  <ul>
+    <a href="#" class="active">
+      <li class="nav-li">
+        <span class="menu">🙋‍♂️ 회원관리</span>
+      </li>
+    </a>
+    <a href="#">
+      <li class="nav-li">
+        <span class="menu">📚 게시판 관리</span>
+      </li>
+    </a>
+    <a href="#">
+      <li class="nav-li">
+        <span class="menu">📢 신고 관리</span>
+      </li>
+    </a>
+    <a href="#">
+      <li class="nav-li">
+        <span class="menu">📺 강의 등록</span>
+      </li>
+    </a>
+    <a href="#">
+      <li class="nav-li">
+        <span class="menu">📞 채팅 상담</span>
+      </li>
+    </a>
+    <a href="#">
+      <li class="nav-li">
+        <span class="menu">event</span>
+      </li>
+    </a>
+    <a href="#">
+      <li class="nav-li">
+        <span class="menu">settings</span>
+      </li>
+    </a>
+  </ul>
+</div>
+<div class="main">
+  <h2>📞 채팅 상담</h2>
+  <div class="header-box">
+    <div class="button-box">
+      <button onclick="startChatting()" class="strat-chatting-btn">상담 시작하기</button>
+      <button onclick="closeChatting()" class="close-chatting-btn">상담 종료하기</button>
+    </div>
+    <div class="notice-box">
+      <h2>💥주의사항💥</h2>
+      <h4>1. 업무시간은 09시부터 18시까지입니다. (점심은 13시부터 14시까지입니다.)</h4>
+      <h4>2. 새로고침을 하거나 페이지 이동 시 통신이 종료됩니다.</h4>
+      <h4 th:style="'color: red'">&nbsp&nbsp- 키입력을 통한 새로고침 이벤트를 제한했으므로 강제로 시도하지 마세요.</h4>
+      <h4>&nbsp&nbsp- 페이지가 이동되지 않도록 조심하세요.</h4>
+      <h4>3. 상담 종료 시 세션이 소멸됩니다. 따라서 이전 상담내역을 확인하기 위해서는 개발팀에 문의하시길 바랍니다.</h4>
+    </div>
+  </div>
+  <div class="chatting-box">
+    <div class="client-list-box-initial">
+      <h4>상담 요청이 존재하지 않습니다.</h4>
+    </div>
+    <div class="client-list-box">
+    </div>
+      <div class="message-box-initial">
+        <img class="mesage-box-initial-img" th:src="@{/common/image/logo.png}" alt="">
+        <h2>LEARNOVATION</h2>
+      </div>
+    <div class="message-box">
+    </div>
+  </div>
+  <textarea class="input-box"></textarea>
+</div>
+</body>
+
+<script>
+  let startChatting = ()=>{
+    document.querySelector('.strat-chatting-btn').innerHTML = "상담 중";
+    // Web Socket 연결 (챗봇)
+    const websocket = new WebSocket("ws://localhost:9999/ws/chatbot");
+    websocket.onmessage = onMessage; // 소켓이 메시지를 받을 때
+    websocket.onopen = onOpen;      // 소켓이 생성될 때 (클라이언트 접속)
+    websocket.onclose = onClose;    // 소켓이 닫힐 때 (클라이언트 접속 해제)
+
+    // 현재 사용자 정보
+    let type = "ADMIN";
+    let sessionId = null;
+    const userId = "53"; //Client 메시지를 전부 다 dataset 속성으로 인해 문자열로 전송되므로 얘도 그렇게 맞춤 서버에서 parseLong 해줄 것
+
+    function send(sessionId){ // 메시지 전송 기능
+      let message = document.querySelector(".input-box").value;
+      let toSendMessage = JSON.stringify({
+        'type' : type,
+        'sessionId' : sessionId,
+        'senderId' : "53",
+        'message' : message
+      });
+      websocket.send(toSendMessage);
+    }
+    function onOpen(event){ // 연결 시
+      let msg = JSON.stringify({
+          'type' : type,
+      });
+      websocket.send(msg);
+      console.log("챗봇 서버에 관리자 연결 완료");
+    }
+    function onClose(event){ // 연결해제 시
+      // let msg = JSON.stringify({
+      //     'type' : 'ENTER',
+      //     'sessionId' : sessionId,
+      //     'senderId' : userId,
+      //     'message' : '연결이 종료되었습니다.'
+      // });
+      console.log("챗봇 서버와의 연결 종료");
+    }
+    function onMessage(msg){
+      let rowMsg = msg.data;
+      let jsonMsg = JSON.parse(rowMsg);
+
+      // 관리자 소켓 연결 성공 시 type을 ADMIN_MSG로 변경
+      if(jsonMsg.type == "SUCCESS"){
+        type = "ADMIN_MSG";
+        alert("[관리자] 상담을 시작합니다.");
+        console.log(jsonMsg);
+      }
+
+      // Client가 연결 요청한 경우
+      if(jsonMsg.type == "CLIENT_ENTER"){
+        document.querySelector('.client-list-box-initial').style.display = "none";
+        document.querySelector('.client-list-box').style.display = "flex";
+        // 종료 후 재요청일 수 있으므로, 좌측 메뉴 동기화 필요
+        let today = new Date();
+        let time = today.toLocaleString();
+        let tag = `<div id="` + jsonMsg.sessionId + `"class="client" onclick="showChatting(this)">
+                      <div class="client-left">
+                        <i class="fa-solid fa-user client-img" style="color: #000000;"></i>
+                      </div>
+                      <div class="client-middle">
+                        <h3>${jsonMsg.name}</h3>
+                        <h4><span class="client-list-box-alert-msg">(수신됨)</span> ${jsonMsg.message}</h4>
+                      </div>
+                      <div class="client-right">
+                        <p>${time}</p>
+                        <p>1개</p>
+                      </div>
+                  </div>`;
+        if($(`#${jsonMsg.sessionId}`) != null){
+          $(`#${jsonMsg.sessionId}`).remove();
+          $('.client-list-box').prepend(tag);
+        } else{
+          $('.client-list-box').prepend(tag);
+        }
+      }
+
+      // Client가 전송한 메시지
+      if(jsonMsg.type == "CLIENT_MSG"){
+        if($(`#${jsonMsg.sessionId}`) != null){
+          $(`#${jsonMsg.sessionId}`).remove();
+          let today = new Date();
+          let time = today.toLocaleString();
+          let tag = `<div id="` + jsonMsg.sessionId + `"class="client" onclick="showChatting(this)">
+                      <div class="client-left">
+                        <i class="fa-solid fa-user client-img" style="color: #000000;"></i>
+                      </div>
+                      <div class="client-middle">
+                        <h3>${jsonMsg.name}</h3>
+                        <h4><span class="client-list-box-alert-msg">(수신됨)</span> ${jsonMsg.message}</h4>
+                      </div>
+                      <div class="client-right">
+                        <p>${time}</p>
+                      </div>
+                  </div>`;
+          $('.client-list-box').prepend(tag);
+        }
+        if ($(".user-info") != null){
+          let userInfoTag = document.querySelector(".user-info");
+          let sessionId = userInfoTag.dataset.sessionId;
+          if(jsonMsg.sessionId == sessionId){
+            let date = new Date();
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            let hour = date.getHours();
+            let minute = date.getMinutes();
+            let formattedDate = `${month}월${day}일 ${hour}시${minute}분`;
+            let tag = `<div class="client-msg-box">
+                        <div class="client-msg">
+                          <p>${jsonMsg.message}</p>
+                        </div>
+                        <p class="client-msg-time">${formattedDate}</p>
+                      </div>`;
+            $(".message-box").append(tag);
+          }
+        }
+      }
+
+      // Client의 연결 종료
+      if (jsonMsg.type == "SOCKET_CLOSE"){
+        if($(`#${jsonMsg.sessionId}`) != null){
+          let today = new Date();
+          let time = today.toLocaleString();
+          let tag = $(`#${jsonMsg.sessionId}`);
+          tag.find('.client-middle h4').text(`${jsonMsg.message}`);
+          tag.find('client-right p').text(time);
+          $(`#${jsonMsg.sessionId}`).remove();
+          $('.client-list-box').prepend(tag);
+
+        }
+      }
+
+      // Client의 세션이 존재하지 않는 경우
+      if (jsonMsg.type == "CLOSED_SESSION"){
+        alert(jsonMsg.message);
+      }
+    }
+
+    document.querySelector(".input-box").addEventListener("keyup", (event)=>{
+      let userInfoTag = document.querySelector(".user-info");
+      let sessionId = userInfoTag.dataset.sessionId;
+      let name = userInfoTag.dataset.name;
+      if(event.keyCode == 13){
+        if(!event.shiftKey){
+          let date = new Date();
+          let month = date.getMonth() + 1;
+          let day = date.getDate();
+          let hour = date.getHours();
+          let minute = date.getMinutes();
+          let formattedDate = `${month}월${day}일 ${hour}시${minute}분`;
+          let message = document.querySelector(".input-box").value;
+          let tag = `<div class="admin-msg-box">
+                            <div class="admin-msg">
+                              <p>${message}</p>
+                            </div>
+                            <p class="admin-msg-time">${formattedDate}</p>
+                          </div>`;
+          $(".message-box").append(tag);
+          send(sessionId);
+          document.querySelector(".input-box").value = "";
+
+          //왼쪽 채팅목록 동기화
+          if($(`#${sessionId}`) != null){
+            $(`#${sessionId}`).remove();
+            let today = new Date();
+            let time = today.toLocaleString();
+            let tag = `<div id="` + sessionId + `"class="client" onclick="showChatting(this)">
+                      <div class="client-left">
+                        <i class="fa-solid fa-user client-img" style="color: #000000;"></i>
+                      </div>
+                      <div class="client-middle">
+                        <h3>${name}</h3>
+                        <h4><span class="client-list-box-alert-msg2">(전송됨)</span> ${message}</h4>
+                      </div>
+                      <div class="client-right">
+                        <p>${time}</p>
+                      </div>
+                  </div>`;
+            $('.client-list-box').prepend(tag);
+          }
+        }
+      }
+    });
+  }
+
+  let showChatting = (tag)=>{
+    let sessionId = tag.id;
+    document.querySelector('.message-box-initial').style.display = "none";
+    document.querySelector(".message-box").style.display = "flex";
+    document.querySelector(".input-box").style.display = "block";
+    document.querySelector(".message-box").innerHTML = "";
+    $.ajax({
+      type : 'POST',
+      url : '/admin/chatting/list',
+      contentType : 'application/json',
+      data : JSON.stringify({
+        'sessionId': sessionId
+      }),
+      success : function(response){
+        // 유저 정보 미리보기 추가
+        if(response[0].senderId == 0){
+          let tag = `<div class="user-info" data-session-id="${sessionId}" data-name="비회원">
+                        <h2>비회원</h2>
+                      </div>`;
+          $(".message-box").prepend(tag);
+        } else{
+          let tag = `<div class="user-info" data-session-id="${sessionId}" data-name="${response[0].user.name}">
+                        <p><b>이름: </b>${response[0].user.name}</p>
+                        <p><b>이메일: </b>${response[0].user.email}</p>
+                        <p><b>연락처: </b>${response[0].user.phoneNumber}</p>
+                        <p><b>가입일: </b>${response[0].user.createdAt}</p>
+                    </div>`;
+          $(".message-box").prepend(tag);
+        }
+
+        // 채팅 내역 추가
+        $(response).each(function(index, chatting){
+          let date = new Date(chatting.createdAt);
+          let month = date.getMonth() + 1;
+          let day = date.getDate();
+          let hour = date.getHours();
+          let minute = date.getMinutes();
+          let formattedDate = `${month}월${day}일 ${hour}시${minute}분`;
+          // Client인지 Admin인지 구분하여 채팅태그 추가
+          if(chatting.senderId != 53){
+            let tag = `<div class="client-msg-box">
+                          <div class="client-msg">
+                            <p>${chatting.message}</p>
+                          </div>
+                          <p class="client-msg-time">${formattedDate}</p>
+                        </div>`;
+            $(".message-box").append(tag);
+          } else{
+            let tag = `<div class="admin-msg-box">
+                          <div class="admin-msg">
+                            <p>${chatting.message}</p>
+                          </div>
+                          <p class="admin-msg-time">${formattedDate}</p>
+                        </div>`;
+            $(".message-box").append(tag);
+          }
+          // Client 소켓 종료 감지 DB 삭제여부
+          if ((chatting.message).includes('CODE:SC9999')){
+            let tag = `<div class="close-msg-box">
+                          <div class="close-msg">
+                              <p><b>[${sessionId}]</b> 세션은 소멸되었습니다.</p>
+                              <p>해당 대화를 백업할까요?</p>
+                          </div>
+                          <div class="backup">
+                              <button id="backup-btn" onclick="chattingBackup('${sessionId}')">백업</button>
+                              <button id="delete-btn" onclick="chattingDelete('${sessionId}')">삭제</button>
+                          </div>
+                      </div>`;
+            $(".message-box").append(tag);
+          }
+        });
+      }
+    });
+  }
+
+  let chattingBackup = (sessionId) =>{
+    alert("DB에 정상적으로 백업되었습니다.");
+  };
+
+  let chattingDelete = (sessionId) =>{
+    if (!confirm("정말 삭제하시겠습니까?")){
+      return false;
+    }
+    $.ajax({
+      type : 'POST',
+      url : '/admin/chatting/delete',
+      contentType : 'application/json',
+      data : JSON.stringify({
+        'sessionId' : sessionId
+      }),
+      success : function(response){
+        if(response == "success"){
+          alert("삭제되었습니다.")
+          document.querySelector(".message-box").innerHTML = "";
+          document.querySelector('.message-box-initial').style.display = "flex";
+          document.querySelector(".message-box").style.display = "none";
+          document.querySelector(".input-box").style.display = "none";
+          $(`#${sessionId}`).remove();
+        }
+      }
+    });
+  }
+
+  let closeChatting = ()=>{
+    alert("상담을 종료합니다.");
+    location.reload();
+  }
+  //스크롤 자동 내리기
+  let scrollDown = () =>{
+    let scrollDiv = document.querySelector(".chat-bot-modal-chatting");
+    scrollDiv.scrollTop = scrollDiv.scrollHeight;
+  }
+
+  // 새로고침 제어
+  function NotReload(){
+    if( (event.ctrlKey == true && (event.keyCode == 78 || event.keyCode == 82)) || (event.keyCode == 116) ) {
+      event.keyCode = 0;
+      event.cancelBubble = true;
+      event.returnValue = false;
+    }
+  }
+  document.onkeydown = NotReload;
+</script>
+</html>

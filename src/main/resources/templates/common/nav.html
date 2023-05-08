@@ -195,31 +195,26 @@
             <div class="chat-bot-modal-chatting-receiverMsg">
               <th:block th:if="${#authentication.principal == 'anonymousUser'}">
                 <p>안녕하세요!</p>
-                <p class="userId" th:data-id="0">아직 러노베이션 가족이 아니네요. 😢</p>
+                <p class="userId" th:data-id="0" th:data-name="'비회원'">아직 러노베이션 가족이 아니네요. 😢</p>
                 <p>지금 바로 <b>회원가입</b>을 하신 후에</p>
                 <p>러노베이션의 <b>다양한 혜택과 소식</b>을</p>
                 <p>받아보세요. 🤩</p>
-                <button class="chat-bot-modal-chatting-btn" th:onclick="location.href='/auth/joinForm'">바로 회원가입 하기</button>
+                <button class="chat-bot-modal-chatting-btn" th:onclick="window.open('/auth/joinForm')">바로 회원가입 하기</button>
               </th:block>
               <th:block th:if="${#authentication.principal != 'anonymousUser'}">
-                <p class="userId" th:utext="'안녕하세요 ! <b>' + ${#authentication.principal.name} + '</b>님'" th:data-id="${#authentication.principal.id}"></p>
+                <p class="userId" th:utext="'안녕하세요 ! <b>' + ${#authentication.principal.name} + '</b>님'" th:data-id="${#authentication.principal.id}" th:data-name="${#authentication.principal.name}"></p>
                 <p><b>🎁 이달의 이벤트 소식이 도착했어요.</b></p>
-                <button class="chat-bot-modal-chatting-btn" th:onclick="location.href='/notice/list'">소식 보러 가기</button>
+                <button class="chat-bot-modal-chatting-btn" th:onclick="window.open('/notice/list')">소식 보러 가기</button>
               </th:block>
               <p><b>[챗봇 이용 방법]</b></p>
               <p>- 원하는 서비스를 직접 요청해보세요!</p>
               <p>- 예를 들어, 상담원 연결이 필요하면 <b>"상담받고 싶어"</b> 또는 <b>"상담원을 연결해줘"</b>라 말해보세요!</p>
             </div>
           </div>
-          <div class="chat-bot-modal-chatting-receive">
-            <img class="chat-bot-modal-chatting-receiverImg" th:src="@{/common/image/logo.png}" alt="">
-            <div class="chat-bot-modal-chatting-receiverMsg">
-              <p>지워야함</p>
-            </div>
-          </div>
         </div>
         <div class="chat-bot-modal-chatting-input">
-          <textarea name="" id="chatbotMsg"></textarea>
+<!--          <textarea name="" id="chatbotMsg"></textarea>-->
+          <input type="text" name="" id="chatbotMsg">
           <i class="fa-regular fa-face-smile chat-bot-modal-chatting-emojiIcon" style="color: #9f9e9e;"></i>
           <i class="fa-solid fa-paper-plane chat-bot-modal-chatting-sendIcon" style="color: #0090F0;"></i>
         </div>

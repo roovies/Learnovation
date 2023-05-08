@@ -1,6 +1,6 @@
 package com.kh.learnovation.conf;
 
-import com.kh.learnovation.domain.chatbot.conf.ChatHandler;
+import com.kh.learnovation.domain.chatbot.handler.ChatbotHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -11,10 +11,10 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @RequiredArgsConstructor
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
-    private final ChatHandler chatHandler;
+    private final ChatbotHandler chatbotHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatHandler, "ws/chat").setAllowedOrigins("*");
+        registry.addHandler(chatbotHandler, "ws/chatbot").setAllowedOrigins("*");
     }
 }
