@@ -5,37 +5,65 @@
     <title>질문 목록</title>
     <link rel="stylesheet" th:href="@{/css/question/list.css}">
     <link rel="stylesheet" href="../../static/css/question/list.css">
+
+<!--    네비게이션 추가 코드-->
+    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/nav.css">
+
 </head>
 <body>
+    <!--    네비게이션 추가 코드-->
+    <nav th:replace="~{common/nav.html :: nav}"></nav>
+
     <div id="container">
-      <table id="question-list">
-        <thead>
-            <tr>
-                <th>글 번호</th>
-                <th>작성자</th>
-                <th>제목</th>
-                <th>조회수</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="question : ${question}">
-                <td th:text="${question.id}"></td>
-                <td th:text="${question.userId}"></td>
-                <td>
-                   <a th:href="@{'/question/' + ${question.id}}">
-                       <span th:text="${question.title}"></span>
-                   </a>
-                </td>
-                <td th:text="${question.viewCount}"></td>
-            </tr>
-        </tbody>
-      </table>
+
+        <div id="maintitle">
+            <p>질문 게시판</p>
+        </div>
+<!--        검색 영역-->
+        <div id="search-area">
+            <form action="/question/search" method="get">
+                <input type="text" id="course-search" name="keyword" placeholder="질문 제목 검색">
+                <button type="submit" id="course-search-btn" style="height: 36px;">검색</button>
+            </form>
+        </div>
+
+        <table id="question-list" class="type10">
+            <thead>
+                <tr>
+                    <th>글 번호</th>
+                    <th>작성자</th>
+                    <th>제목</th>
+                    <th>조회수</th>
+                    <th>작성날짜</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="question" th:each="question : ${question}">
+                    <td th:text="${question.id}"></td>
+                    <td th:text="${question.userId}"></td>
+                    <td>
+                       <a id="questionTitle" th:href="@{'/question/' + ${question.id}}">
+                           <span th:text="${question.title}"></span>
+                       </a>
+                    </td>
+                    <td th:text="${question.viewCount}"></td>
+                    <td th:text="${#dates.format(question.createdAt, 'yyyy-MM-dd')}"></td>
+                </tr>
+            </tbody>
+        </table>
         <div id="page-area">
             <span th:each="pageNum : ${pageList}" th:inline="text">
                 <a th:href="@{'/question/list?page=' + ${pageNum}}">[[${pageNum}]]</a>
             </span>
         </div>
-        <a href="/question/registView">글쓰기</a>
-    </div>
+            <a href="/question/registView" id="question-regist">글쓰기</a>
+        </div>
+
+        <!--    네비게이션 추가 코드-->
+        <script src="/common/js/nav.js"></script>
 </body>
 </html>

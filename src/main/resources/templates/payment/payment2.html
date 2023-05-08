@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>결제 테스트</title>
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <!-- iamport.payment.js -->
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+</head>
+<body>
+
+
+    <div>
+        <input type="hidden" name="payNo" value="1">
+        <th:block th:if="${#authentication.principal != 'anonymousUser'}">
+            회원 고유 번호 : <input type="text" name="buyerId" th:value="${#authentication.principal.id}"> <br>
+            회원 이메일 : <input type="text" name="buyerEmail" th:value="${#authentication.principal.username}"> <br>
+            회원 이름 : <input type="text" name="buyerName" th:value="${#authentication.principal.name}"> <br>
+            회원 전화번호 : <input type="text" name="buyerPhone" th:value="${#authentication.principal.phoneNumber}"> <br>
+        </th:block>
+        강의 고유 번호 : <input type="text" name="courseId" th:value="${course.id}" > <br>
+        강의 제목 : <input type="text" name="courseName" th:value="${course.title}"> <br>
+        강의 가격 : <input type="text" name="courseAmount" th:value="${course.price}"> <br>
+    </div>
+
+    <button type="button" id="iamportPayment">결제테스트</button>
+
+  <script>
+
+      const payNo = document.querySelector("[name=payNo]").value;
+      const buyerId = document.querySelector("[name=buyerId]").value;
+      const courseId = document.querySelector("[name=courseId]").value;
+
+      const courseName = document.querySelector("[name=courseName]").value;
+      const courseAmount = document.querySelector("[name=courseAmount]").value;
+      const buyerEmail = document.querySelector("[name=buyerEmail]").value;
+      const buyerName = document.querySelector("[name=buyerName]").value;
+      const buyerPhone = document.querySelector("[name=buyerPhone]").value;
+
+
+    $(document).ready(function() {
+      $("#iamportPayment").click(function(){
+        payment();
+      });
+    })
+
+    function payment() {
+      IMP.init('imp11062418');
+      IMP.request_pay({
+        pg: "kakaopay.TC0ONETIME",
+        pay_method: "card",
+        merchant_uid: 'merchant_' + new Date().getTime(),
+        name: courseName,
+        amount: courseAmount,
+        buyer_email: buyerEmail,
+        buyer_name: buyerName,
+        buyer_tel: buyerPhone
+      }, function(rsp) {
+          console.log(rsp);
+          // 결제 검증
+          $.ajax({
+            type: "POST",
+            url : "/verifyIamport/" + rsp.imp_uid
+          }).done(function(data) {
+            console.log(data);
+            // rsp.paid_amount와 result.response.amount(서버 검증) 비교 후 로직 실행
+            if(rsp.paid_amount == data.response.amount) {
+                alert("결제 및 검증완료");
+                $.ajax({
+                    type : "POST",
+                    url : "/payment/pay",
+                    contentType : 'application/json',
+                    data : JSON.stringify({
+                        "courseId" : courseId,
+                        "buyerId" : buyerId
+                    }),
+                    success : function (response) {
+                        if(response === "true") {
+                            location.href="";
+                        }
+                        else {
+                            alert("서버측 오류가 발생했습니다.");
+                        }
+                    }
+                })
+            }
+            else {
+                alert("인증에 실패하였습니다. 에러 내용 : " + rsp.error_msg);
+            }
+          });
+      });
+    }
+  </script>
+</body>
+</html>

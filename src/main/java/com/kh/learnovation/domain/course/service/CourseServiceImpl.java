@@ -518,6 +518,36 @@ public class CourseServiceImpl implements CourseService {
         return pageList;
     }
 
+    /* 강의 제목으로 검색 */
+    @Override
+    @Transactional
+    public List<CourseDetailDTO> courseSearch(String keyword) {
+        List<Course> courses = courseRepository.findByTitleContaining(keyword);
+        List<CourseDetailDTO> courseDetailDTOList = new ArrayList<>();
+
+        if(courses.isEmpty()) return courseDetailDTOList;
+
+        for(Course course : courses) {
+            courseDetailDTOList.add(this.convertEntityToDto(course));
+        }
+        return courseDetailDTOList;
+    }
+
+    private CourseDetailDTO convertEntityToDto(Course course) {
+        return CourseDetailDTO.builder()
+                .id(course.getId())
+                .category(course.getCourseCategory().getName())
+                .level(course.getLevel())
+                .title(course.getTitle())
+                .nickname(course.getUser().getNickname())
+                .price(course.getPrice())
+                .content(course.getContent())
+                .savedPath(course.getCourseImage().getSavedPath())
+                .savedImageName(course.getCourseImage().getSavedImageName())
+                .build();
+    }
+
+
     public Long getCourseCount() {
         return courseRepository.count();
     }

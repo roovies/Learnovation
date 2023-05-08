@@ -95,7 +95,7 @@ public class UserController {
         return "admin/userList";
     }
 
-    // 회원 상세정보 조회
+    // 회원 상세정보 조회(관리자)
     @RequestMapping(value = "/admin/detail/{no}", method = RequestMethod.GET)
     public String detail(@PathVariable("no") Long id, Model model) {
         UserDTO userDTO = userService.getPost(id);

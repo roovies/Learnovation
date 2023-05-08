@@ -71,4 +71,6 @@ public interface CourseService {
     /** 리스트 페이징 */
     Integer[] getPageList(Integer pageNum);
 
+    /** 강의 제목으로 검색 */
+    List<CourseDetailDTO> courseSearch(String keyword);
 }

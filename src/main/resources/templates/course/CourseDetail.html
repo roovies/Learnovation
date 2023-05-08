@@ -136,7 +136,9 @@
                 <li th:text="'▪ 강사: ' + ${detail.nickname}"></li>
             </ul>
             <h2 id="price" th:text="${'💸 ' + #numbers.formatInteger(detail.price, 3, 'COMMA') + '원'}"></h2>
-            <button class="right-apply-btn">수강신청</button>
+            <button class="right-apply-btn"
+                    th:id="${detail.id}"
+                    th:onclick="gopay(this.getAttribute('id'))">수강신청</button>
             <button class="right-cart-btn">장바구니 추가</button>
             <a href="#" class="right-share"><i class="fa-solid fa-share-nodes"></i> 공유하기</a>
         </div>
@@ -288,6 +290,10 @@
             }
         });
     });
+
+    function gopay(id) {
+        location.href = "/payment/paymentView/" + id;
+    }
 </script>
 <script src="/common/js/nav.js"></script>
 </html>

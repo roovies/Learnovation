@@ -11,20 +11,50 @@ p {
     width: 60%;
     margin: 0 auto;
 }
+#title-area #title {
+    border: 0;
+    font-size: 100pxc;
+    width: auto;
+}
 #title-area #created-at{
-    width: 23%;
+    border: 0;
+    width: auto;
 }
 #title-area #view-count {
-    width: 8%;
+    border: 0;
+    width: auto;
+}
+
+#question-area {
+    border: 1px solid black;
+}
+
+#content-area {
+    width: 60%;
+    height: 1000px;
+    /*border: 0;*/
+    margin: 0 auto;
 }
 
 #content-area p{
-    border: 0;
     margin: 0 auto;
-    margin-left: 265px;
-    width: 59.8%;
+    margin-top: 20px;
 }
 
-#update-btn, #golist-btn {
+#btn-area {
+    float: right;
+}
+
+#delete-form {
+    width: auto;
+}
+
+.delete-btn, .update-btn, .golist-btn {
     cursor: pointer;
+    width: auto;
+    height: 40px;
+    border-radius: 10px ;
+    color: white;
+    border-color: rgb(88, 193, 121);
+    background-color: rgb(88, 193, 121);
 }

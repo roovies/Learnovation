@@ -25,8 +25,8 @@
     width: 1000px;
     font-size: 40px;
     text-align: center;
-    border-bottom: 1px solid;
-    border-bottom-color: black;
+    /*border-bottom: 1px solid;*/
+    /*border-bottom-color: black;*/
     margin: 0 auto;
     margin-bottom: 20px;
 }
@@ -43,13 +43,23 @@
     width: 80px;
     height: 40px;
     border-radius: 10px ;
-    border-color: yellowgreen;
-    background-color: gold;
+    color: white;
+    border-color: rgb(88, 193, 121);
+    background-color: rgb(88, 193, 121);
 }
 #golist {
     width: 80px;
     height: 40px;
     border-radius: 10px ;
-    border-color: yellowgreen;
-    background-color: gold;
+    color: white;
+    border-color: rgb(88, 193, 121);
+    background-color: rgb(88, 193, 121);
+}
+.backDetail {
+    width: 80px;
+    height: 40px;
+    border-radius: 10px ;
+    color: white;
+    border-color: rgb(88, 193, 121);
+    background-color: rgb(88, 193, 121);
 }

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+</head>
+<body>
+  <button type="button" onclick="payment()">결제 테스트!</button>
+  <div id="info-area">
+      <input type="hidden" name="course-name" class="course-name" value="강의1">
+      <input type="hidden" name="course-price" class="course-price" value="100">
+      <input type="hidden" name="email" class="buyer_email" value="khuser01@gmail.com">
+      <input type="hidden" name="name" class="buyer_name" value="일용자">
+      <input type="hidden" name="phone" class="buyer_phone" value="01012345678">
+      <input type="hidden" name="address" class="buyer_address" value="도쿄도 치요다구">
+  </div>
+  <script>
+    function payment(){
+
+        const productName = document.querySelector(".course-name").value;
+        const totalPrice = document.querySelector(".course-price").value;
+        const buyerEmail = document.querySelector(".buyer_email").value;
+        const buyerName = document.querySelector(".buyer_name").value;
+        const buyerTel = document.querySelector(".buyer_phone").value;
+        const buyerAddr = document.querySelector(".buyer_address").value;
+
+        console.log(totalPrice);
+
+      //가맹점 식별코드
+      IMP.init('imp11062418');
+      IMP.request_pay({
+        pg : 'kakaopay.TC0ONETIME',
+        pay_method : 'card',
+        merchant_uid : 'merchant_' + new Date().getTime(),
+        name : productName,
+        amount : totalPrice,
+        buyer_email : buyerEmail,
+        buyer_name : buyerName,
+        buyer_tel : buyerTel,
+        buyer_addr : buyerAddr,
+        // buyer_postcode : '123-456'
+      }, function(rsp) {
+          console.log(rsp);
+
+          $.ajax({
+              type: 'POST',
+              url: '/payment/'+rsp.imp_uid,
+              beforeSend: function(xhr){
+                  xhr.setRequestHeader(header, token);
+              }
+
+          }).done(function(result){
+
+              if(rsp.paid_amount === result.response.amount){
+                  alert("결제가 완료되었습니다.");
+                  $.ajax({
+                      type:'POST',
+                      url:'/lecture/payment',
+                      beforeSend: function(xhr){
+                          xhr.setRequestHeader(header, token);
+                      }
+                  }).done(function() {
+                      window.location.reload();
+                  }).fail(function(error){
+                      alert(JSON.stringify(error));
+                  })
+              } else{
+                  alert("결제에 실패했습니다."+"에러코드 : "+rsp.error_code+"에러 메시지 : "+rsp.error_message);
+
+              }
+          });
+      });
+    }
+  </script>
+</body>
+</html>

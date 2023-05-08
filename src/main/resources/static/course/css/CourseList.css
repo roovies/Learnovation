@@ -1,0 +1,178 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+#container {
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 20px;
+    /*background-color: gold;*/
+}
+
+
+#subject{
+    font-size: 30px;
+    font-weight: bold;
+}
+#subject:link {
+    color: black;
+    text-decoration: none;
+}
+#subject:visited {
+    color: black;
+    text-decoration: none;
+}
+
+
+
+#search-area {
+    /*margin-left: 879px;*/
+    float: right;
+}
+#course-search {
+    border: 1px solid gray;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+    /*margin-top: 5px;*/
+    width: 222px;
+    height: 36px;
+    font-size: 15px;
+    outline: none;
+}
+#course-search-btn {
+    border: 1px solid gray;
+    width: 50px;
+    height: 36px;
+    border-bottom-right-radius: 7px;
+    border-top-right-radius: 7px;
+    margin-left: -4px;
+    /*margin-bottom: 3px;*/
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    background-color: rgb(88, 193, 121);
+}
+
+#main-area {
+    /*background-color: pink;*/
+}
+
+#tag-nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 10px;
+}
+
+.nav-btn {
+    width: auto;
+    height: 36px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    background-color: white;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+hr.hr-1 {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+#course-difficulty {
+    margin: 0 auto;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+#diff-description {
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-evenly;
+}
+.diff-des {
+    text-align: center;
+    line-height: 29px;
+    width: 123px;
+    height: 29px;
+    font-size: 14px;
+    color: white;
+    background-color: black;
+    border-radius: 5px;
+}
+
+.diff-btn {
+    width: auto;
+    height: 36px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 25px;
+    background-color: white;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.course-area {
+    margin-top: 20px;
+}
+
+.course-item {
+    width: 218px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    margin: 0 auto;
+}
+.course-item:hover {
+    opacity: .5;
+    cursor: pointer;
+}
+
+.course-title {
+    font-weight: bold;
+}
+.course-teacher {
+    color: gray;
+}
+.rating {
+    font-size: 20px;
+}
+.course-price {
+    color: blue;
+    font-weight: bold;
+}
+.course-content {
+    margin-top: 10px;
+}
+.course-img {
+    height: 142px;
+}
+
+.course-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 20px;
+}
+.course-area {
+    /*background-color: #eee;*/
+    padding: 20px;
+}
+
+#page-area {
+    margin-top: 10px;
+    text-align: center;
+}
+#page-area a{
+    text-decoration: none;
+}

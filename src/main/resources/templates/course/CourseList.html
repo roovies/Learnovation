@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>강의 리스트</title>
+    <link rel="stylesheet" href="../../static/course/css/CourseList.css">
+    <link rel="stylesheet" href="/course/css/CourseList.css">
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    <!--    네비게이션 추가 코드-->
+    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/nav.css">
+</head>
+<body>
+    <!--    네비게이션 추가 코드-->
+    <nav th:replace="~{common/nav.html :: nav}"></nav>
+
+    <div id="container">
+        <div id="top-area">
+
+<!--            타이틀-->
+            <div id="title">
+                <a id="subject" href="/course/list">전체 강의</a>
+            </div>
+<!--            검색 영역-->
+            <div id="search-area">
+                <form action="/course/search" method="get">
+                    <input type="text" id="course-search" name="keyword" placeholder="  강의 제목 검색">
+                    <button type="submit" id="course-search-btn">검색</button>
+                </form>
+            </div>
+
+        </div>
+        <div id="main-area">
+            <div id="category">
+                <div id="tag-nav">
+                    <button type="button" class="nav-btn" onclick="location.href='#';">프론트엔드</button>
+                    <button type="button" class="nav-btn" onclick="location.href='#';">백엔드</button>
+                    <button type="button" class="nav-btn" onclick="location.href='#';">보안</button>
+                    <button type="button" class="nav-btn" onclick="location.href='#';">네트워크</button>
+                </div>
+                <hr class="hr-1">
+                <div id="course-difficulty">
+                    <button type="button" class="diff-btn level1" onclick="location.href='#';">입문자용</button>
+                    <button type="button" class="diff-btn level2" onclick="location.href='#';">초급자용</button>
+                    <button type="button" class="diff-btn level3" onclick="location.href='#';">중급이상</button>
+                </div>
+                <div id="diff-description">
+                    <div class="diff-des level11">
+                        누구나 들을 수 있는
+                    </div>
+                    <div class="diff-des level22">
+                        선수 지식이 필요한
+                    </div>
+                    <div class="diff-des level33">
+                        전문성을 높이는
+                    </div>
+                </div>
+            </div>
+            <div class="course-container">
+                <div class="course-area" th:each="courses : ${courses}">
+                    <div class="course-item"
+                         th:id = "${courses.id}"
+                         th:onclick="coursedetail(this.getAttribute('id'))">
+                        <input type="hidden" name="id" th:value="${courses.id}">
+<!--                        <img src="../../static/course/image/330459-eng.png" class="course-img" alt="강의 섬네일">-->
+                        <img th:src="@{/course/upload/thumbnails/} + ${courses.savedPath} + @{/} + ${courses.savedImageName}" class="course-img" id="thumbnails" alt="강의 섬네일">
+                        <p class="course-title" th:utext="${courses.title}"></p>
+                        <br>
+                        <p class="course-teacher" th:utext="${courses.nickname}"></p>
+                        <p class="rating"></p>
+                        <p class="course-price" th:utext="${courses.price}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="page-area">
+            <span th:each="pageNum : ${pageList}" th:inline="text">
+                <a th:href="@{'/question/list?page=' + ${pageNum}}">[[${pageNum}]]</a>
+            </span>
+        </div>
+    </div>
+    <script type="text/javascript" th:inline="javascript">
+        $(window).load(function(){
+            $(function() {
+                $('div.level11').hide();
+                $('.level1').hover(function() {
+                    $('div.level11').show();
+                }, function() {
+                    $('div.level11').hide();
+                });
+            });
+            $(function() {
+                $('div.level22').hide();
+                $('.level2').hover(function() {
+                    $('div.level22').show();
+                }, function() {
+                    $('div.level22').hide();
+                });
+            });
+            $(function() {
+                $('div.level33').hide();
+                $('.level3').hover(function() {
+                    $('div.level33').show();
+                }, function() {
+                    $('div.level33').hide();
+                });
+            });
+        });
+
+        function coursedetail(id) {
+            location.href = "/course/" + id;
+        }
+    </script>
+
+    <!--    네비게이션 추가 코드-->
+    <script src="/common/js/nav.js"></script>
+</body>
+</html>
