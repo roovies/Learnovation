@@ -42,6 +42,7 @@
                   <div class="a-nav-community-modal-list">
                     <a href="#">질문 게시판</a>
                     <a href="/freeBoard/">자유 게시판</a>
+                    <a href="/matching/list">그룹 매칭</a>
                   </div>
                 </div>
               </div>
@@ -85,8 +86,8 @@
                       <div class="info-modal" id="infoModal">
                         <div class="user-diamond"></div>
                         <div class="modal-user-info">
-                      <span>
-                        <a class="modal-nickname" href="">닉네임님</a>
+                      <span th:if="${#authentication.principal != 'anonymousUser'}">
+                        <a class="modal-nickname" href="" th:text="${#authentication.principal.getNickname()}">닉네임님</a>
                         <a class="modal-alarm" href=""><i class="fa-solid fa-bell bell"></i></a>
                       </span>
                         </div>
@@ -151,6 +152,27 @@
                           <div class="modal-cart-btn">
                             <a href="">수강바구니에서 전체보기</a>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="group-Icon-box">
+                      <span id="asdas">
+                      <a href="" id="switchGroupModal">
+                        <i id="groupIcon" class="fa-solid fa-user-group fa-lg"></i>
+                      </a>
+                      </span>
+                      <div class="group-chat-diamond" id="groupChatDiamond"></div>
+                      <div class="group-chat-box" id="groupChatBox">
+                        <div class="group-create-box">
+                          <input type="text" id="groupName" th:data-id="${#authentication.principal.getId()}">
+                          <button id="groupCreateBtn">그룹생성</button>
+                        </div>
+                        <div id="groupChatList">
+
+                        </div>
+                        <div id="groupChatContent" class="group-chat-content">
+                          <div class="group-chat-subject"><span class="group-chat-title">title</span><div><button class="exit-group-btn"onclick="exitGroup(this)">나가기</button></div></div>
+                          <span class="group-chat-contents">contents</span>
                         </div>
                       </div>
                     </div>

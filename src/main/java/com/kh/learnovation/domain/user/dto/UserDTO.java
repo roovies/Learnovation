@@ -1,6 +1,7 @@
 package com.kh.learnovation.domain.user.dto;
 
 import com.kh.learnovation.domain.user.entity.User;
+import com.kh.learnovation.domain.user.model.RoleType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -34,6 +35,8 @@ public class UserDTO {
     private Timestamp deletedAt;
     private String oauth;
 
+    private RoleType role;
+
     public User toEntity() {
         User user = User.builder()
                 .id(id)
@@ -53,7 +56,7 @@ public class UserDTO {
     }
 
     @Builder
-    public UserDTO(Long id, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt, String oauth) {
+    public UserDTO(Long id, String email, String password, String name, String nickname, String phoneNumber, String profileImage, Timestamp createdAt, Timestamp updatedAt, String status, Timestamp deletedAt, String oauth, RoleType role) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -66,5 +69,6 @@ public class UserDTO {
         this.status = status;
         this.deletedAt = deletedAt;
         this.oauth = oauth;
+        this.role = role;
     }
 }

@@ -1,6 +1,7 @@
 package com.kh.learnovation.domain.notice.entity;
 
-import com.kh.learnovation.domain.admin.entity.Admin;
+
+import com.kh.learnovation.domain.user.entity.User;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +25,7 @@ public class Notice {
     private Long id;
     @ManyToOne
     @JoinColumn(name="admin_id")
-    private Admin admin;
+    private User user;
     @Column(name="title", nullable = false)
     private String title;
     @Column(name="content", nullable = false)
@@ -40,9 +41,9 @@ public class Notice {
     private String subject;
 
     @Builder
-    public Notice(long id, Admin admin, String title, String content, Timestamp createdAt, Timestamp updatedAt, int status, String subject){
+    public Notice(long id, User user, String title, String content, Timestamp createdAt, Timestamp updatedAt, int status, String subject){
         this.id = id;
-        this.admin = admin;
+        this.user = user;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
@@ -55,7 +56,7 @@ public class Notice {
     public String toString() {
         return "Notice{" +
                 "id=" + id +
-                ", admin=" + admin +
+                ", user=" + user +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", createdAt=" + createdAt +

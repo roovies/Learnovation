@@ -2,9 +2,13 @@ package com.kh.learnovation.domain.notice.controller;
 
 import com.google.gson.JsonObject;
 import com.kh.learnovation.domain.admin.entity.Admin;
+import com.kh.learnovation.domain.alarm.AlarmHandler;
 import com.kh.learnovation.domain.notice.dto.NoticeDTO;
 import com.kh.learnovation.domain.notice.entity.Notice;
 import com.kh.learnovation.domain.notice.service.NoticeServiceImpl;
+import com.kh.learnovation.domain.user.dto.UserDTO;
+import com.kh.learnovation.domain.user.entity.User;
+import com.kh.learnovation.domain.user.service.UserService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,17 +21,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -37,8 +41,24 @@ public class NoticeController {
     @Autowired
     NoticeServiceImpl nService;
 
+    @Autowired
+    AlarmHandler alarmHandler;
+
+    @Autowired
+    UserService userService;
+
     @GetMapping("/notice/write")
     public ModelAndView noticeWriteView(ModelAndView mv){
+        Optional<UserDTO> userDTO = userService.getCurrentUser();
+        if (userDTO.isPresent()){
+            if(!userDTO.get().getRole().toString().equals("ADMIN")){
+                mv.setViewName("common/error");
+                return mv;
+            }
+        }else{
+            mv.setViewName("common/error");
+            return mv;
+        }
         mv.addObject("random", UUID.randomUUID()).setViewName("notice/write");
         return mv;
     }
@@ -103,8 +123,8 @@ public class NoticeController {
         }
         System.out.println(sb);*/
         String subject = content.replaceAll("<[^>]*>?","");
-        Admin admin = Admin.builder().id(Long.parseLong(adminId)).build();
-        NoticeDTO noticeDTO = NoticeDTO.builder().title(title).content(content).admin(admin).status(0).subject(subject).createdAt(ts).build();
+        User user = User.builder().id(Long.parseLong(adminId)).build();
+        NoticeDTO noticeDTO = NoticeDTO.builder().title(title).content(content).user(user).status(0).subject(subject).createdAt(ts).build();
         long noticeNo = nService.insertNotice(noticeDTO).getId();
         mv.setViewName("redirect:/notice/detail?noticeNo=" + noticeNo);
         return mv;
@@ -149,6 +169,16 @@ public class NoticeController {
     // 로그인 한거 관리자인지 체크 해줘야 함
     @GetMapping("/notice/modify")
     public ModelAndView noticeModifyView(ModelAndView mv, @RequestParam("noticeNo") Long noticeNo){
+        Optional<UserDTO> userDTO = userService.getCurrentUser();
+        if (userDTO.isPresent()){
+            if(!userDTO.get().getRole().toString().equals("ADMIN")){
+                mv.setViewName("common/error");
+                return mv;
+            }
+        }else{
+            mv.setViewName("common/error");
+            return mv;
+        }
         NoticeDTO noticeDTO = nService.selectOneNotice(noticeNo);
         mv.addObject("notice", noticeDTO).addObject("random", UUID.randomUUID()).setViewName("notice/modify");
         return mv;
@@ -156,6 +186,16 @@ public class NoticeController {
 
     @GetMapping("/notice/delete")
     public ModelAndView noticeRemove(ModelAndView mv, @RequestParam("noticeNo") Long noticeNo){
+        Optional<UserDTO> userDTO = userService.getCurrentUser();
+        if (userDTO.isPresent()){
+            if(!userDTO.get().getRole().toString().equals("ADMIN")){
+                mv.setViewName("common/error");
+                return mv;
+            }
+        }else{
+            mv.setViewName("common/error");
+            return mv;
+        }
         NoticeDTO noticeDTO = nService.selectOneNotice(noticeNo);
         noticeDTO.setStatus(1);
         noticeDTO = nService.updateNotice(noticeDTO);
@@ -308,9 +348,9 @@ public class NoticeController {
         content = content.replaceAll(id, "notice/" + title + time);
         // 글 내용 검색용으로 만들기 위해 html 태그들 삭제
         String subject = content.replaceAll("<[^>]*>?", "");
-        Admin admin = Admin.builder().id(Long.parseLong(adminId)).build();
+        User user = User.builder().id(Long.parseLong(adminId)).build();
         NoticeDTO OriginalNoticeDTO = nService.selectOneNotice(Long.parseLong(noticeId));
-        NoticeDTO noticeDTO = NoticeDTO.builder().id(Long.parseLong(noticeId)).title(title).content(content).admin(admin).subject(subject).createdAt(OriginalNoticeDTO.getCreatedAt()).build();
+        NoticeDTO noticeDTO = NoticeDTO.builder().id(Long.parseLong(noticeId)).title(title).content(content).user(user).subject(subject).createdAt(OriginalNoticeDTO.getCreatedAt()).build();
         long noticeNo = nService.updateNotice(noticeDTO).getId();
         mv.setViewName("redirect:/notice/detail?noticeNo=" + noticeId);
         return mv;

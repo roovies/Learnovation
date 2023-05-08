@@ -23,7 +23,7 @@
         </div>
         <form action="/notice/write" method="post">
             <input type="hidden" th:value="${random}" id="id" name="id">
-            <input type="hidden" value="1" name="adminId">
+            <input type="hidden" th:value="${#authentication.principal.id}" name="adminId">
             <div class="notice-write-title-box">
                 제목 : <input type="text" name="title" class="notice-write-title" required>
             </div>

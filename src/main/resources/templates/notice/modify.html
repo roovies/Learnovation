@@ -24,7 +24,7 @@
       <form action="/notice/modify" method="post">
         <input type="hidden" th:value="${notice.getId()}" name="noticeId">
         <input type="hidden" th:value="${random}" id="id" name="id">
-        <input type="hidden" th:value="${notice.getAdminId()}" name="adminId">
+        <input type="hidden" th:value="${notice.getUserid()}" name="adminId">
         <input type="hidden" th:value="${notice.getCreatedAt()}" name="createTime">
         <input type="hidden" th:value="${notice.getTitle()}" name="originalTitle">
         <div class="notice-write-title-box">
