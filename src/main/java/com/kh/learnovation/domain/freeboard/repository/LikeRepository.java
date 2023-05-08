@@ -16,6 +16,4 @@ public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
     @Query("SELECT l FROM LikeEntity l WHERE l.user = :user AND l.freeBoardEntity = :freeBoardEntity")
     Optional<LikeEntity> findByUserAndFreeBoard(@Param("user") User user, @Param("freeBoardEntity") FreeBoardEntity freeBoardEntity);
 
-
-
 }

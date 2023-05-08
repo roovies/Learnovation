@@ -50,7 +50,7 @@ public class FreeBoardEntity {
     private User user;
 
 
-    @OneToMany(mappedBy = "freeBoard")
+    @OneToMany(mappedBy = "freeBoardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LikeEntity> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "freeBoardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)

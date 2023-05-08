@@ -36,15 +36,7 @@ public class CommentEntity {
     @JoinColumn(name = "freeBoard_id")
     private FreeBoardEntity freeBoardEntity;
 
-    //------------------------------------------ 여긴 실험 -----------------------------------
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "parent_id")
-//    private CommentEntity parentCommentEntity;
-//
-//
-//    @OneToMany(mappedBy = "parent", orphanRemoval = true)
-//    private List<CommentEntity> childrenCommentEntity = new ArrayList<>();
 
     @Builder
     public CommentEntity(long id, User user, String commentContents, FreeBoardEntity freeBoardEntity, Timestamp commentCreatedTime){

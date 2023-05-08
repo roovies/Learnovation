@@ -35,7 +35,7 @@ import java.util.UUID;
 public class FreeBoardController {
     private final FreeBoardService freeBoardService;
     private final CommentService commentService;
-    private final LikeServiceImpl likeService;
+    private final LikeService likeService;
     private final UserService userService;
 
 
@@ -171,14 +171,22 @@ public class FreeBoardController {
             해당 게시글의 조회수를 하나 올리고
             게시글 데이터를 가져와서 detail.html에 출력
          */
+        Integer result = null;
         freeBoardService.updateHits(id);
         Long countLike = freeBoardService.countLikesByFreeBoardId(id);
         FreeBoardDTO freeBoardDTO = freeBoardService.findById(id);
         /* 댓글 목록 가져오기 */
         List<CommentDTO> commentDTOList = commentService.findAll(id);
 //        int result = likeService.likeCheck(id);
+        Optional<UserDTO> optionalUserDTO =userService.getCurrentUser();
+        if(optionalUserDTO.isEmpty()) {
+            result = 0;
+        }else {
+            result = likeService.findLike(id,optionalUserDTO);
+        }
         freeBoardDTO.getEmail();
 //        model.addAttribute("result", result);
+        model.addAttribute("result", result);
         model.addAttribute("countLike", countLike);
         model.addAttribute("commentDTOList", commentDTOList);
         model.addAttribute("freeBoard", freeBoardDTO);

@@ -22,19 +22,18 @@ public class LikeController {
     private final UserService userService;
 
 
-    @PostMapping("/like")
+    @PostMapping("/check")
     public ResponseEntity check(@ModelAttribute LikeDTO likeDTO){
         Optional<UserDTO> optionalUserDTO = userService.getCurrentUser();
         if (optionalUserDTO.isPresent()){
             UserDTO userDTO =optionalUserDTO.get();
             likeDTO.setUserId(userDTO.getId());
-            int result =likeService.check(likeDTO);
-            if(result==0){
+            likeDTO =likeService.check(likeDTO);
+            if(likeDTO.getId()==null){
                 likeService.save(likeDTO);
                 return new ResponseEntity<>("liked", HttpStatus.OK);
             }else {
-                likeService.delete(likeDTO);
-                int count = 0;
+                likeService.delete(likeDTO.getId());
                 return new ResponseEntity<>("unliked", HttpStatus.OK);
             }
         }else {

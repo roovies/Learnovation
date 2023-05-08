@@ -4,6 +4,8 @@ import com.kh.learnovation.domain.freeboard.entity.LikeEntity;
 import com.kh.learnovation.domain.freeboard.entity.ReportEntity;
 import lombok.*;
 
+import java.sql.Timestamp;
+
 @Getter
 @Setter
 @ToString
@@ -13,16 +15,20 @@ public class ReportDTO {
 
     private Long id;
     private Long userId;
+    private String nickname;
     private Long freeBoardId;
     private String reportTitle;
     private String reportContent;
 
-    public static ReportDTO toReportDTO(ReportEntity reportEntity, Long freeBoardId) {
-        ReportDTO reportDTO = new ReportDTO();
-        reportDTO.setUserId(reportEntity.getUser().getId());
-        reportDTO.setUserId(reportEntity.getUser().getId());
-        reportDTO.setFreeBoardId(freeBoardId);
-        return reportDTO;
+
+    @Builder
+    public ReportDTO(long id, Long userId, String nickname, Long freeBoardId, String reportTitle, String reportContent) {
+        this.id = id;
+        this.userId = userId;
+        this.nickname = nickname;
+        this.freeBoardId = freeBoardId;
+        this.reportTitle = reportTitle;
+        this.reportContent = reportContent;
     }
 
 }

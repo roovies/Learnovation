@@ -31,8 +31,9 @@
 <!--        <span th:text="${#authentication.principal.username}"></span>-->
         </div>
         <div class="freeBoard-heart">
-            <img th:src="@{/freeBoard/image/black-heart-logo.png}" th:data-freeBoard-id="${freeBoard.id}" alt="" >
-            <span th:text="${countLike}" th:data-likes="${countLike}"></span>
+            <img th:if="${result == 1}" th:src="@{/freeBoard/img/red-heart-logo.png}" th:data-freeboardid="${freeBoard.id}" alt="" >
+            <img th:if="${result == 0}" th:src="@{/freeBoard/img/black-heart-logo.png}" th:data-freeboardid="${freeBoard.id}" alt="" >
+            <span class="countLike" th:text="${countLike}" th:data-likes="${countLike}"></span>
         </div>
         <div class="freeBoard-hit">
             <span th:text="${freeBoard.freeBoardHits}"></span>
@@ -143,33 +144,40 @@
 
   $(document).ready(function() {
       $('.freeBoard-heart').click(function() {
-          let freeBoardId = $(this).data('freeBoard-id'); // 클릭한 게시글의 아이디
-          let likes = parseInt($(this).data('likes')); // 현재 좋아요 개수
+          let freeBoardId = $(this).find('img').data('freeboardid'); // 클릭한 게시글의 아이디
+          let likes = parseInt($(this).find('span').data('likes')); // 현재 좋아요 개수
 
           $.ajax({
               type: "POST",
-              url: "/like",
+              url: "/like/check",
               data: {
                   freeBoardId: freeBoardId,
               },
               success: function(data) {
                   if (data === "liked") {
                       likes += 1; // 좋아요 개수 1 증가
-                      $(this).data('likes', likes); // 데이터 속성 업데이트
                       if (likes > 0) {
-                          $(this).children('img').attr('src', '/freeBoard/image/red-heart-logo.png'); // 빨간 하트 이미지로 변경
+                          $('.freeBoard-heart').children('img').attr('src', '/freeBoard/img/red-heart-logo.png'); // 빨간 하트 이미지로 변경
                       }
                   } else if (data === "unliked") {
                       likes -= 1; // 좋아요 개수 1 감소
-                      $(this).data('likes', likes); // 데이터 속성 업데이트
+                      $('.freeBoard-heart').children('img').attr('src', '/freeBoard/img/black-heart-logo.png'); // 검은 하트 이미지로 변경
                       if (likes === 0) {
-                          $(this).children('img').attr('src', '/freeBoard/image/black-heart-logo.png'); // 검은 하트 이미지로 변경
+                          $('.freeBoard-heart').children('img').attr('src', '/freeBoard/img/black-heart-logo.png'); // 검은 하트 이미지로 변경
                       }
+                  }else {
+                      alert("로그인 해라.");
                   }
+                  $('.countLike').data('likes', likes); // 데이터 속성 업데이트
+                  $('.countLike').text(likes); // 데이터 속성 업데이트
+              },error: function (err) {
+                  alert("Ajax Failed!!");
               }
+
           });
       });
   });
+
 
   // 현재 시간과의 차이를 계산하여 텍스트로 반환하는 함수
   function getTimeDiffString(datetime) {

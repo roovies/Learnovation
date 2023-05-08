@@ -2,12 +2,10 @@ package com.kh.learnovation.domain.freeboard.entity;
 
 
 import com.kh.learnovation.domain.user.entity.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -35,11 +33,15 @@ public class ReportEntity {
     @Column(length = 500)
     private String reportContents;
 
-
-    public static ReportEntity toSaveEntity(User userEntity, FreeBoardEntity freeBoardEntity) {
-        ReportEntity reportEntity = new ReportEntity();
-        reportEntity.setUser(userEntity);
-        reportEntity.setFreeBoardEntity(freeBoardEntity);
-        return reportEntity;
+    @Builder
+    public ReportEntity(long id, User user, String reportContents, String reportTitle, FreeBoardEntity freeBoardEntity){
+        this.id = id;
+        this.user = user;
+        this.reportContents = reportContents;
+        this.freeBoardEntity = freeBoardEntity;
+        this.reportTitle = reportTitle;
     }
+
+
+
 }
