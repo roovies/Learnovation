@@ -25,9 +25,16 @@ public interface UserService {
     User 회원찾기(String email);
 
     void 회원가입(User user);
+
     void 회원수정(User user);
 
-    /** user이메일로 user Entity 가져오기 */
+
+    /**
+     * user이메일로 user Entity 가져오기
+     */
     Optional<User> getCurrentUser();
 
+    UserDTO findId(String name, String phoneNumber);
+
+//    UserDTO findPw(String email, String name, String phoneNumber);
 }

@@ -43,8 +43,8 @@ let index = {
 			email: $("#email").val(),
 			password: $("#password").val(),
 			name: $("#name").val(),
-			nickname: $("#nickname").val(),
-			phoneNumber: $("#phone_number").val()
+			nickname: $("#3").val(),
+			phoneNumber: $("#phoneNumber").val()
 		};
 		
 		$.ajax({

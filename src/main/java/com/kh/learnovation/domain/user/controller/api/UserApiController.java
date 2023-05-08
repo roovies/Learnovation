@@ -22,10 +22,7 @@ public class UserApiController {
 	private AuthenticationManager authenticationManager;
 	
 	@PostMapping("/auth/joinProc")
-	public ResponseDto<Integer> save(@RequestBody User user/*,
-									 @RequestParam("phoneNumber1") String one,
-									 @RequestParam("phoneNumber2") String two,
-									 @RequestParam("phoneNumber3") String three*/) { // username, password, email
+	public ResponseDto<Integer> save(@RequestBody User user) { // username, password, email
 		System.out.println("UserApiController : save 호출됨");
 		userService.회원가입(user);
 		System.out.println(user);

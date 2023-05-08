@@ -95,6 +95,31 @@
         location.href = '/';
     }
     /*]]>*/
+
+
+
 </script>
+<script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        var email = document.querySelector('input[name="email"]').value;
+        var password = document.querySelector('input[name="password"]').value;
+
+        if (!email || !password) {
+            event.preventDefault(); // 폼의 기본 동작인 페이지 새로고침을 방지합니다.
+            alert('이메일과 비밀번호를 입력해주세요.');
+        }
+    });
+</script>
+<script th:inline="javascript" th:if="${errorMsg != null}">
+    /*<![CDATA[*/
+    window.onload = function () {
+        var error = [[${errorMsg}]];
+        if (error != null) {
+            alert(error);
+        }
+    }
+    /*]]>*/
+</script>
+
 </body>
 </html>
