@@ -5,30 +5,53 @@
     <title>질문 상세 조회</title>
     <link rel="stylesheet" th:href="@{/css/question/detail.css}">
     <link rel="stylesheet" href="../../static/css/question/detail.css">
+
+    <!--    네비게이션 추가 코드-->
+    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/nav.css">
+
 </head>
 <body>
+<!--    네비게이션 추가 코드-->
+<nav th:replace="~{common/nav.html :: nav}"></nav>
+
     <div id="container">
         <div id="title-area">
             <br>
-            <p type="text" id="title" name="title" th:text="${question.title}" readonly></p> <br>
-            <p type="text" id="created-at" name="createdAt" th:text="${#dates.format(question.createdAt, 'yyyy-MM-dd HH:mm:ss')}" readonly></p>
-            <p type="text" id="view-count" name="viewCount" th:text="${question.viewCount}" readonly></p>
+            제목 : <p type="text" id="title" name="title" th:text="${question.title}" readonly>제목입니다.</p> <br>
+            작성날짜 : <p type="text" id="created-at" name="createdAt" th:text="${#dates.format(question.createdAt, 'yyyy-MM-dd HH:mm:ss')}" readonly>2023-05-08</p>
+            조회수 : <p type="text" id="view-count" name="viewCount" th:text="${question.viewCount}" readonly>123</p>
         </div>
-        <br><br>
-        <div id="content-area" th:utext="${question.content}"></div>
+        <br>
+
+<!--        질문 내용-->
+        <div id="question-area">
+            <div id="content-area" th:utext="${question.content}">내용입니다.</div>
+        </div>
+
+<!--        수정 삭제 목록으로 버튼-->
         <div id="btn-area">
             <form id="delete-form" th:action="@{'/question/delete/' +${question.id}}" method="post">
                 <input type="hidden" name="_method" value="delete" />
-                <button id="delete-btn">게시글 삭제하기</button>
+                <button class="delete-btn">게시글 삭제하기</button>
             </form>
-            <a id="update-btn">게시글 수정하기</a> <br>
-            <a id="golist-btn" onclick="golist();">질문 목록으로 돌아가기</a>
+            <button type="button" class="update-btn" th:id="${question.id}" th:onclick="gomodify(this.getAttribute('id'))">게시글 수정하기</button>
+            <button type="button" class="golist-btn" th:onclick="golist()">질문 목록으로 돌아가기</button>
         </div>
     </div>
     <script>
         function golist() {
             location.href = "/question/list";
         }
+        function gomodify(id) {
+            location.href = "/question/updateView/" + id;
+        }
     </script>
+
+<!--    네비게이션 추가 코드-->
+<script src="/common/js/nav.js"></script>
 </body>
 </html>

@@ -2,9 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>질문 등록 페이지</title>
-    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <title>질문 등록</title>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/question/register.css}">
+
+    <!--    네비게이션 추가 코드-->
+    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/nav.css">
 
     <!-- include libraries(jQuery, bootstrap) -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
@@ -16,22 +23,26 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            //여기 아래 부분
-            $('#summernote').summernote({
-                width: 1000,
-                height: 300,                 // 에디터 높이
-                minHeight: null,             // 최소 높이
-                maxHeight: null,             // 최대 높이
-                focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
-                lang: "ko-KR",					// 한글 설정
-                placeholder: '내용을 입력해주세요.', //placeholder 설정
-            });
-        });
+    $(document).ready(function() {
+    //여기 아래 부분
+    $('#summernote').summernote({
+    width: 1000,
+    height: 300,                 // 에디터 높이
+    minHeight: null,             // 최소 높이
+    maxHeight: null,             // 최대 높이
+    focus: true,                  // 에디터 로딩후 포커스를 맞출지 여부
+    lang: "ko-KR",					// 한글 설정
+    placeholder: '내용을 입력해주세요.', //placeholder 설정
+    });
+    });
     </script>
+    <link rel="stylesheet" href="../../static/css/question/register.css">
 
 </head>
 <body>
+<!--    네비게이션 추가 코드-->
+<nav th:replace="~{common/nav.html :: nav}"></nav>
+
 <div id="container">
     <div id="maintitle">
         <p>질문 게시글 작성</p>
@@ -46,22 +57,25 @@
         <button type="button" id="golist" onclick="location.href = '/question/list'">리스트로</button>
     </form>
 </div>
-<script>
-    function uploadSummernoteImageFile(file, editor) {
-        data = new FormData();
-        data.append("file", file);
-        $.ajax({
-            data : data,
-            type : "POST",
-            url : "/uploadSummernoteImageFile",
-            contentType : false,
-            processData : false,
-            success : function(data) {
-                //항상 업로드된 파일의 url이 있어야 한다.
-                $(editor).summernote('insertImage', data.url);
-            }
-        });
-    }
-</script>
+<!--<script>-->
+<!--    function uploadSummernoteImageFile(file, editor) {-->
+<!--        data = new FormData();-->
+<!--        data.append("file", file);-->
+<!--        $.ajax({-->
+<!--            data : data,-->
+<!--            type : "POST",-->
+<!--            url : "/uploadSummernoteImageFile",-->
+<!--            contentType : false,-->
+<!--            processData : false,-->
+<!--            success : function(data) {-->
+<!--                //항상 업로드된 파일의 url이 있어야 한다.-->
+<!--                $(editor).summernote('insertImage', data.url);-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
+<!--</script>-->
+
+<!--    네비게이션 추가 코드-->
+<script src="/common/js/nav.js"></script>
 </body>
 </html>

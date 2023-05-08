@@ -231,7 +231,21 @@ public class CourseController {
         Integer[] pageList = courseService.getPageList(pageNum);
 
         model.addAttribute("courses", courseList);
-        model.addAttribute("page", pageList);
+        model.addAttribute("pageList", pageList);
+
+        return "course/CourseList";
+    }
+
+    /**
+     * ==============================================================================================================
+     * / 강의 제목으로 검색
+     * /==============================================================================================================
+     */
+
+    @GetMapping("/search")
+    public String courseSearch(@RequestParam(value = "keyword") String keyword, Model model) {
+        List<CourseDetailDTO> courseDetailDTOList = courseService.courseSearch(keyword);
+        model.addAttribute("courses", courseDetailDTOList);
 
         return "course/CourseList";
     }

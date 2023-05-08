@@ -26,7 +26,7 @@ public class Course {
     private CourseCategory courseCategory; // 강의 카테고리
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;      // 강사 정보
+    private User user;       // 강사 정보
     @Column(name = "title", nullable = false)
     private String title;   // 강의 제목
     @Column(name = "level", nullable = false)

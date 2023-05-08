@@ -1,4 +1,98 @@
-/*#question-list td{*/
-/*    border: 1px solid black;*/
-/*    border-collapse: collapse;*/
-/*}*/
+#container {
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+#maintitle p{
+    text-align: center;
+    font-size: 30px;
+}
+
+#search-area {
+    /*margin-left: 879px;*/
+    float: right;
+}
+#course-search {
+    border: 1px solid gray;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+    /*margin-top: 5px;*/
+    width: 222px;
+    height: 36px;
+    font-size: 15px;
+    outline: none;
+}
+#course-search-btn {
+    border: 1px solid gray;
+    width: 50px;
+    height: 36px;
+    border-bottom-right-radius: 7px;
+    border-top-right-radius: 7px;
+    margin-left: -4px;
+    /*margin-bottom: 3px;*/
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    background-color: rgb(88, 193, 121);
+}
+
+table.type10 {
+    /*width: 60%;*/
+
+    border-collapse: collapse;
+    text-align: left;
+    line-height: 1.5;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin: 0 auto;
+    margin-top: 100px;
+}
+table.type10 thead th {
+    width: 150px;
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    color: #fff;
+    background: rgb(88, 193, 121);
+    margin: 20px 10px;
+}
+table.type10 tbody th {
+    width: 150px;
+    padding: 10px;
+}
+table.type10 td {
+    width: 350px;
+    padding: 10px;
+    vertical-align: top;
+}
+table.type10 .even {
+    background: #fdf3f5;
+}
+
+#page-area {
+    margin-top: 10px;
+    text-align: center;
+}
+#page-area a{
+    text-decoration: none;
+}
+
+#question-regist {
+    float: right;
+    /*margin-right: 340px;*/
+}
+
+#questionTitle {
+    text-decoration: none;
+}
+#questionTitle:link {
+    color: black;
+}
+#questionTitle:visited {
+    color: black;
+}
+
+#question:hover {
+    background-color: lightgrey;
+}

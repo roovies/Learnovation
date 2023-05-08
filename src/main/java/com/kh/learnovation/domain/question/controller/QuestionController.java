@@ -33,10 +33,11 @@ public class QuestionController {
         return "question/list";
     }
 
+    // 질문 검색
     @RequestMapping(value = "/question/search")
     public String questionSearch(@RequestParam(value = "keyword") String keyword, Model model) {
         List<QuestionDTO> questionDTOList = questionService.searchQuestion(keyword);
-        model.addAttribute("questionList", questionDTOList);
+        model.addAttribute("question", questionDTOList);
 
         return "question/list";
     }
@@ -64,11 +65,30 @@ public class QuestionController {
         return "question/detail";
     }
 
+    // 질문 삭제
     @DeleteMapping("/question/delete/{no}")
     public String questionDelete(@PathVariable("no") Long id) {
         questionService.questionDelete(id);
         return "redirect:/question/list";
     }
+
+    // 질문 수정 페이지
+    @GetMapping("/question/updateView/{no}")
+    public String questionModifyView(@PathVariable("no") Long id, Model model) {
+        QuestionDTO questionDTO = questionService.getPost(id);
+
+        model.addAttribute("question", questionDTO);
+        return "question/modify";
+    }
+
+    // 질문 수정
+    @PutMapping("/question/update/{id}")
+    public String questionModify(QuestionDTO questionDTO) {
+        questionService.savePost(questionDTO);
+        return "redirect:/question/{id}";
+    }
+
+
 
 
 }
