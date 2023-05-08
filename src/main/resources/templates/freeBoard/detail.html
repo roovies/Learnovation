@@ -80,7 +80,7 @@
           </div>
       </div>
             <div id="update-review" class="none">
-                <textarea placeholder="강의와 관련없거나, 비평이 아닌 비방의 목적으로 작성될 경우 삭제될 수 있습니다." th:text="${comment.commentContents}"></textarea>
+                <textarea placeholder="댓글" th:text="${comment.commentContents}"></textarea>
                 <div class="right-aside">
                     <div class="right-aside-btn">
                         <button class="update" th:data-comment-id="${comment.id}" th:data-freeboard-id="${freeBoard.id}">수정하기</button>
