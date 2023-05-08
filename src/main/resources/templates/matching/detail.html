@@ -52,7 +52,7 @@
                 <div class="matching-reply-box" id="matchingReplyBox">
                     <div class="matching-reply-subject">
                         <div class="matching-reply-title">
-                            <a href="#" onclick="switchModal(this)"><div class="nicknamebox"><span class="replyNickname">닉네임</span></div></a>
+                            <a href="#" class="nickname-link"onclick="switchModal(this)"><div class="nicknamebox"><span class="replyNickname">닉네임</span></div></a>
                             <span class="replyDate">2023-05-07 21:58:56.0</span>
                         </div>
                         <div class="matching-reply-btn">
@@ -67,12 +67,12 @@
             </div>
             <div class="group-invite-modal" id="groupModal">
                 <h2>그룹 초대</h2>
-                <select name="" id="abc">
+                <select id="groupSelect">
                     <option value="">1</option>
                     <option value="">2</option>
                     <option value="">3</option>
                 </select>
-                <button>초대하기</button>
+                <button id="groupInviteBtn">초대하기</button>
             </div>
             <div class="index-btn-area">
                 <a class="index-btn" th:if="${keyword == null}" th:href="@{/matching/list(page=${page})}">목록으로</a>
@@ -126,16 +126,44 @@
             function switchModal(btn){
                 window.event.preventDefault();
                 window.event.stopPropagation();
-                let titleBox = btn.parentElement;
-                let span = btn.firstElementChild;
-                let left = span.clientWidth;
-                groupModal.style.left = (left + 10) +'px';
-                if(titleBox.lastElementChild == groupModal){
-                    titleBox.after(groupModal);
-                    groupModal.style.display = "none";
-                }else{
-                    groupModal.style.display = "block";
-                    titleBox.append(groupModal);
+                if(document.getElementById("userNo") != null){
+                    let curUserNo = document.getElementById("userNo").value;
+                    let titleBox = btn.parentElement;
+                    let writeUserNo = titleBox.parentElement.parentElement.dataset.userid;
+                    if(curUserNo != writeUserNo){
+                        let span = btn.firstElementChild;
+                        let left = span.clientWidth;
+                        groupModal.style.left = (left + 10) +'px';
+                        if(titleBox.lastElementChild == groupModal){
+                            titleBox.after(groupModal);
+                            groupModal.style.display = "none";
+                        }else{
+                            groupModal.style.display = "block";
+                            let selectBox = document.getElementById('groupSelect')
+                            selectBox.innerHTML = "";
+                            $.ajax({
+                                data : {userNo : curUserNo},
+                                type : "GET",
+                                url : "/meeting/list",
+                                success : function(data) {
+                                    if(data != "fail") {
+                                        let mList = JSON.parse(data);
+                                        for (let i = 0; i < mList.length; i++) {
+                                            let option = document.createElement("option");
+                                            option.innerText = mList[i].name;
+                                            option.setAttribute("value", mList[i].id);
+                                            selectBox.append(option);
+                                        }
+                                    }
+                                },error : function (data){
+
+                                }
+                            });
+                            titleBox.append(groupModal);
+                        }
+                    }else{
+                        alert("자기가 쓴 댓글입니다.");
+                    }
                 }
             }
             groupModal.addEventListener("click", function(e){
@@ -174,17 +202,22 @@
                 e.preventDefault();
                 let content = document.getElementById('replyInput').value;
                 let matchingNo = document.getElementById('matchingTitle').dataset.matchingno;
-                if(content != ""){
+                let curUserNo = document.getElementById("userNo");
+                if(content != "" && curUserNo != null){
                     $.ajax({
                         data : {content : content, matchingNo : matchingNo},
                         type : "POST",
                         url : "/matching/comment/insert",
                         success : function(data){
+                            alert("댓글 작성 완료!!");
+                            document.getElementById('replyInput').value = "";
                             getCommentList();
                         },error : function(data){
                             console.log(data);
                         }
                     })
+                }else{
+                    alert("로그인 해주세요...")
                 }
             })
             //댓글 수정
@@ -243,9 +276,27 @@
                 })
             }
             //그룹 초대
-            document.getElementById('replyWrite').addEventListener('click', function(e){
+            document.getElementById('groupInviteBtn').addEventListener('click', function(e){
                 e.preventDefault();
-
+                e.stopPropagation();
+                let groupNo = document.getElementById("groupSelect").value
+                let userNo = e.target.parentElement.parentElement.parentElement.parentElement.dataset.userid;
+                $.ajax({
+                    data : {groupNo : groupNo, userNo : userNo},
+                    type : "POST",
+                    url : "/meeting/invite",
+                    success : function(data){
+                        if(data == "success"){
+                            alert("초대완료");
+                            e.target.parentElement.parentElement.parentElement.parentElement.after(groupModal);
+                            groupModal.style.display = "none";
+                        }else if(data == "중복"){
+                            alert("이미 초대된 회원입니다.");
+                        }
+                    },error : function(data){
+                        console.log(data);
+                    }
+                })
             })
             //수정댓글 제출
             function submitModify(btn){

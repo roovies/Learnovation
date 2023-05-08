@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface MatchingCommentRepository extends JpaRepository<MatchingComment, Long> {
 
-    List<MatchingComment> findByMatchingOrderByCreatedAt(Matching matching);
+    List<MatchingComment> findByMatchingOrderByCreatedAtDesc(Matching matching);
 }

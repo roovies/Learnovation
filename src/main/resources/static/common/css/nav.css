@@ -296,7 +296,7 @@ nav a:hover{
             text-decoration: underline;
         }
         .modal-alarm{
-            margin-left : 105px !important;
+            margin-left : 127px !important;
         }
         .bell{
             color : rgb(252, 252, 11);
@@ -657,4 +657,87 @@ nav a:hover{
     border-radius: 20px;
     min-width: 0px;
     max-width: 230px;
+}
+
+.group-Icon-box{
+    position: relative;
+}
+.group-chat-box{
+    background-color: rgb(203, 232, 252);
+    width: 500px;
+    height: 500px;
+    border-radius: 10px;
+    position: absolute;
+    top: 40px;
+    left: -200px;
+    display: none;
+    box-shadow: 0px 0px 5px #6a6a6a;
+}
+.group-chat-diamond{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #0090F0;
+    top : 30px;
+    z-index: -1;
+    transform: rotate(45deg);
+    display: none;
+}
+.group-create-box{
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    background-color: #0090F0;
+    height: 40px;
+    padding-left: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+.group-create-box > button{
+    background-color: rgb(133, 204, 252);
+    border: none;
+    border-radius: 10px;
+    height: 30px;
+    padding: 3px 10px;
+    color: white;
+    margin-top: 5px;
+}
+.group-create-box > input{
+    border: none;
+    width: 400px;
+    height: 20px;
+    margin-top: 10px;
+}
+.group-create-box > input:focus{
+    outline: none;
+}
+.group-chat-content{
+    background-color: rgb(133, 204, 252);
+    width: 100%;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0px;
+    display: none;
+}
+.group-chat-title{
+    font-weight: 900;
+    font-size: 24px;
+}
+#groupChatList{
+    height: 450px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.group-chat-subject{
+    display: flex;
+    justify-content: space-between;
+}
+.exit-group-btn{
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background-color: #0090F0;
+}
+.group-blue{
+    color: #0090F0;
 }

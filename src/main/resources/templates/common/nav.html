@@ -155,12 +155,26 @@
                         </div>
                       </div>
                     </div>
-                    <div>
+                    <div class="group-Icon-box">
                       <span id="asdas">
-                      <a href="">
-                        <i class="fa-solid fa-user-group fa-lg"></i>
+                      <a href="" id="switchGroupModal">
+                        <i id="groupIcon" class="fa-solid fa-user-group fa-lg"></i>
                       </a>
-                    </span>
+                      </span>
+                      <div class="group-chat-diamond" id="groupChatDiamond"></div>
+                      <div class="group-chat-box" id="groupChatBox">
+                        <div class="group-create-box">
+                          <input type="text" id="groupName" th:data-id="${#authentication.principal.getId()}">
+                          <button id="groupCreateBtn">그룹생성</button>
+                        </div>
+                        <div id="groupChatList">
+
+                        </div>
+                        <div id="groupChatContent" class="group-chat-content">
+                          <div class="group-chat-subject"><span class="group-chat-title">title</span><div><button class="exit-group-btn"onclick="exitGroup(this)">나가기</button></div></div>
+                          <span class="group-chat-contents">contents</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
             </li>

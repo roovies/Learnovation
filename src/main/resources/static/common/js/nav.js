@@ -194,6 +194,92 @@ document.querySelector("#startChat").addEventListener("click", ()=>{
 
 });
 
+//-------------------------------- 그룹 톡 -------------------------------
+let showGroupModal = false
+if(document.getElementById('switchGroupModal') != null){
+    document.getElementById('switchGroupModal').addEventListener('click', function (e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(!showGroupModal){
+            document.getElementById('groupChatDiamond').style.display = 'block'
+            document.getElementById('groupChatBox').style.display = 'block'
+            document.getElementById('groupIcon').classList.add("group-blue");
+        }else{
+            document.getElementById('groupChatDiamond').style.display = 'none'
+            document.getElementById('groupChatBox').style.display = 'none'
+            document.getElementById('groupIcon').classList.remove('group-blue');
+        }
+        showGroupModal = !showGroupModal;
+    })
+}
+
+if(document.getElementById('groupName') != null){
+    groupChatList();
+}
+if(document.getElementById("groupCreateBtn") !=null){
+    document.getElementById("groupCreateBtn").addEventListener("click", function (e){
+        e.preventDefault();
+        e.stopPropagation();
+        let groupInfo = document.getElementById('groupName')
+        let groupName = groupInfo.value
+        let userNo = groupInfo.dataset.id;
+        $.ajax({
+            data : {groupName : groupName, userNo : userNo},
+            type : "POST",
+            url : "/meeting/create",
+            success : function(data) {
+                groupChatList();
+                console.log(data);
+            },error : function (data){
+
+            }
+        });
+    })
+}
+
+
+function groupChatList(){
+    let groupInfo = document.getElementById('groupName');
+    let userNo = groupInfo.dataset.id;
+    $.ajax({
+        data : {userNo : userNo},
+        type : "GET",
+        url : "/meeting/list",
+        success : function(data) {
+            if(data != "fail"){
+                let mList = JSON.parse(data);
+                let listBox = document.getElementById("groupChatList");
+                listBox.innerHTML = "";
+                for(let i = 0; i < mList.length; i++){
+                    let groupChatContent = document.getElementById("groupChatContent").cloneNode(true);
+                    groupChatContent.style.display = "block";
+                    groupChatContent.querySelector(".group-chat-title").innerText = mList[i].name;
+                    groupChatContent.querySelector(".group-chat-title").dataset.id = mList[i].id;
+                    groupChatContent.querySelector(".group-chat-contents").innerText = "최근 내용";
+                    listBox.append(groupChatContent);
+                }
+            }
+        },error : function (data){
+
+        }
+    });
+}
+
+function exitGroup(btn){
+    let groupNo = btn.parentElement.previousElementSibling.dataset.id;
+    $.ajax({
+        data : {groupNo : groupNo},
+        type : "GET",
+        url : "/meeting/exit",
+        success : function(data) {
+            console.log(data);
+            groupChatList();
+        },error : function (data){
+
+        }
+    });
+}
+
 // --------------------------------- 알람 웹소켓 --------------------------------
 const alarm = new WebSocket("ws://localhost:9999/ws/alarm");
 

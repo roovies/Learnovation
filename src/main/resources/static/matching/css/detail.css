@@ -211,6 +211,9 @@ matching-info-content{
     height: 50px;
     justify-content: space-around;
 }
+.nickname-link{
+    width: fit-content;
+}
 .nicknamebox{
     width: fit-content;
 }
@@ -254,6 +257,7 @@ matching-info-content{
     position: absolute;
     top: 5px;
     padding: 10px;
+    text-align: center;
     border: 1px solid darkgray;
     background-color: white;
     width: 150px;
@@ -270,7 +274,6 @@ matching-info-content{
 .group-invite-modal button{
     margin-top: 20px;
     background-color: #0090F0;
-    margin-left: 10px;
     padding: 5px 15px;
     border: none;
     border-radius: 10px;

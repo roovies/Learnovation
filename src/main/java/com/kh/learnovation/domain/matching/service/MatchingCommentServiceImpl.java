@@ -27,7 +27,7 @@ public class MatchingCommentServiceImpl implements MatchingCommentService{
 
     @Override
     public List<MatchingComment> selectList(Matching matching) {
-        List<MatchingComment> cList = mCRepository.findByMatchingOrderByCreatedAt(matching);
+        List<MatchingComment> cList = mCRepository.findByMatchingOrderByCreatedAtDesc(matching);
         return cList;
     }
 
