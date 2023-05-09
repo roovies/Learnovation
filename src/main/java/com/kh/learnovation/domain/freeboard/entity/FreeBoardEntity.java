@@ -1,5 +1,6 @@
 package com.kh.learnovation.domain.freeboard.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kh.learnovation.domain.freeboard.dto.FreeBoardDTO;
 import com.kh.learnovation.domain.user.entity.User;
 import lombok.Builder;
@@ -47,14 +48,15 @@ public class FreeBoardEntity {
     @Column
     private int status; // 1 or 0
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "freeBoardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LikeEntity> likes = new ArrayList<>();
-
+    @JsonIgnore
     @OneToMany(mappedBy = "freeBoardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CommentEntity> commentEntityList = new ArrayList<>();
 

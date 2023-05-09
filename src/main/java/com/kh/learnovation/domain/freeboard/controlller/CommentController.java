@@ -1,5 +1,7 @@
 package com.kh.learnovation.domain.freeboard.controlller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
 import com.kh.learnovation.domain.freeboard.entity.CommentEntity;
@@ -43,23 +45,29 @@ public class CommentController {
                     .id(DTO.getId())
                     .build();
             CommentDTO commentDTO = CommentDTO.builder()
-                    .freeBoardEntity(freeBoardEntity)
+                    .userId(user.getId())
+                    .freeBoardId(freeBoardId)
                     .commentContents(commentContents)
-                    .user(user)
                     .build();
             commentService.insertComment(commentDTO);
-            return "sucess";
+            return "success";
         }
         return "fail";
     }
 
-    @PostMapping("/comment/list")
+    @PostMapping("/list")
     @ResponseBody
-    public String CommentList(@RequestParam("freeBoardId") Long freeBoardId){
+    public String CommentList(@RequestParam("freeBoardNo") Long freeBoardId){
         FreeBoardEntity freeBoardEntity = FreeBoardEntity.builder().id(freeBoardId).build();
         List<CommentEntity> cList = commentService.selectList(freeBoardEntity);
-        Gson gson = new Gson();
-        return gson.toJson(cList);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = objectMapper.writeValueAsString(cList);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 
 
@@ -67,9 +75,10 @@ public class CommentController {
 
 
     @PostMapping("/modify")
+    @ResponseBody
     public String modify(@RequestParam("id") Long id
             ,@RequestParam("userId") Long userId
-            ,@RequestParam("commentContents") String content) {
+            ,@RequestParam("content") String content) {
 //        Timestamp ts = new Timestamp(System.currentTimeMillis());
         Optional<UserDTO> userDTO = userService.getCurrentUser();
         if (userDTO.isPresent()){
@@ -84,7 +93,8 @@ public class CommentController {
         return "success";
     }
 
-    @PostMapping("/delete")
+    @GetMapping("/delete")
+    @ResponseBody
     public String delete(@RequestParam("id") Long id, @RequestParam("userId") Long userId){
         Optional<UserDTO> userDTO = userService.getCurrentUser();
         if (userDTO.isPresent()){

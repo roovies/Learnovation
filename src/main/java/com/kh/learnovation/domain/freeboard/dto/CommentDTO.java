@@ -15,19 +15,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor // 모든 필드를 매개변수로 하는 생성자
 public class CommentDTO {
     private Long id;
-    private User user;
-    private FreeBoardEntity freeBoardEntity;
+    private Long userId;
+    private Long freeBoardId;
     private String commentContents;
-    private Timestamp commentCreatedTime;
+    private Timestamp createdAt;
 
 
     @Builder
-    public CommentDTO(long id, User user, String commentContents, FreeBoardEntity freeBoardEntity, Timestamp commentCreatedTime){
+    public CommentDTO(long id, Long userId, Long freeBoardId, String commentContents, Timestamp createdAt){
         this.id = id;
-        this.user = user;
+        this.userId = userId;
+        this.freeBoardId = freeBoardId;
         this.commentContents = commentContents;
-        this.freeBoardEntity = freeBoardEntity;
-        this.commentCreatedTime = commentCreatedTime;
+        this.createdAt = createdAt;
     }
 
 

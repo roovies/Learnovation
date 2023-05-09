@@ -1,5 +1,8 @@
 package com.kh.learnovation.domain.freeboard.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
 import com.kh.learnovation.domain.user.entity.User;
 import lombok.Builder;
@@ -19,11 +22,12 @@ import java.util.List;
 @Setter
 @Table(name = "comment")
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
     @Column
@@ -36,6 +40,7 @@ public class CommentEntity {
     /* Board:Comment = 1:N */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "freeBoard_id")
+    @JsonIgnore // 해당 필드를 직렬화에서 제외시킴
     private FreeBoardEntity freeBoardEntity;
 
 

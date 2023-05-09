@@ -17,10 +17,8 @@ public class ReportEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "report_id")
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column
+    private String name;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,18 +26,18 @@ public class ReportEntity {
     private FreeBoardEntity freeBoardEntity;
 
     @Column
-    private String reportTitle;
+    private String reportReason;
 
     @Column(length = 500)
     private String reportContents;
 
     @Builder
-    public ReportEntity(long id, User user, String reportContents, String reportTitle, FreeBoardEntity freeBoardEntity){
+    public ReportEntity(long id, String name , String reportContents, String reportReason, FreeBoardEntity freeBoardEntity){
         this.id = id;
-        this.user = user;
+        this.name = name;
         this.reportContents = reportContents;
         this.freeBoardEntity = freeBoardEntity;
-        this.reportTitle = reportTitle;
+        this.reportReason = reportReason;
     }
 
 

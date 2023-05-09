@@ -17,17 +17,17 @@ public class ReportDTO {
     private Long userId;
     private String nickname;
     private Long freeBoardId;
-    private String reportTitle;
+    private String reportReason;
     private String reportContent;
 
 
     @Builder
-    public ReportDTO(long id, Long userId, String nickname, Long freeBoardId, String reportTitle, String reportContent) {
+    public ReportDTO(long id, Long userId, String nickname, Long freeBoardId, String reportReason, String reportContent) {
         this.id = id;
         this.userId = userId;
         this.nickname = nickname;
         this.freeBoardId = freeBoardId;
-        this.reportTitle = reportTitle;
+        this.reportReason = reportReason;
         this.reportContent = reportContent;
     }
 

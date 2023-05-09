@@ -29,15 +29,37 @@
             </div>
         </div>
         <div class="freeBoard-info-content">
-            <div class="freeBoard-nickname">
-                <span th:text="${freeBoard.nickname}"></span>
+            <div class="freeBoard-profile">
+                <img th:src="@{/freeBoard/img/user-logo.png}" alt="Profile Image">
             </div>
-            <div class="freeBoard-subject">
-                <span th:text="${freeBoard.freeBoardCreatedTime}"></span>
+            <div class="freeBoard-info">
+                <div class="freeBoard-profile-info">
+                    <div class="freeBoard-nickname">
+                        <span th:text="${freeBoard.nickname}"></span>
+                    </div>
+                <div class="freeBoard-heart">
+                    <img th:if="${result == 1}" th:src="@{/freeBoard/img/red-heart-logo.png}" th:data-freeboardid="${freeBoard.id}" alt="" >
+                    <img th:if="${result == 0}" th:src="@{/freeBoard/img/black-heart-logo.png}" th:data-freeboardid="${freeBoard.id}" alt="" >
+                    <span class="countLike" th:text="${countLike}" th:data-likes="${countLike}"></span>
+                </div>
+                    <div class="freeBoard-info-stats">
+                        <div class="freeBoard-hit">
+                            <i class="far fa-eye"></i>
+                            <span class="countHits" th:text="${freeBoard.freeBoardHits}"></span>
+                        </div>
+                        <div class="freeBoard-subject">
+                            <span id="time" class="timeDiff" th:text="${freeBoard.freeBoardCreatedTime}"></span>
+                        </div>
+                        <div class="freeBoard-report">
+                            <i class="fas fa-exclamation-triangle" th:onclick="openReportModal()"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        </div>
     </div>
-    <div class="freeBoard-detail-title" id="freeBoardTitle" th:data-freeBoardNo="${freeBoard.id}">
+    <div class="freeBoard-detail-title" id="freeBoardTitle" th:data-freeboardno="${freeBoard.id}">
         <p th:text="${freeBoard.freeBoardTitle}"></p>
     </div>
     <div class="freeBoard-detail-content" th:utext="${freeBoard.freeBoardContents}"></div>
@@ -52,7 +74,7 @@
         <div class="freeBoard-reply-box" id="freeBoardReplyBox">
             <div class="freeBoard-reply-subject">
                 <div class="freeBoard-reply-title">
-                    <a href="#" class="nickname-link"onclick="switchModal(this)"><div class="nicknamebox"><span class="replyNickname">닉네임</span></div></a>
+                    <a href="#" class="nickname-link"><div class="nicknamebox"><span class="replyNickname">닉네임</span></div></a>
                     <span class="replyDate">2023-05-07 21:58:56.0</span>
                 </div>
                 <div class="freeBoard-reply-btn">
@@ -92,6 +114,22 @@
         </div>
     </div>
 </div>
+<div id="reportModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>신고하기</h2>
+        <p>신고 사유를 선택해주세요.</p>
+        <select id="reportReason">
+            <option value="욕설">욕설</option>
+            <option value="성적 수치심">성적 수치심</option>
+            <option value="인신공격">인신공격</option>
+            <option value="기타">기타</option>
+        </select>
+        <p>신고 내용을 입력해주세요.</p>
+        <textarea id="reportContent"></textarea>
+        <button onclick="submitReport()">신고 완료</button>
+    </div>
+</div>
 <script src="/common/js/nav.js"></script>
 <script>
     if(document.getElementById('freeBoardRemoveBtn') != null){
@@ -117,61 +155,124 @@
             document.getElementById("removeModalBox").style.display = 'none';
         }
     }
+
+    // 신고 기능
+    function openReportModal() {
+        document.getElementById("reportModal").style.display = "block";
+    }
+    document.querySelector(".close").addEventListener("click", function() {
+        document.getElementById("reportModal").style.display = "none";
+    });
+    function submitReport() {
+        const reportReason = document.getElementById("reportReason").value;
+        const reportContent = document.getElementById("reportContent").value;
+        const curUserNo = document.getElementById("userNo");
+        const freeBoardNo = document.getElementById('freeBoardTitle').dataset.freeboardno;
+        document.getElementById("reportModal").style.display = "none";
+        document.querySelector("button").disabled = true;
+        if(reportContent != "" && curUserNo != null){
+            $.ajax({
+                data : {reportContent : reportContent, reportReason : reportReason, curUserNo:curUserNo, freeBoardNo:freeBoardNo },
+                type : "GET",
+                url : "/report/write",
+                success : function(data){
+                    if(data == "success"){
+                        alert(`신고가 접수되었습니다`);
+                    }
+                },error : function(data){
+                    console.log(data);
+                    alert("신고 실패")
+                }
+            })
+        }else{
+            alert("로그인 해주세요...")
+        }
+    }
+
+
+
+
+
+
     // 댓글
     document.querySelector('body').addEventListener('click', function(){
         groupModal.style.display = 'none';
         this.append(groupModal);
     })
-    const groupModal = document.getElementById('groupModal');
-    function switchModal(btn){
-        window.event.preventDefault();
-        window.event.stopPropagation();
-        if(document.getElementById("userNo") != null){
-            let curUserNo = document.getElementById("userNo").value;
-            let titleBox = btn.parentElement;
-            let writeUserNo = titleBox.parentElement.parentElement.dataset.userid;
-            if(curUserNo != writeUserNo){
-                let span = btn.firstElementChild;
-                let left = span.clientWidth;
-                groupModal.style.left = (left + 10) +'px';
-                if(titleBox.lastElementChild == groupModal){
-                    titleBox.after(groupModal);
-                    groupModal.style.display = "none";
-                }else{
-                    groupModal.style.display = "block";
-                    let selectBox = document.getElementById('groupSelect')
-                    selectBox.innerHTML = "";
-                    $.ajax({
-                        data : {userNo : curUserNo},
-                        type : "GET",
-                        url : "/freeBoard/list",
-                        success : function(data) {
-                            if(data != "fail") {
-                                let mList = JSON.parse(data);
-                                for (let i = 0; i < mList.length; i++) {
-                                    let option = document.createElement("option");
-                                    option.innerText = mList[i].name;
-                                    option.setAttribute("value", mList[i].id);
-                                    selectBox.append(option);
-                                }
-                            }
-                        },error : function (data){
 
-                        }
-                    });
-                    titleBox.append(groupModal);
-                }
-            }else{
-                alert("자기가 쓴 댓글입니다.");
-            }
+
+
+    // 현재 시간과의 차이를 계산하여 텍스트로 반환하는 함수
+    function getTimeDiffString(datetime) {
+        const now = new Date();
+        const date = new Date(datetime);
+        const diff = now - date;
+
+        const sec = Math.floor(diff / 1000);
+        const min = Math.floor(sec / 60);
+        const hour = Math.floor(min / 60);
+        const day = Math.floor(hour / 24);
+
+        if (day > 0) {
+            return `${day}일 전`;
+        } else if (hour > 0) {
+            return `${hour}시간 전`;
+        } else if (min > 0) {
+            return `${min}분 전`;
+        } else {
+            return '방금 전';
         }
     }
-    groupModal.addEventListener("click", function(e){
-        e.stopPropagation();
-    })
+        const timeElem = document.getElementById('time');
+        const datetime = timeElem.innerText;
+        timeElem.innerText = getTimeDiffString(datetime);
+    // 종아요
+    $('.freeBoard-heart').each(function() {
+        let likes = parseInt($(this).data('likes')); // 현재 좋아요 개수
+        if (likes === 0) {
+            $(this).children('img').attr('src', '/freeBoard/image/black-heart-logo.png'); // 검은 하트 이미지로 변경
+        }
+    });
+
+    $(document).ready(function() {
+        $('.freeBoard-heart').click(function() {
+            let freeBoardId = $(this).find('img').data('freeboardid'); // 클릭한 게시글의 아이디
+            let likes = parseInt($(this).find('span').data('likes')); // 현재 좋아요 개수
+
+            $.ajax({
+                type: "POST",
+                url: "/like/check",
+                data: {
+                    freeBoardId: freeBoardId,
+                },
+                success: function(data) {
+                    if (data === "liked") {
+                        likes += 1; // 좋아요 개수 1 증가
+                        if (likes > 0) {
+                            $('.freeBoard-heart').children('img').attr('src', '/freeBoard/img/red-heart-logo.png'); // 빨간 하트 이미지로 변경
+                        }
+                    } else if (data === "unliked") {
+                        likes -= 1; // 좋아요 개수 1 감소
+                        $('.freeBoard-heart').children('img').attr('src', '/freeBoard/img/black-heart-logo.png'); // 검은 하트 이미지로 변경
+                        if (likes === 0) {
+                            $('.freeBoard-heart').children('img').attr('src', '/freeBoard/img/black-heart-logo.png'); // 검은 하트 이미지로 변경
+                        }
+                    }else {
+                        alert("로그인 해라.");
+                    }
+                    $('.countLike').data('likes', likes); // 데이터 속성 업데이트
+                    $('.countLike').text(likes); // 데이터 속성 업데이트
+                },error: function (err) {
+                    alert("Ajax Failed!!");
+                }
+
+            });
+        });
+    });
+
 
     function getCommentList(){
-        let freeBoardNo = document.getElementById('freeBoardTitle').dataset.freeBoardNo;
+        let freeBoardNo = document.getElementById('freeBoardTitle').dataset.freeboardno;
         $.ajax({
             data : {freeBoardNo : freeBoardNo},
             type : "POST",
@@ -184,8 +285,8 @@
                     let freeBoardReplyBox = document.getElementById('freeBoardReplyBox').cloneNode(true);
                     freeBoardReplyBox.dataset.id = cList[i].id;
                     freeBoardReplyBox.querySelector(".replyNickname").innerHTML = cList[i].user.nickname;
-                    freeBoardReplyBox.querySelector(".replyContent").innerHTML = cList[i].content;
-                    freeBoardReplyBox.querySelector(".replyDate").innerHTML = cList[i].createdAt;
+                    freeBoardReplyBox.querySelector(".replyContent").innerHTML = cList[i].commentContents;
+                    freeBoardReplyBox.querySelector(".replyDate").innerHTML = getTimeDiffString(cList[i].createdAt);
                     freeBoardReplyBox.dataset.userid = cList[i].user.id;
                     freeBoardReplyBox.style.display = "block";
                     replyList.append(freeBoardReplyBox);
@@ -201,7 +302,7 @@
     document.getElementById('replyWrite').addEventListener('click', function(e){
         e.preventDefault();
         let content = document.getElementById('replyInput').value;
-        let freeBoardNo = document.getElementById('freeBoardTitle').dataset.freeBoardNo;
+        let freeBoardNo = document.getElementById('freeBoardTitle').dataset.freeboardno;
         let curUserNo = document.getElementById("userNo");
         if(content != "" && curUserNo != null){
             $.ajax({

@@ -23,15 +23,15 @@ public class ReportServiceImpl  implements  ReportService{
         User user = userRepository.findById(reportDTO.getUserId()).get();
         FreeBoardEntity freeBoardEntity = freeBoardRepository.findById(reportDTO.getFreeBoardId()).get();
         ReportEntity reportEntity = ReportEntity.builder()
-                .user(user).freeBoardEntity(freeBoardEntity).reportTitle(reportDTO.getReportTitle())
+                .freeBoardEntity(freeBoardEntity).reportReason(reportDTO.getReportReason())
                 .reportContents(reportDTO.getReportContent()).build();
         reportEntity =reportRepository.save(reportEntity);
         reportDTO = ReportDTO.builder()
                 .id(reportEntity.getId())
-                .userId(reportEntity.getUser().getId())
-                .nickname(reportEntity.getUser().getNickname())
+//                .userId(reportEntity.getUser().getId())
+//                .nickname(reportEntity.getUser().getNickname())
                 .freeBoardId(reportEntity.getFreeBoardEntity().getId())
-                .reportTitle(reportEntity.getReportTitle())
+                .reportReason(reportEntity.getReportReason())
                 .reportContent(reportEntity.getReportContents())
                 .build();
         return  reportDTO.getId();

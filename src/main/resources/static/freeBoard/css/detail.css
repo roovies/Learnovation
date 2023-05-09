@@ -279,3 +279,139 @@ freeBoard-info-content{
     border-radius: 10px;
     color : white;
 }
+
+
+.freeBoard-info-content {
+    display: flex;
+    align-items: center;
+}
+
+.freeBoard-profile {
+    margin-right: 10px;
+}
+
+.freeBoard-profile img {
+    width: 50px;
+    height: 50px;
+}
+
+.freeBoard-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.freeBoard-profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 50%;
+}
+
+.freeBoard-nickname {
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 100%;
+}
+
+.freeBoard-heart {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.freeBoard-heart img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.countLike {
+    margin-right: 10px;
+}
+
+.freeBoard-info-stats {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
+
+.freeBoard-hit {
+    display: flex;
+    align-items: center;
+}
+
+.countHits {
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.freeBoard-subject {
+    font-size: 0.8rem;
+}
+
+.timeDiff {
+    font-size: 0.8rem;
+}
+/*
+신고기능 css
+*/
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border-radius: 20px; /* 모달창을 동그랗게 만듦 */
+    width: 60%; /* 모달의 너비를 60%로 조정 */
+    max-width: 600px; /* 모달의 최대 너비를 600px로 제한 */
+    text-align: center; /* 신고 내용을 가운데 정렬 */
+    position: relative; /* 상대적 위치 설정 */
+    top: 50%; /* 상단 위치를 50%로 지정 */
+    transform: translateY(-50%); /* 모달창을 수직 방향으로 중앙에 위치시킴 */
+}
+
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute; /* 절대적 위치 설정 */
+    top: 10px; /* 모달창 상단에서 10px 아래 */
+    right: 10px; /* 모달창 우측에서 10px 왼쪽 */
+    cursor: pointer;
+}
+
+.report {
+    background-color: #eee;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    position: absolute; /* 절대적 위치 설정 */
+    top: 10px; /* 모달창 상단에서 10px 아래 */
+    left: 50%; /* 모달창 중앙 */
+    transform: translateX(-50%); /* 가로 방향으로 중앙에 위치시킴 */
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+ #reportModal textarea {
+    width: 100%;
+    height: 100px; /* textarea의 높이를 100px로 조정 */
+    resize: none; /* 사용자가 크기를 조정할 수 없도록 함 */
+    margin-top: 20px; /* 신고 내용 위쪽 여백을 설정 */
+}

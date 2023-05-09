@@ -27,10 +27,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void insertComment(CommentDTO commentDTO) {
+        User user=userRepository.findById(commentDTO.getUserId()).get();
+        FreeBoardEntity freeBoardEntity = freeBoardRepository.findById(commentDTO.getFreeBoardId()).get();
         CommentEntity commentEntity = CommentEntity.builder()
-                .user(commentDTO.getUser())
+                .user(user)
                 .commentContents(commentDTO.getCommentContents())
-                .freeBoardEntity(commentDTO.getFreeBoardEntity())
+                .freeBoardEntity(freeBoardEntity)
                 .build();
         commentRepository.save(commentEntity);
 
