@@ -57,6 +57,14 @@ public class AlarmHandler extends TextWebSocketHandler {
                 sessionMap.get(feeder).sendMessage(textMessage);
             }
         }
+        if(jsonObject.get("type").toString().equals("\"chat\"")){
+            String feeder = jsonObject.get("feeder").toString().replaceAll("\"","");
+            String groupNo = jsonObject.get("meetingNo").toString().replaceAll("\"","");
+            TextMessage textMessage = new TextMessage("{\"msg\" : \"newChat\", \"meetingNo\" : \""+groupNo+"\"}");
+            if(sessionMap.get(feeder) != null){
+                sessionMap.get(feeder).sendMessage(textMessage);
+            }
+        }
     }
 
     @Override

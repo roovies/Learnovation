@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MeetingChattingRepository extends JpaRepository<MeetingChatting, Long> {
-    List<MeetingChatting> findByMeeting(Meeting meeting);
+
+    List<MeetingChatting> findByMeetingOrderByCreateAtAsc(Meeting meeting);
 }

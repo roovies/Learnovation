@@ -1,5 +1,6 @@
 package com.kh.learnovation.domain.meeting.service;
 
+import com.kh.learnovation.domain.meeting.dto.MeetingChattingDTO;
 import com.kh.learnovation.domain.meeting.dto.MeetingDTO;
 import com.kh.learnovation.domain.meeting.dto.MeetingMemberDTO;
 import com.kh.learnovation.domain.meeting.entity.Meeting;
@@ -105,8 +106,32 @@ public class MeetingServiceImpl implements MeetingService{
     @Override
     public List<MeetingChatting> chattingList(long meetingNo) {
         Meeting meeting = Meeting.builder().id(meetingNo).build();
-        List<MeetingChatting> mCList = meetingChattingRepository.findByMeeting(meeting);
+        List<MeetingChatting> mCList = meetingChattingRepository.findByMeetingOrderByCreateAtAsc(meeting);
         return mCList;
     }
+
+    @Override
+    public void insertChat(UserDTO curUser, MeetingDTO meetingDTO, String content) {
+        User user = User.builder().id(curUser.getId()).nickname(curUser.getNickname()).build();
+        Meeting meeting = Meeting.builder().id(meetingDTO.getId()).build();
+        MeetingChattingDTO meetingChattingDTO = MeetingChattingDTO.builder()
+                .user(user)
+                .meeting(meeting)
+                .Content(content)
+                .build();
+        MeetingChatting meetingChatting = MeetingChatting.builder()
+                .meeting(meetingChattingDTO.getMeeting())
+                .user(meetingChattingDTO.getUser())
+                .content(meetingChattingDTO.getContent())
+                .build();
+        meetingChatting = meetingChattingRepository.save(meetingChatting);
+    }
+
+    @Override
+    public List<MeetingMember> meetingMemberList(long meetingNo) {
+        List<MeetingMember> mList =  meetingMemberRepository.findByMeetingId(meetingNo);
+        return mList;
+    }
+
 
 }

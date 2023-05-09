@@ -76,6 +76,7 @@
                   </div>
                   <div th:if="${#authentication.principal != 'anonymousUser'}" class="nav-login-icons">
                     <div id="userIconBox" class="user-icon-box">
+                      <div id="userIconAlarm" class="user-icon-alarm"></div>
                   <span>
                     <a id="userIcon" href="">
                       <i class="fas fa-user fa-lg"></i>
@@ -164,18 +165,19 @@
 
                       <div class="group-chat-diamond" id="groupChatDiamond"></div>
                       <div class="group-chat-room-container" id="groupRoomBox">
+                        <div class="group-chat-room-myChatting-box">
+                          <div class="group-chat-myMessage"><span>32131323223213232132123123321321232123</span></div>
+                        </div>
+                        <div class="group-chat-room-youChatting-box">
+                          <div class="group-chat-room-nickname">213</div>
+                          <div class="group-chat-message"><span>32131323223213232132123123321321232123</span></div>
+                        </div>
                         <div class="group-chat-room-list" id="groupChatRoomList">
-                          <div class="group-chat-room-content-box" id="myChatting">
-                            <div class="group-chat-myMessage"><span>32131323223213232132123123321321232123</span></div>
-                          </div>
-                          <div class="group-chat-room-content-box" id="youChatting">
-                            <div class="group-chat-room-nickname">213</div>
-                            <div class="group-chat-message"><span>32131323223213232132123123321321232123</span></div>
-                          </div>
+
                         </div>
                         <div class="group-chat-inputBox" id="groupChatInputBox">
                           <textarea id="groupChatInputContent" cols="30" rows="10"></textarea>
-                          <button>전송</button>
+                          <button id="groupRoomBtn">전송</button>
                         </div>
                       </div>
                       <div class="group-chat-box" id="groupChatBox">

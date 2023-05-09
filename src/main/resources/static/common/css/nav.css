@@ -248,6 +248,17 @@ nav a:hover{
     margin-right: 20px;
     position: relative;
 }
+    .user-icon-alarm{
+        line-height: 20px;
+        position: absolute;
+        border-radius: 100%;
+        padding: 0px 7px;
+        background-color: rgb(203, 232, 252);
+        color: white;
+        top: -8px;
+        left: 12px;
+        height: 20px;
+    }
     .nav-login-icons a{
         color : darkgray;
         margin : 0;
@@ -773,7 +784,6 @@ nav a:hover{
     background-color: white;
     border-radius: 10px;
     border: 1px solid darkgray;
-    display: none;
 }
 .group-chat-inputBox > button{
     float: right;
@@ -803,7 +813,7 @@ nav a:hover{
     overflow-x: hidden;
     padding: 0px 10px;
     box-sizing: border-box;
-    display: none;
+    display: block;
 }
 .group-chat-room-list::-webkit-scrollbar {
     width: 10px; /*스크롤바의 너비*/
@@ -816,7 +826,12 @@ nav a:hover{
 .group-chat-room-list::-webkit-scrollbar-track {
     background-color: rgb(203, 232, 252); /*스크롤바 트랙 색상*/
 }
-.group-chat-room-content-box{
+.group-chat-room-myChatting-box{
+    display: none;
+    margin : 20px 0px;
+}
+.group-chat-room-youChatting-box{
+    display: none;
     margin : 20px 0px;
 }
 .group-chat-room-nickname{
