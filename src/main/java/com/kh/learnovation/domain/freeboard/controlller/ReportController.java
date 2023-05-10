@@ -24,7 +24,7 @@ public class ReportController {
     private final LikeService likeService;
     private final UserService userService;
     private final ReportService reportService;
-    @GetMapping("/insert")
+    @GetMapping("/write")
     @ResponseBody
     public String reportInsert(
              @RequestParam("reportReason") String reportReason
@@ -35,7 +35,7 @@ public class ReportController {
         Optional<UserDTO> optionalUserDTO = userService.getCurrentUser();
         if (optionalUserDTO.isPresent()){
             UserDTO userDTO = optionalUserDTO.get();
-            ReportDTO reportDTO = ReportDTO.builder().userId(userDTO.getId()).nickname(userDTO.getNickname())
+            ReportDTO reportDTO = ReportDTO.builder().userId(userDTO.getId()).name(userDTO.getName())
                     .reportReason(reportReason).reportContent(reportContent).freeBoardId(freeBoardNo).build();
             reportService.insertReport(reportDTO);
             return "success";

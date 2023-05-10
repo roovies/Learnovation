@@ -299,6 +299,7 @@ freeBoard-info-content{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    width: 50%;
 }
 
 .freeBoard-profile-info {
@@ -317,7 +318,7 @@ freeBoard-info-content{
 .freeBoard-heart {
     display: flex;
     align-items: center;
-    width: 100%;
+    width: 20%;
 }
 
 .freeBoard-heart img {
