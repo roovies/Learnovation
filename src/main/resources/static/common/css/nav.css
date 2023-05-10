@@ -248,6 +248,17 @@ nav a:hover{
     margin-right: 20px;
     position: relative;
 }
+    .user-icon-alarm{
+        line-height: 20px;
+        position: absolute;
+        border-radius: 100%;
+        padding: 0px 7px;
+        background-color: rgb(203, 232, 252);
+        color: white;
+        top: -8px;
+        left: 12px;
+        height: 20px;
+    }
     .nav-login-icons a{
         color : darkgray;
         margin : 0;
@@ -292,14 +303,26 @@ nav a:hover{
         position: relative;
         z-index: 13;
     }
+    .modal-alarm{
+        position: relative;
+    }
         .modal-nickname:hover{
             text-decoration: underline;
         }
-        .modal-alarm{
-            margin-left : 127px !important;
-        }
         .bell{
             color : rgb(252, 252, 11);
+        }
+        .nav-bell-count{
+            position: absolute;
+            border-radius: 50%;
+            padding: 0px 3px;
+            background-color: red;
+            color: white;
+            top: -2px;
+            left: 7px;
+        }
+        .hidden-count{
+            display: none;
         }
     .modal-user-list{
         background-color: rgb(203, 232, 252);
@@ -662,6 +685,17 @@ nav a:hover{
 .group-Icon-box{
     position: relative;
 }
+.group-chat-room-container{
+    background-color: rgb(203, 232, 252);
+    width: 500px;
+    height: 500px;
+    border-radius: 10px;
+    position: absolute;
+    top: 40px;
+    left: -200px;
+    display: none;
+    box-shadow: 0px 0px 5px #6a6a6a;
+}
 .group-chat-box{
     background-color: rgb(203, 232, 252);
     width: 500px;
@@ -715,7 +749,7 @@ nav a:hover{
     width: 100%;
     height: 60px;
     display: flex;
-    flex-direction: column;
+    align-items: center;
     margin: 10px 0px;
     display: none;
 }
@@ -724,13 +758,112 @@ nav a:hover{
     font-size: 24px;
 }
 #groupChatList{
-    height: 450px;
+    width: 500px;
+    height: 500px;
+    background-color: rgb(203, 232, 252);
+    border-radius: 10px;
+    position: absolute;
     overflow-y: scroll;
     overflow-x: hidden;
+}
+#groupChatList::-webkit-scrollbar {
+    width: 10px; /*스크롤바의 너비*/
+}
+
+#groupChatList::-webkit-scrollbar-thumb {
+    background-color: darkgray; /*스크롤바의 색상*/
+}
+
+#groupChatList::-webkit-scrollbar-track {
+    background-color: rgb(203, 232, 252); /*스크롤바 트랙 색상*/
+}
+.group-chat-inputBox{
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid darkgray;
+}
+.group-chat-inputBox > button{
+    float: right;
+    border: none;
+    border-radius: 10px;
+    padding: 5px 20px;
+    margin : 10px 20px 10px 0px;
+    background-color: rgb(133, 204, 252);
+}
+#groupChatInputContent{
+    box-sizing: border-box;
+    width: 100%;
+    height: 80px;
+    resize: none;
+    border: none;
+    border-bottom: 1px solid darkgray;
+    border-radius: 10px;
+    font-size: 18px
+}
+#groupChatInputContent:focus{
+    outline: none;
+}
+.group-chat-room-list{
+    width: 100%;
+    height: 370px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding: 0px 10px;
+    box-sizing: border-box;
+    display: block;
+}
+.group-chat-room-list::-webkit-scrollbar {
+    width: 10px; /*스크롤바의 너비*/
+}
+
+.group-chat-room-list::-webkit-scrollbar-thumb {
+    background-color: darkgray; /*스크롤바의 색상*/
+}
+
+.group-chat-room-list::-webkit-scrollbar-track {
+    background-color: rgb(203, 232, 252); /*스크롤바 트랙 색상*/
+}
+.group-chat-room-myChatting-box{
+    display: none;
+    margin : 20px 0px;
+}
+.group-chat-room-youChatting-box{
+    display: none;
+    margin : 20px 0px;
+}
+.group-chat-room-nickname{
+    font-weight: 900;
+}
+.group-chat-myMessage{
+    width: 100%;
+    text-align: end;
+}
+.group-chat-myMessage > span{
+    background-color: yellow;
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: inline-block;
+    max-width: 300px;
+    overflow-wrap: break-word;
+}
+.group-chat-message{
+    width: 100%;
+}
+.group-chat-message > span{
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: inline-block;
+    max-width: 300px;
+    overflow-wrap: break-word;
 }
 .group-chat-subject{
     display: flex;
     justify-content: space-between;
+    width: 100%;
 }
 .exit-group-btn{
     border: none;
@@ -740,4 +873,33 @@ nav a:hover{
 }
 .group-blue{
     color: #0090F0;
+}
+.alarm-list-box{
+    position: absolute;
+    background-color: white;
+    border-left: 1px solid darkgray;
+    border-top : 1px solid darkgray;
+    border-bottom: 1px solid darkgray;;
+    width: 400px;
+    height: 100vh;
+    right: -400px;
+    transition: 1s;
+}
+.alarm-content-box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+    background-color: white;
+    border: 1px solid darkgray;
+    border-radius: 10px;
+    height: 30px;
+    margin: 10px 0px;
+    display: none;
+}
+#alarmListClose{
+    display: none;
+}
+#alarmListClose > a{
+    margin-left: 5px;
 }

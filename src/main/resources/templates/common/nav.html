@@ -77,6 +77,7 @@
                   </div>
                   <div th:if="${#authentication.principal != 'anonymousUser'}" class="nav-login-icons">
                     <div id="userIconBox" class="user-icon-box">
+                      <div id="userIconAlarm" class="user-icon-alarm"></div>
                   <span>
                     <a id="userIcon" href="">
                       <i class="fas fa-user fa-lg"></i>
@@ -89,7 +90,7 @@
                         <div class="modal-user-info">
                       <span th:if="${#authentication.principal != 'anonymousUser'}">
                         <a class="modal-nickname" href="" th:text="${#authentication.principal.getNickname()}">닉네임님</a>
-                        <a class="modal-alarm" href=""><i class="fa-solid fa-bell bell"></i></a>
+                        <a class="modal-alarm" id="navAlarmBtn" href=""><i class="fa-solid fa-bell bell"><div class="nav-bell-count hidden-count" id="navBellCount"></div></i></a>
                       </span>
                         </div>
                         <div class="modal-user-list">
@@ -162,7 +163,24 @@
                         <i id="groupIcon" class="fa-solid fa-user-group fa-lg"></i>
                       </a>
                       </span>
+
                       <div class="group-chat-diamond" id="groupChatDiamond"></div>
+                      <div class="group-chat-room-container" id="groupRoomBox">
+                        <div class="group-chat-room-myChatting-box">
+                          <div class="group-chat-myMessage"><span>32131323223213232132123123321321232123</span></div>
+                        </div>
+                        <div class="group-chat-room-youChatting-box">
+                          <div class="group-chat-room-nickname">213</div>
+                          <div class="group-chat-message"><span>32131323223213232132123123321321232123</span></div>
+                        </div>
+                        <div class="group-chat-room-list" id="groupChatRoomList">
+
+                        </div>
+                        <div class="group-chat-inputBox" id="groupChatInputBox">
+                          <textarea onkeyup="groupChatEnter()" id="groupChatInputContent" cols="30" rows="10"></textarea>
+                          <button id="groupRoomBtn">전송</button>
+                        </div>
+                      </div>
                       <div class="group-chat-box" id="groupChatBox">
                         <div class="group-create-box">
                           <input type="text" id="groupName" th:data-id="${#authentication.principal.getId()}">
@@ -172,14 +190,26 @@
 
                         </div>
                         <div id="groupChatContent" class="group-chat-content">
-                          <div class="group-chat-subject"><span class="group-chat-title">title</span><div><button class="exit-group-btn"onclick="exitGroup(this)">나가기</button></div></div>
-                          <span class="group-chat-contents">contents</span>
+                          <div class="group-chat-subject">
+                            <a onclick="openGroupChatting(this)"><span class="group-chat-title">title</span></a>
+                            <div>
+                              <button class="exit-group-btn"onclick="exitGroup(this)">나가기</button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
             </li>
           </ul>
+        </div>
+        <div class="alarm-content-box" id="alarmContentBox">
+          <div class="alarm-content"></div>
+          <div class="alarm"><a id="alarmRemove" onclick="removeAlarm(this)"><i class="fa-solid fa-x"></i></a></div>
+        </div>
+        <div id="alarmListClose"><a onclick="closeAlarmBox()"><i class="fa-solid fa-arrow-right"></i></a></div>
+        <div class="alarm-list-box" id="alarmListBox">
+
         </div>
       </nav>
       <div class="nav-block"></div>

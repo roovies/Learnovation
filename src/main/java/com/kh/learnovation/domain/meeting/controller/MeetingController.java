@@ -1,9 +1,12 @@
 package com.kh.learnovation.domain.meeting.controller;
 
 import com.google.gson.Gson;
+import com.kh.learnovation.domain.meeting.dto.MeetingChattingDTO;
 import com.kh.learnovation.domain.meeting.dto.MeetingDTO;
 import com.kh.learnovation.domain.meeting.dto.MeetingMemberDTO;
 import com.kh.learnovation.domain.meeting.entity.Meeting;
+import com.kh.learnovation.domain.meeting.entity.MeetingChatting;
+import com.kh.learnovation.domain.meeting.entity.MeetingMember;
 import com.kh.learnovation.domain.meeting.entity.MeetingMemberPk;
 import com.kh.learnovation.domain.meeting.service.MeetingService;
 import com.kh.learnovation.domain.user.dto.UserDTO;
@@ -29,6 +32,9 @@ public class MeetingController {
     @PostMapping("/meeting/create")
     @ResponseBody
     public String MeetingCreate(@RequestParam("groupName") String groupName, @RequestParam("userNo") long userId){
+        if(groupName.equals("")){
+            return "fail";
+        }
         MeetingDTO meetingDTO = MeetingDTO.builder().name(groupName).build();
         Optional<UserDTO> userDTO = userService.getCurrentUser();
         UserDTO curUser = null;
@@ -91,5 +97,40 @@ public class MeetingController {
         MeetingDTO meetingDTO = MeetingDTO.builder().id(groupNo).build();
         meetingService.inviteMeeting(meetingDTO, userDTO);
         return "success";
+    }
+    @GetMapping("/meeting/chat/room")
+    @ResponseBody
+    public String openChattingRoom(@RequestParam("meetingNo") long meetingNo){
+        List<MeetingChatting> mCList = meetingService.chattingList(meetingNo);
+        if(mCList.size() < 1){
+            return "empty";
+        }
+        Gson gson = new Gson();
+        return gson.toJson(mCList);
+    }
+
+    @PostMapping("/meeting/chat/insert")
+    @ResponseBody
+    public String insertChat(@RequestParam("userNo") long userNo
+            , @RequestParam("groupNo") long meetingNo
+            , @RequestParam("content") String content){
+        Optional<UserDTO> userDTO = userService.getCurrentUser();
+        if(userDTO.isPresent()){
+            if(userDTO.get().getId() == userNo){
+                UserDTO curUser = userDTO.get();
+                MeetingDTO meetingDTO = MeetingDTO.builder().id(meetingNo).build();
+                meetingService.insertChat(curUser, meetingDTO, content);
+                return "success";
+            }
+        }
+        return "fail";
+    }
+
+    @GetMapping("/meeting/member/list")
+    @ResponseBody
+    public String meetingMemberList(@RequestParam("meetingNo") long meetingNo){
+        List<MeetingMember> mList = meetingService.meetingMemberList(meetingNo);
+        Gson gson = new Gson();
+        return gson.toJson(mList);
     }
 }

@@ -261,8 +261,11 @@ if(document.getElementById('switchGroupModal') != null){
         e.stopPropagation();
         if(!showGroupModal){
             document.getElementById('groupChatDiamond').style.display = 'block'
+            document.getElementById('groupChatDiamond').style.backgroundColor = '#0090F0'
             document.getElementById('groupChatBox').style.display = 'block'
             document.getElementById('groupIcon').classList.add("group-blue");
+            let chatBox = document.getElementById('groupRoomBox');
+            chatBox.style.display = 'none'
         }else{
             document.getElementById('groupChatDiamond').style.display = 'none'
             document.getElementById('groupChatBox').style.display = 'none'
@@ -282,17 +285,22 @@ if(document.getElementById("groupCreateBtn") !=null){
         let groupInfo = document.getElementById('groupName')
         let groupName = groupInfo.value
         let userNo = groupInfo.dataset.id;
-        $.ajax({
-            data : {groupName : groupName, userNo : userNo},
-            type : "POST",
-            url : "/meeting/create",
-            success : function(data) {
-                groupChatList();
-                console.log(data);
-            },error : function (data){
+        if(groupName == ""){
+            alert("그룹이름을 입력해주세요");
+        }else{
+            $.ajax({
+                data : {groupName : groupName, userNo : userNo},
+                type : "POST",
+                url : "/meeting/create",
+                success : function(data) {
+                    groupChatList();
+                    groupInfo.value = "";
+                    alert('그룹 생성 완료')
+                },error : function (data){
 
-            }
-        });
+                }
+            });
+        }
     })
 }
 
@@ -311,10 +319,9 @@ function groupChatList(){
                 listBox.innerHTML = "";
                 for(let i = 0; i < mList.length; i++){
                     let groupChatContent = document.getElementById("groupChatContent").cloneNode(true);
-                    groupChatContent.style.display = "block";
+                    groupChatContent.style.display = "flex";
                     groupChatContent.querySelector(".group-chat-title").innerText = mList[i].name;
                     groupChatContent.querySelector(".group-chat-title").dataset.id = mList[i].id;
-                    groupChatContent.querySelector(".group-chat-contents").innerText = "최근 내용";
                     listBox.append(groupChatContent);
                 }
             }
@@ -325,13 +332,13 @@ function groupChatList(){
 }
 
 function exitGroup(btn){
-    let groupNo = btn.parentElement.previousElementSibling.dataset.id;
+    let groupNo = btn.parentElement.previousElementSibling.firstElementChild.dataset.id;
     $.ajax({
         data : {groupNo : groupNo},
         type : "GET",
         url : "/meeting/exit",
         success : function(data) {
-            console.log(data);
+           // console.log(data);
             groupChatList();
         },error : function (data){
 
@@ -339,29 +346,315 @@ function exitGroup(btn){
     });
 }
 
-// --------------------------------- 알람 웹소켓 --------------------------------
-const alarm = new WebSocket("ws://localhost:9999/ws/alarm");
+//---------------------------------- 채팅방-------------------------------------
+if(document.getElementById('userIconBox') != null){
+    function openGroupChatting(btn){
+        let meetingNo = btn.firstElementChild.dataset.id;
+        let userNo = document.getElementById('groupName').dataset.id;
+        $.ajax({
+            data : {meetingNo : meetingNo},
+            url : "/meeting/chat/room",
+            type : "GET",
+            success : function (data){
+                let chatBox = document.getElementById('groupChatBox');
+                chatBox.style.display = 'none'
+                let roomBox = document.getElementById('groupRoomBox');
+                roomBox.dataset.meetingno = meetingNo;
+                let roomList = document.getElementById('groupChatRoomList');
+                roomList.innerHTML = "";
+                roomBox.style.display = 'block'
+                document.getElementById('groupChatDiamond').style.backgroundColor = 'rgb(203, 232, 252)';
+                showGroupModal = false;
+                if(data != "empty"){
+                    let mCList = JSON.parse(data);
+                    for(let i = 0; i < mCList.length; i++){
+                        if(mCList[i].user.id == userNo){
+                            let myContentBox = roomBox.querySelector('.group-chat-room-myChatting-box').cloneNode(true);
+                            myContentBox.style.display = 'block';
+                            let myMessage = document.createElement("span");
+                            myMessage.innerText = mCList[i].content;
+                            myContentBox.querySelector('.group-chat-myMessage').innerHTML = "";
+                            myContentBox.querySelector('.group-chat-myMessage').append(myMessage);
+                            roomList.append(myContentBox);
+                        }else{
+                            let youContentBox = roomBox.querySelector('.group-chat-room-youChatting-box').cloneNode(true);
+                            youContentBox.style.display = 'block';
+                            let youMessage = document.createElement("span");
+                            youMessage.innerText = mCList[i].content;
+                            youContentBox.querySelector('.group-chat-message').innerHTML = "";
+                            youContentBox.querySelector('.group-chat-room-nickname').innerText = mCList[i].user.nickname;
+                            youContentBox.querySelector('.group-chat-message').append(youMessage);
+                            roomList.append(youContentBox);
+                        }
+                    }
+                    roomList.scrollTo(0,roomList.scrollHeight - roomList.clientHeight);
+                }
+            },
+            error : function (data){
 
-alarm.onopen = function(e) {
-    console.log('알람소켓 open');
-};
-
-alarm.onmessage = function(event) {
-    console.log(`[message] 서버로부터 전송받은 데이터: ${event.data}`);
-};
-
-alarm.onclose = function(event) {
-    if (event.wasClean) {
-        console.log(`[close] 커넥션이 정상적으로 종료되었습니다(code=${event.code} reason=${event.reason})`);
-    } else {
-        // 예시: 프로세스가 죽거나 네트워크에 장애가 있는 경우
-        // event.code가 1006이 됩니다.
-        console.log('[close] 커넥션이 죽었습니다.');
+            }
+        })
     }
-};
+}
 
-alarm.onerror = function(error) {
-    alert(`[error]`);
-};
+if(document.getElementById('groupChatInputContent') != null){
+    document.getElementById('groupChatInputContent').addEventListener('keyup', function (e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(e.keyCode == 13){
+            let content = document.getElementById('groupChatInputContent').value;
+            let userNo = document.getElementById('groupName').dataset.id;
+            let groupNo = e.target.parentElement.parentElement.dataset.meetingno;
+            if(content.trim() != ""){
+                $.ajax({
+                    data : {userNo : userNo, groupNo : groupNo, content : content},
+                    url : "/meeting/chat/insert",
+                    type : "POST",
+                    success : function (data){
+                        if(data == "success"){
+                            getChatRoomList(groupNo, userNo);
+                            document.getElementById('groupChatInputContent').value = "";
+                            $.ajax({
+                                data : {meetingNo : groupNo},
+                                url : "/meeting/member/list",
+                                type : "GET",
+                                success : function (data){
+                                    let mList = JSON.parse(data);
+                                    for(let i = 0; i < mList.length; i++){
+                                        if(mList[i].meetingMemberPk.user.id != userNo){
+                                            alarm.send(`{type: "chat", feeder: "${mList[i].meetingMemberPk.user.id}", meetingNo : "${groupNo}"}`);
+                                        }
+                                    }
+                                },
+                                error : function (data){
+
+                                }
+                            })
+
+                        }
+                    },
+                    error : function (data){
+
+                    }
+                })
+            }else{
+                alert("공백 ㄴ");
+            }
+        }
+    })
+}
+
+if(document.getElementById('groupRoomBtn') != null){
+    document.getElementById('groupRoomBtn').addEventListener('click', function (e){
+        e.preventDefault();
+        e.stopPropagation();
+        let content = document.getElementById('groupChatInputContent').value;
+        let userNo = document.getElementById('groupName').dataset.id;
+        let groupNo = e.target.parentElement.parentElement.dataset.meetingno;
+        if(content.trim() != ""){
+            $.ajax({
+                data : {userNo : userNo, groupNo : groupNo, content : content},
+                url : "/meeting/chat/insert",
+                type : "POST",
+                success : function (data){
+                    if(data == "success"){
+                        getChatRoomList(groupNo, userNo);
+                        document.getElementById('groupChatInputContent').value = "";
+                        $.ajax({
+                            data : {meetingNo : groupNo},
+                            url : "/meeting/member/list",
+                            type : "GET",
+                            success : function (data){
+                                let mList = JSON.parse(data);
+                                for(let i = 0; i < mList.length; i++){
+                                    if(mList[i].meetingMemberPk.user.id != userNo){
+                                        alarm.send(`{type: "chat", feeder: "${mList[i].meetingMemberPk.user.id}", meetingNo : "${groupNo}"}`);
+                                    }
+                                }
+                            },
+                            error : function (data){
+
+                            }
+                        })
+
+                    }
+                },
+                error : function (data){
+
+                }
+            })
+        }else{
+            alert("공백 ㄴ");
+        }
+    })
+}
+
+
+function getChatRoomList(meetingNo, userNo){
+    $.ajax({
+        data : {meetingNo : meetingNo},
+        url : "/meeting/chat/room",
+        type : "GET",
+        success : function (data){
+            if(data != "empty"){
+                let mCList = JSON.parse(data);
+                let roomList = document.getElementById('groupChatRoomList');
+                roomList.innerHTML = "";
+                let roomBox = document.getElementById('groupRoomBox');
+                for(let i = 0; i < mCList.length; i++){
+                    if(mCList[i].user.id == userNo){
+                        let myContentBox = roomBox.querySelector('.group-chat-room-myChatting-box').cloneNode(true);
+                        myContentBox.style.display = 'block';
+                        let myMessage = document.createElement("span");
+                        myMessage.innerText = mCList[i].content;
+                        myContentBox.querySelector('.group-chat-myMessage').innerHTML = "";
+                        myContentBox.querySelector('.group-chat-myMessage').append(myMessage);
+                        roomList.append(myContentBox);
+                    }else{
+                        let youContentBox = roomBox.querySelector('.group-chat-room-youChatting-box').cloneNode(true);
+                        youContentBox.style.display = 'block';
+                        let youMessage = document.createElement("span");
+                        youMessage.innerText = mCList[i].content;
+                        youContentBox.querySelector('.group-chat-message').innerHTML = "";
+                        youContentBox.querySelector('.group-chat-room-nickname').innerText = mCList[i].user.nickname;
+                        youContentBox.querySelector('.group-chat-message').append(youMessage);
+                        roomList.append(youContentBox);
+                    }
+                }
+                roomList.scrollTo(0,roomList.scrollHeight - roomList.clientHeight);
+            }
+        },
+        error : function (data){
+
+        }
+    })
+}
+
+// --------------------------------- 알람 웹소켓 --------------------------------
+
+let alarm;
+let alarmModal = false;
+const alarmListBox = document.getElementById('alarmListBox');
+if(document.getElementById('userIconBox') != null){
+    getListAlarm();
+    document.getElementById('navAlarmBtn').addEventListener("click", function (e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(!alarmModal){
+            alarmListBox.style.transform = "translate(-400px)";
+        }else{
+            alarmListBox.style.transform = "translate(0px)";
+        }
+        alarmModal = !alarmModal;
+    })
+    function getListAlarm(){
+        let userNo = document.getElementById('groupName').dataset.id;
+        $.ajax({
+            data : {userNo : userNo},
+            type : "GET",
+            url : "/alarm/list",
+            success : function(data){
+                let alarmListBox = document.getElementById("alarmListBox");
+                alarmListBox.innerHTML = "";
+                let alarmCloseBox = document.getElementById('alarmListClose').cloneNode(true);
+                alarmCloseBox.style.display = "block";
+                let alarmCount = document.getElementById('navBellCount');
+                let iconAlarm = document.getElementById('userIconAlarm');
+                if(data == "empty"){
+                    alarmListBox.innerHTML = "알람이 없습니다."
+                    alarmCount.classList.add('hidden-count');
+                    iconAlarm.classList.add('hidden-count');
+                }else{
+                    let aList = JSON.parse(data);
+                    for(let i = 0; i < aList.length; i++){
+                        alarmCount.innerText = aList.length;
+                        alarmCount.classList.remove('hidden-count');
+                        iconAlarm.innerText = aList.length;
+                        iconAlarm.classList.remove('hidden-count');
+                        let alarmBox = document.getElementById("alarmContentBox").cloneNode(true);
+                        alarmBox.style.display = 'flex';
+                        alarmBox.querySelector('.alarm-content').innerText = aList[i].content;
+                        alarmBox.querySelector('#alarmRemove').dataset.id = aList[i].id;
+                        alarmListBox.append(alarmBox);
+                    }
+                }
+                alarmListBox.prepend(alarmCloseBox);
+            },error : function(data){
+                console.log(data);
+            }
+        })
+    }
+
+    function removeAlarm(btn){
+        let alarmNo = btn.dataset.id;
+        $.ajax({
+            data : {alarmNo : alarmNo},
+            type : "GET",
+            url : "/alarm/remove",
+            success : function(data){
+                if(data == "success"){
+                    getListAlarm();
+                }
+            },error : function(data){
+                console.log(data);
+            }
+        })
+    }
+
+    function closeAlarmBox(){
+        let e = window.event;
+        e.preventDefault();
+        e.stopPropagation();
+        alarmListBox.style.transform = "translate(0px)";
+        alarmModal = false;
+    }
+
+
+
+
+    alarm = new WebSocket("ws://localhost:9999/ws/alarm");
+
+    alarm.onopen = function(e) {
+        //console.log('알람소켓 open');
+        let userNo = document.getElementById('groupName').dataset.id;
+        alarm.send(`{type: "create", sender: "${userNo}"}`);
+    };
+
+    alarm.onmessage = function(event) {
+       // console.log(`[message] 서버로부터 전송받은 데이터: ${event.data}`);
+        if(event.data == '새로운 접속'){
+            // 같은 아이디 중복 접속
+        }
+        else if(event.data == 'newAlarm'){
+            getListAlarm();
+            groupChatList();
+        }else{
+            let obj = JSON.parse(event.data);
+            if(document.getElementById('groupRoomBox') != null && document.getElementById('groupName') != null){
+                let groupNo = document.getElementById('groupRoomBox').dataset.meetingno;
+                let userNo = document.getElementById('groupName').dataset.id;
+                if(groupNo == obj.meetingNo){
+                    getChatRoomList(groupNo, userNo);
+                }
+            }
+        }
+    };
+
+
+    alarm.onclose = function(event) {
+        if (event.wasClean) {
+            //console.log(`[close] 커넥션이 정상적으로 종료되었습니다(code=${event.code} reason=${event.reason})`);
+        } else {
+            // 예시: 프로세스가 죽거나 네트워크에 장애가 있는 경우
+            // event.code가 1006이 됩니다.
+           // console.log('[close] 커넥션이 죽었습니다.');
+        }
+    };
+
+    alarm.onerror = function(error) {
+        alert(`[error]`);
+    };
+}
+
 
 //alarm.send(`{msg: "${msg}", sender: "${sender}"}`);
