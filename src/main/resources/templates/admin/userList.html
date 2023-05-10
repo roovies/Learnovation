@@ -27,14 +27,14 @@
     <div class="side-nav">
         <header>Learnnovation</header>
         <ul>
-            <a href="#" class="active">
+            <a href="/admin/userList" class="active">
                 <li class="nav-li">
-                    <span class="menu" onclick="goUserList()">🙋‍♂️ 회원관리</span>
+                    <span class="menu">🙋‍♂️ 회원관리</span>
                 </li>
             </a>
             <a href="#">
                 <li class="nav-li">
-                    <span class="menu">게시판 관리</span>
+                    <span class="menu">📚 게시판 관리</span>
                 </li>
             </a>
             <a href="#">
@@ -42,25 +42,14 @@
                     <span class="menu">📢 신고 관리</span>
                 </li>
             </a>
-            <a href="#">
+            <a href="/admin/course/register">
                 <li class="nav-li">
-                    <!-- <img src="/learning.png" alt="" style="width: 30px; height: 30px;"> -->
                     <span class="menu">📺 강의 등록</span>
                 </li>
             </a>
-            <a href="#">
+            <a href="/admin/chatting">
                 <li class="nav-li">
-                    <span class="menu">apps</span>
-                </li>
-            </a>
-            <a href="#">
-                <li class="nav-li">
-                    <span class="menu">event</span>
-                </li>
-            </a>
-            <a href="#">
-                <li class="nav-li">
-                    <span class="menu">settings</span>
+                    <span class="menu">📞 채팅 상담</span>
                 </li>
             </a>
         </ul>
@@ -121,7 +110,6 @@
     </form>
 
     <script th:inline="javascript">
-
         function toggleCheckbox(checkbox) {
             var checkboxes = document.getElementsByName('selectedIds');
 

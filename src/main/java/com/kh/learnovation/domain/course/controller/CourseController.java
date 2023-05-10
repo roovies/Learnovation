@@ -24,7 +24,6 @@ import java.util.*;
 
 
 @Controller
-@RequestMapping("/course")
 public class CourseController {
 
     private final ResourceLoader resourceLoader;
@@ -44,13 +43,13 @@ public class CourseController {
      * / 강의 등록관련 (후에 manager domain으로 옮겨야 함)
      * /==============================================================================================================
      */
-    @GetMapping("/register")
+    @GetMapping("/admin/course/register")
     public String showCourseRegistration() {
         return "/course/CourseRegister";
     }
 
     // 이메일로 회원여부 확인 ajax
-    @PostMapping("/register/checkemail")
+    @PostMapping("/course/register/checkemail")
     @ResponseBody
     public UserDTO checkUserViaEmail(@RequestBody Map<String, String> data) {
         String email = data.get("email");
@@ -58,7 +57,7 @@ public class CourseController {
         return userDto;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/course/register")
     public String registerCourse(@ModelAttribute CourseDTO courseDto, String priceStr,
                                  @RequestParam("chapter") String[] chapters, @ModelAttribute CourseLessonDTO courseLessonDto,
                                  @RequestParam("thumbnail") MultipartFile imageFile,
@@ -90,7 +89,7 @@ public class CourseController {
     }
 
     // SummerNote 이미지 업로드
-    @PostMapping("/register/uploadImage")
+    @PostMapping("/course/register/uploadImage")
     @ResponseBody
     public String summerNoteFileUpload(@RequestParam("file") MultipartFile file) {
         String url = "savedError";
@@ -108,7 +107,7 @@ public class CourseController {
      * / 강의 상세 페이지
      * /==============================================================================================================
      */
-    @GetMapping("/{id}")
+    @GetMapping("/course/{id}")
     public String showCourseDetail(@PathVariable Long id, Model model){
         CourseDetailDTO detailDTO = courseService.findDetailById(id); // 인강 상세정보
         if (detailDTO != null){
@@ -130,7 +129,7 @@ public class CourseController {
      * / 나의 학습 페이지 (내 강의 대시보드)
      * /==============================================================================================================
      */
-    @GetMapping("/purchased/{id}")
+    @GetMapping("/course/purchased/{id}")
     public String showMyCourseDetail(@PathVariable Long id, Model model){
         /** 로그인 정보를 받고, 해당 회원 id를 토대로 "인강 구매내역 테이블"에 넘어오는 인강 고유 id 값이 있는지 확인한 후, 있으면 findDetailById를 하면 될듯. */
         Optional<UserDTO> currentUser = userService.getCurrentUser();
@@ -162,7 +161,7 @@ public class CourseController {
      * /==============================================================================================================
      */
     // 1. 수강후기 작성
-    @PostMapping("/review/register")
+    @PostMapping("/course/review/register")
     @ResponseBody
     public String registerReview(@RequestBody CourseReviewDTO reviewDTO){
         Optional<UserDTO> currentUser = userService.getCurrentUser();
@@ -181,7 +180,7 @@ public class CourseController {
     }
 
     // 2. 수강후기 수정
-    @PostMapping("/review/update")
+    @PostMapping("/course/review/update")
     @ResponseBody
     public String updateReview(@RequestBody CourseReviewDTO reviewDTO){
         Optional<UserDTO> currentUser = userService.getCurrentUser();
@@ -199,7 +198,7 @@ public class CourseController {
     }
 
     // 3. 수강후기 삭제
-    @PostMapping("/review/delete")
+    @PostMapping("/course/review/delete")
     @ResponseBody
     public String deleteReview(@RequestBody CourseReviewDTO reviewDTO){
         Optional<UserDTO> currentUser = userService.getCurrentUser();
@@ -218,7 +217,7 @@ public class CourseController {
     }
 
     // 4. 수강후기 더보기
-    @PostMapping("/{courseId}/more")
+    @PostMapping("/course/{courseId}/more")
     @ResponseBody
     public List<CourseReviewDTO> moreReview(@PathVariable Long courseId, @RequestBody Map<String, String> map){
         int page = Integer.parseInt(map.get("page"));
@@ -232,7 +231,7 @@ public class CourseController {
      * / 강의 리스트
      * /==============================================================================================================
      */
-    @GetMapping("/list")
+    @GetMapping("/course/list")
     public String courseList(
             Model model
             , @RequestParam(value = "page", defaultValue = "1") Integer pageNum
@@ -253,7 +252,7 @@ public class CourseController {
      * /==============================================================================================================
      */
 
-    @GetMapping("/search")
+    @GetMapping("/course/search")
     public String courseSearch(@RequestParam(value = "keyword") String keyword, Model model) {
         List<CourseDetailDTO> courseDetailDTOList = courseService.courseSearch(keyword);
         model.addAttribute("courses", courseDetailDTOList);

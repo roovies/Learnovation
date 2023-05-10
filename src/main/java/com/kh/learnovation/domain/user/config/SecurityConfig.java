@@ -49,10 +49,9 @@ public class SecurityConfig {
 		http
 			.csrf().disable()	// csrf 토큰 비활성화 (테스트시 걸어두는 게 좋음)
 			.authorizeRequests()
-			.antMatchers("/**")
-			.permitAll()
+			.antMatchers("/admin/**").hasRole("ADMIN")
 			.anyRequest()
-			.authenticated()
+			.permitAll()
 		.and()
 		.logout()
 		 .addLogoutHandler((request, response, authentication) -> {
