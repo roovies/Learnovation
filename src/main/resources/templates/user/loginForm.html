@@ -52,8 +52,16 @@
 
     <link rel="stylesheet" href="/css/user/login.css">
     <script src="/js/login.js"></script>
+
+    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/nav.css">
+
 </head>
 <body>
+<nav th:replace="~{common/nav.html :: nav}"></nav>
 <img class="wave" src="https://raw.githubusercontent.com/sefyudem/Responsive-Login-Form/master/img/wave.png">
 <div class="container">
     <div class="img">
@@ -63,14 +71,14 @@
 
         <form action="/auth/loginProc" method="post">
             <img src="https://raw.githubusercontent.com/sefyudem/Responsive-Login-Form/master/img/avatar.svg">
-            <h2 class="title">Welcome</h2>
+            <h2 class="title">환영합니다!</h2>
             <div class="input-div one">
                 <div class="i">
                     <i class="fas fa-user"></i>
                 </div>
                 <div class="div">
 
-                    <input type="text" class="input" placeholder="Enter email" name="email">
+                    <input type="text" class="input" placeholder="email을 입력해주세요" name="email">
                 </div>
             </div>
             <div class="input-div pass">
@@ -79,12 +87,12 @@
                 </div>
                 <div class="div">
 
-                    <input type="password" class="input" placeholder="Enter password" name="password">
+                    <input type="password" class="input" placeholder="password를 입력해주세요" name="password">
                 </div>
             </div>
-            <a href="#">Sing up</a>
-            <a href="#">Forgot Password?</a>
-            <input type="submit" class="btn" value="Login">
+            <a href="findId">아이디 찾기</a>
+            <a href="findPw">비밀번호 찾기</a>
+            <input type="submit" class="log" value="Login">
             <a href="https://kauth.kakao.com/oauth/authorize?client_id=0c7a67f1f4fcb8912b7d917baa9f87ee&redirect_uri=http://localhost:9999/auth/kakao/callback&response_type=code"><img class="kakao" height="20px" width="360px" src="/course/image/kakao_login_medium_wide.png" /></a>
         </form>
     </div>
@@ -121,5 +129,6 @@
     /*]]>*/
 </script>
 
+<script src="/common/js/nav.js"></script>
 </body>
 </html>

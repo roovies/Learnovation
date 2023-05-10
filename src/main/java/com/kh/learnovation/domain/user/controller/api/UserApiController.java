@@ -1,8 +1,10 @@
 package com.kh.learnovation.domain.user.controller.api;
 
 import com.kh.learnovation.domain.user.dto.ResponseDto;
+import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.entity.User;
 import com.kh.learnovation.domain.user.service.UserService;
+import com.kh.learnovation.domain.user.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,4 +43,12 @@ public class UserApiController {
 		
 		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 	}
+
+	@PostMapping("/mailck")
+	public ResponseDto<String> mailck(@RequestBody UserDTO userDTO){
+		System.out.println("userDTO:"+ userDTO.getEmail());
+		String mailck = userService.mailck(userDTO.getEmail());
+		return new ResponseDto<String>(HttpStatus.OK.value(), mailck);
+	}
+
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <meta charset="utf-8">
@@ -8,6 +9,13 @@
   <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
   <meta name="description" content="">
   <meta name="author" content="">
+
+  <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/common/css/nav.css">
+
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -19,7 +27,7 @@
       height: 100%;
     }
 
-    body {
+    main {
       width:100%;
       height:100%;
       margin: 0;
@@ -33,12 +41,6 @@
       margin: 0 auto; /* Added */
       float: none; /* Added */
       margin-bottom: 10px; /* Added */
-    }
-    .card-body{
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
     }
 
     #btn-Yes{
@@ -55,113 +57,120 @@
       padding: 10px;
       font-size: 16px;
     }
+    .checkbox{
+      margin-right: 20px;
+      text-align: right;
+    }
     .card-title{
       margin-left: 30px;
     }
-    .links{
-      text-align: center;
-      margin-bottom: 10px;
-    }
+
 
     a{
       color: #f58b34; text-decoration: none;
     }
-    .text2{
-      color : blue;
+
+    .links{
+      text-align: center;
+      margin-bottom: 10px;
     }
   </style>
 </head>
+<body>
+<nav th:replace="~{common/nav.html :: nav}"></nav>
+<main cellpadding="0" cellspacing="0" marginleft="0" margintop="0" width="100%" height="100%" align="center">
 
-<body cellpadding="0" cellspacing="0" marginleft="0" margintop="0" width="100%" height="100%" align="center">
+
+<!--
+<%
+Object data = session.getAttribute("findid");
+String finduid = (String)data;
+%>
+-->
 
 <div class="card align-middle" style="width:25rem;">
-  <!--<div class="card-title" style="margin-top:30px;">
 
-    <h2 class="card-title" style="color:#f58b34;"><img src="/resources/img/rabbit_logo.png"/></h2>
-  </div>-->
 
   <div class="card-body">
-    <!--<form action="findId" class="form-signin" method="POST">-->
-      <p class="text2" th:text="${id}"></p>
-      <input type="text" name="email" id="email" class="form-control" placeholder="이메일을 입력해주세요. 예)khuser@gmail.com" required autofocus><BR>
-      <input type="text" name="name" id="name" class="form-control" placeholder="이름을 입력해주세요. 예)박상은" required><BR>
-
-      <p class="check" id="check"></p><br/>
-      <button id="btn-Yes" class="btn btn-lg btn-primary btn-block" type="submit" onclick="findId()">비밀번호 찾 기</button>
-
-    <!--</form>-->
+    <form action="" th:action="@{/auth/resultPw/{id} (id=${id})}" class="form-signin" method="POST">
+      <p>my email : </p>
+      <p class="check" id="check" th:text="${email}"></p><br/>
+      <input type="password" name="password" id="pw" class="form-control" placeholder="비밀번호" required ><BR>
+      <input type="password" name="pw2" id="pw2" class="form-control" placeholder="비밀번호 재확인" required><br>
+      <p class="check" id="check2"></p><br/>
+      <button type="submit"  id="btn-Yes"  class="btn btn-lg btn-primary btn-block" style="width: 90%">비밀번호 재설정</button>
+    </form>
 
   </div>
   <div class="links">
-     <a href="loginForm">로그인</a> | <a href="joinForm">회원가입</a>
+    <a href="memberLogin">로그인</a> | <a href="memberRegist">회원가입</a>
 
   </div>
 </div>
 
+
+
+</main>
+<script src="/common/js/nav.js"></script>
 </body>
-<script type="text/javascript">
+
+<script >
 
 
 
-  $("#name").focusout(function(){
+  // 비밀번호 정규식
 
-    if($('#name').val() == ""){
-      $('#check').text('입력해주세요.');
+  var pwc = false;
+  var pwc2 = false;
+
+  $("#pw").focusout(function(){
+    if($('#pw').val() == ""){
+      $('#check').text('비밀번호를 입력해주세요.');
       $('#check').css('color', 'red');
 
     }else{
+      pwc2 = true;
       $('#check').hide();
     }
   });
 
-  $("#phoneNumber").focusout(function(){
-    if($('#phoneNumber').val() == ""){
-      $('#check').text('입력해주세요');
-      $('#check').css('color', 'red');
+  $("#pw2").focusout(function(){
+    if($('#pw2').val() == ""){
+      $('#check').text('필수 정보입니다.')
+      $('#check').css('color', 'red')
+    }else
+      $('#check').hide()
+  });
+
+  $("#pw2").keyup(function(){
+
+    if($(this).val()!=$("#pw").val()){
+      $("#check2").html("비밀번호가 다릅니다");
+      $("#check2").css("color",'red');
+      pwc = false;
+
     }else{
-      $('#check').hide();
+      $("#check2").html("비밀번호가 일치합니다");
+      $("#check2").css("color",'blue');
+      pwc = true;
     }
   });
 
-  // document.getElementById("btn-Yes").addEventListener("click", function() {
-  //   document.getElementById("name").style.display = "none";
-  //   document.getElementById("phoneNumber").style.display = "none";
-  //   document.getElementById("check").style.display = "none";
-  // });
+  $("#pw").keyup(function(){
 
-  // document.querySelector("form").addEventListener("submit", function() {
-  //   document.getElementById("name").style.display = "none";
-  //   document.getElementById("phoneNumber").style.display = "none";
-  //   document.getElementById("check").style.display = "none";
-  // });
+    if($(this).val()!=$("#pw2").val()){
+      $("#check2").html("비밀번호가 다릅니다");
+      $("#check2").css("color",'red');
+      pwc = false;
 
-/*  function findId(){
-    $.ajax({
-      url : '/findIdLogic',
-      type : 'post',
-      data : {
-        'name' : $('#name').val(),
-        'phoneNumber' : $('#phoneNumber').val()
-      },
-      success : function (data) {
-        if(data != "실패"){
-          $('.text2').text(data);
-          document.getElementById("name").style.display = "none";
-          document.getElementById("phoneNumber").style.display = "none";
-        }else {
-          $('.text2').text("일치하는 회원정보가 없습니다.")
-        }
-      },
-      error : function (data) {
-        console.log(data)
-      }
-    })
-  }*/
-
-
-
-
+    }else{
+      $("#check2").html("비밀번호가 일치합니다");
+      $("#check2").css("color",'blue');
+      pwc = true;
+    }
+  });
 
 
 </script>
+
 </html>

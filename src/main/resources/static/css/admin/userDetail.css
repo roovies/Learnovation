@@ -1,20 +1,20 @@
 /* 네비게이터 및 배경색 */
-body {
+main {
     margin: 0;
     padding: 0;
     font-family: 'Noto Sans KR', sans-serif;
     background-color: #eeeeee;
-    display: flex;
+    /*display: flex;*/
 }
 
-.side-nav {
+/*.side-nav {
     display: flex;
     flex-direction: column;
     background-color: #191b1f;
     height: 100vh;
     width: 230px;
     padding-top: 5vh;
-}
+}*/
 
 .menu {
     margin-left: 15px;
@@ -42,12 +42,12 @@ a:hover {
     color: #e7e7e7;
 }
 
-.nav-li{
+/*.nav-li{
     list-style-type: none;
     display: flex;
     align-items: center;
     margin: 15px auto;
-}
+}*/
 
 header {
     font-size: 30px;
