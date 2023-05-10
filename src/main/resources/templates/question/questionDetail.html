@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>자유게시판 상세보기</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/common/css/nav.css">
+  <link rel="stylesheet" href="/freeBoard/css/detail.css">
+</head>
+<body>
+<nav th:replace="~{common/nav.html :: nav}"></nav>
+<main>
+  <div class="freeBoard-theme-box">
+    <div class="freeBoard-theme-content"><a href="/freeBoard/list"><p>자유게시판</p></a></div>
+    <div class="freeBoard-theme-line"><hr></div>
+  </div>
+  <div class="freeBoard-info-box">
+    <div class="freeBoard-info-btn">
+      <a class="blue" th:href="@{|/freeBoard/modify/${freeBoard.id}|}">수정</a>
+      <a href="" class="sky" id="freeBoardRemoveBtn">삭제</a>
+    </div>
+  </div>
+  <div class="freeBoard-info-content">
+    <div class="freeBoard-nickname">
+      <span th:text="${freeBoard.nickname}"></span>
+      <!--        <span th:text="${#authentication.principal.username}"></span>-->
+    </div>
+    <div class="freeBoard-heart">
+      <img th:if="${result == 1}" th:src="@{/freeBoard/img/red-heart-logo.png}" th:data-freeboardid="${freeBoard.id}" alt="" >
+      <img th:if="${result == 0}" th:src="@{/freeBoard/img/black-heart-logo.png}" th:data-freeboardid="${freeBoard.id}" alt="" >
+      <span class="countLike" th:text="${countLike}" th:data-likes="${countLike}"></span>
+    </div>
+    <div class="freeBoard-hit">
+      <span th:text="${freeBoard.freeBoardHits}"></span>
+    </div>
+    <div class="freeBoard-subject">
+      <span th:text="${freeBoard.freeBoardUpdatedTime}"></span>
+    </div>
+  </div>
+  </div>
+  <div class="freeBoard-detail-title">
+    <p th:text="${freeBoard.freeBoardTitle}"></p>
+  </div>
+  <div class="freeBoard-detail-content" th:utext="${freeBoard.freeBoardContents}"></div>
+  <div class="index-btn-area">
+    <a class="index-btn" th:if="${keyword == null}" th:href="@{/freeBoard/list(page=${page})}">목록으로</a>
+    <a class="index-btn" th:if="${keyword != null}" th:href="@{/freeBoard/list(page=${page},keyword=${keyword})}">목록으로</a>
+  </div>
+  <hr>
+
+  <div id="comment-write">
+    <input type="hidden" th:value="${freeBoard.id}" name="freeBoardId">
+    <!--    <input type="hidden" id="commentWriter" th:value="${#authentication.principal.username}" placeholder="작성자">-->
+    <textarea id="commentContents" placeholder="내용"></textarea>
+    <button id="comment-write-btn" onclick="commentWrite()">댓글작성</button>
+  </div>
+
+
+  <div class="my-review" th:each="comment : ${commentDTOList}">
+    <div class="review-area">
+      <div class="review-user">
+        <img th:src="@{/freeBoard/image/user-logo.png}" alt="" class="user-logo">
+        <div class="user-info">
+          <span class="nickname" th:text="${comment.nickname}"></span>
+          <span class="review-date" th:text="${#dates.format(comment.commentCreatedTime, 'yyyy-MM-dd')}"></span>
+        </div>
+        <div class="review-controller">
+          <span id="reviewUpdate">수정</span>
+          <span id="reviewDelete">삭제</span>
+        </div>
+      </div>
+      <div id="comment-con">
+        <p th:text="${comment.commentContents}"></p>
+      </div>
+    </div>
+    <div id="update-review" class="none">
+      <textarea placeholder="댓글" th:text="${comment.commentContents}"></textarea>
+      <div class="right-aside">
+        <div class="right-aside-btn">
+          <button class="update" th:data-comment-id="${comment.id}" th:data-freeboard-id="${freeBoard.id}">수정하기</button>
+          <button class="cancel">취소하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</main>
+<div class="remove-modal-box" id="removeModalBox">
+  <div class="remove-modal-bg" id="removeModalBg"></div>
+  <div class="remove-modal">
+    <div>
+      <span>정말 삭제하시겠습니까?</span>
+    </div>
+    <div class="freeBoard-modal-btn">
+      <a th:href="@{/freeBoard/delete(freeBoardId=${freeBoard.getId()})}">삭제</a>
+      <a href="#" id="modalInClose">취소</a>
+    </div>
+  </div>
+</div>
+<script type="module">
+  const foo = "bar";
+  console.log(foo);
+</script>
+<script src="/common/js/nav.js"></script>
+<script>
+  document.getElementById('freeBoardRemoveBtn').addEventListener('click', function(e){
+    // e.preventDefault()는 JavaScript에서 이벤트의 기본 동작을 취소하는 메서드입니다.
+    e.preventDefault();
+    document.querySelector('body').style.overflow = 'hidden';
+    document.getElementById("removeModalBox").style.display = 'block';
+  })
+
+  document.getElementById("modalInClose").addEventListener('click',function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    modalClose();
+  })
+
+  document.getElementById("removeModalBg").addEventListener('click', function(e){
+    e.stopPropagation();
+    modalClose();
+  });
+
+  function modalClose(){
+    document.querySelector('body').style.overflow = 'scroll';
+    document.getElementById("removeModalBox").style.display = 'none';
+  }
+  // 종아요
+  $('.freeBoard-heart').each(function() {
+    let likes = parseInt($(this).data('likes')); // 현재 좋아요 개수
+    if (likes === 0) {
+      $(this).children('img').attr('src', '/freeBoard/image/black-heart-logo.png'); // 검은 하트 이미지로 변경
+    }
+  });
+
+  $(document).ready(function() {
+    $('.freeBoard-heart').click(function() {
+      let freeBoardId = $(this).find('img').data('freeboardid'); // 클릭한 게시글의 아이디
+      let likes = parseInt($(this).find('span').data('likes')); // 현재 좋아요 개수
+
+      $.ajax({
+        type: "POST",
+        url: "/like/check",
+        data: {
+          freeBoardId: freeBoardId,
+        },
+        success: function(data) {
+          if (data === "liked") {
+            likes += 1; // 좋아요 개수 1 증가
+            if (likes > 0) {
+              $('.freeBoard-heart').children('img').attr('src', '/freeBoard/img/red-heart-logo.png'); // 빨간 하트 이미지로 변경
+            }
+          } else if (data === "unliked") {
+            likes -= 1; // 좋아요 개수 1 감소
+            $('.freeBoard-heart').children('img').attr('src', '/freeBoard/img/black-heart-logo.png'); // 검은 하트 이미지로 변경
+            if (likes === 0) {
+              $('.freeBoard-heart').children('img').attr('src', '/freeBoard/img/black-heart-logo.png'); // 검은 하트 이미지로 변경
+            }
+          }else {
+            alert("로그인 해라.");
+          }
+          $('.countLike').data('likes', likes); // 데이터 속성 업데이트
+          $('.countLike').text(likes); // 데이터 속성 업데이트
+        },error: function (err) {
+          alert("Ajax Failed!!");
+        }
+
+      });
+    });
+  });
+
+
+  // 현재 시간과의 차이를 계산하여 텍스트로 반환하는 함수
+  function getTimeDiffString(datetime) {
+    const now = new Date();
+    const date = new Date(datetime);
+    const diff = now - date;
+
+    const sec = Math.floor(diff / 1000);
+    const min = Math.floor(sec / 60);
+    const hour = Math.floor(min / 60);
+    const day = Math.floor(hour / 24);
+
+    if (day > 0) {
+      return `${day}일 전`;
+    } else if (hour > 0) {
+      return `${hour}시간 전`;
+    } else if (min > 0) {
+      return `${min}분 전`;
+    } else {
+      return '방금 전';
+    }
+  }
+  const commentWrite = () => {
+    const contents = document.getElementById("commentContents").value;
+    console.log("내용: ", contents);
+    const id = [[${freeBoard.id}]];
+    $.ajax({
+      // 요청방식: post, 요청주소: /comment/save, 요청데이터: 작성자, 작성내용, 게시글번호
+      type: "post",
+      url: "/comment/write",
+      data: {
+        "commentContents": contents,
+        "freeBoardId": id
+      },
+      success: function (res) {
+        console.log("요청성공", res);
+        let output = '<div id="dynamic-review-area">';
+        for (let i in res) {
+          output += '<div class="review-area">';
+          output += '<div class="review-user">';
+          output += '<img th:src="@{/freeBoard/image/user-logo.png}" alt="" class="user-logo">';
+          output += '<div class="user-info">';
+          output += '<span class="nickname">' + res[i].nickname + '</span>';
+          output += '<span class="review-date">' + getTimeDiffString(res[i].commentCreatedTime) + '</span>';
+          output += '</div>';
+          output += '</div>';
+          output += '<div>';
+          output += '<p>' + res[i].commentContents + '</p>';
+          output += '</div>';
+          output += '</div>';
+          output += '<br>';
+          output += '<br>';
+          output += '<hr>';
+        }
+        output += '</div>';
+        document.getElementById('dynamic-review-area').innerHTML = output;
+        document.getElementById('commentContents').value = '';
+      },
+      error: function (err) {
+        console.log("요청실패", err);
+      }
+    });
+  }
+
+  document.querySelectorAll(".review-controller #reviewUpdate").forEach(function(button) {
+    button.addEventListener("click", function() {
+      button.parentElement.parentElement.parentElement.nextElementSibling.className = "input-review";
+      button.parentElement.parentElement.style.display = "none";
+      button.parentElement.parentElement.nextElementSibling.style.display = "none";
+    });
+  });
+
+
+  document.querySelectorAll(".right-aside-btn .update").forEach(function(button) {
+    button.addEventListener("click", function() {
+      const commentId = button.getAttribute('data-comment-id');
+      const freeBoardId = button.getAttribute('data-freeboard-id');
+      const commentElement = button.closest('.my-review').querySelector('#update-review');
+      const content = commentElement.querySelector('textarea').value;
+      console.log(commentId);
+      console.log(freeBoardId);
+      $.ajax({
+        type: 'POST',
+        url: '/comment/update',
+        data: {
+          'id': commentId,
+          'freeBoardId': freeBoardId,
+          'commentContents': content
+        },
+        success: function (res) {
+          console.log("요청성공", res);
+          let output = '<div class="my-review">';
+          output += '<div class="review-area">';
+          output += '<div class="review-user">';
+          output += '<img th:src="@{/freeBoard/image/user-logo.png}" alt="" class="user-logo">';
+          output += '<div class="user-info">';
+          output += '<span class="nickname">' + res[0].nickname + '</span>';
+          output += '<span class="review-date">' + getTimeDiffString(res[0].commentCreatedTime) + '</span>';
+          output += '</div>';
+          output += '<div class="review-controller">';
+          output += '<span id="reviewUpdate">' + '수정' + '</span>';
+          output += '<span id="reviewDelete">' + '삭제' + '</span>';
+          output += '</div>'
+          output += '</div>'
+          output += '<div id="comment-con">'
+          output += '<p>' + res[0].commentContents + '</p>';
+          output += '</div>';
+          output += '</div>';
+          button.parentElement.parentElement.parentElement.style.display = 'none';
+          button.parentElement.parentElement.parentElement.nextElementSibling.style.display = 'block';
+          document.querySelector('.review-area').outerHTML = output;
+          document.getElementById('commentContents').value = '';
+        },
+        error: function (err) {
+          console.log("요청실패", err);
+        }
+      });
+      button.parentElement.parentElement.parentElement.className = "none";
+      button.parentElement.parentElement.parentElement.nextElementSibling
+              .children[0].style.display = "block";
+      button.parentElement.parentElement.parentElement.nextElementSibling
+              .children[1].style.display = "block";
+    });
+  });
+
+
+
+  // 댓글 수정 취소
+  document.querySelector(".cancel").addEventListener("click", ()=>{
+    document.querySelector('.review-area').style.display = "block";
+    document.querySelector('#update-review').style.display = 'none';
+    document.querySelector('#comment-con').style.display = 'none';
+  });
+
+  // 수강후기 삭제
+  document.querySelector("#reviewDelete").addEventListener("click", ()=>{
+    const commentId = /*[[${comment?.id}]]*/ null;
+    $.ajax({
+      type: 'POST',
+      url: '/comment/delete',
+      data: {
+        'id' : commentId
+      },
+      success: function (response){
+        if (response === "success"){
+          location.reload();
+        } else{
+
+        }
+      }
+    })
+  });
+
+
+
+</script>
+</body>
+</html>

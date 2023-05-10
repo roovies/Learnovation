@@ -20,7 +20,7 @@
             <li><img src='' alt=''><a href="/">Learnovation</a></li>
             <li>
               <div class="a-nav-course-box" id="aNavCourse">
-                <a href='#' id="navCourse">강의</a>
+                <a href='/course/list' id="navCourse">강의</a>
                 <div class="a-nav-course-hidden" id="aNavCourseHidden"></div>
                 <div class="a-nav-course-modal" id="aNavCourseModal">
                   <div class="a-nav-course-modal-diamond"></div>
@@ -40,7 +40,7 @@
                 <div class="a-nav-community-modal" id="aNavCommunityModal">
                   <div class="a-nav-community-modal-diamond"></div>
                   <div class="a-nav-community-modal-list">
-                    <a href="#">질문 게시판</a>
+                    <a href="/question/list">질문 게시판</a>
                     <a href="/freeBoard/list">자유 게시판</a>
                     <a href="/matching/list">그룹 매칭</a>
                   </div>
@@ -103,59 +103,12 @@
                     </div>
                     <div class="cart-icon-box" id="cartIconBox">
                   <span id="cartIcon">
-                    <a href="">
+                    <a href=""
+                       th:userid="${#authentication.principal.id}"
+                       th:onclick="myCart(this.getAttribute('userid'))">
                       <i class="fa-solid fa-cart-shopping fa-lg"></i>
                     </a>
                   </span>
-                      <div class="cart-hidden" id="cartHidden"></div>
-                      <div class="nav-cart-modal" id="navCartModal">
-                        <div class="cart-diamond"></div>
-                        <div class="padding-modal">
-                          <div class="modal-cart-info">
-                            <div class="modal-cart-info-left">
-                              <span>수강바구니 </span>
-                              <span>1</span>
-                            </div>
-                            <div class="modal-cart-info-right">
-                              <span>총 결제금액 </span>
-                              <span>1,000,000</span>
-                              <span>원</span>
-                            </div>
-                          </div>
-                          <div class="modal-cart-list">
-                            <div class="nav-course-box">
-                              <div class="nav-course-thumbnail">
-                                <img class="nav-course-img" src="" alt="">
-                              </div>
-                              <div class="nav-course-content">
-                                <span>제목제목제목제목</span>
-                                <span>100,000 원</span>
-                              </div>
-                            </div>
-                            <div class="nav-course-box">
-                              <div class="nav-course-thumbnail">
-                                <img class="nav-course-img" src="" alt="">
-                              </div>
-                              <div class="nav-course-content">
-                                <span>제목제목제목제목</span>
-                                <span>100,000 원</span>
-                              </div>
-                            </div>
-                            <div class="nav-course-box">
-                              <div class="nav-course-thumbnail">
-                                <img class="nav-course-img" src="" alt="">
-                              </div>
-                              <div class="nav-course-content">
-                                <span>제목제목제목제목</span>
-                                <span>100,000 원</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="modal-cart-btn">
-                            <a href="">수강바구니에서 전체보기</a>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                     <div class="group-Icon-box">
                       <span id="asdas">

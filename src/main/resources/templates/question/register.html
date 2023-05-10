@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>질문 등록</title>
@@ -47,8 +47,11 @@
     <div id="maintitle">
         <p>질문 게시글 작성</p>
     </div>
+
     <form action="/question/regist" method="post" id="input-area">
-        <input type="hidden" name="userId" value="1">
+        <th:block th:if="${#authentication.principal != 'anonymousUser'}">
+            <input type="hidden" name="userId" th:value="${#authentication.principal.id}" >
+        </th:block>
         <label for="titlebox">제목 : </label> <br>
         <input type="text" id="titlebox" name="title" placeholder="제목을 입력해주세요."> <br>
         <label for="summernote">내용 : </label>

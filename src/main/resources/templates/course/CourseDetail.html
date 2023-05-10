@@ -139,7 +139,7 @@
             <button class="right-apply-btn"
                     th:id="${detail.id}"
                     th:onclick="gopay(this.getAttribute('id'))">수강신청</button>
-            <button class="right-cart-btn">장바구니 추가</button>
+            <button type="button" class="right-cart-btn" id="addcart">장바구니 추가</button>
             <a href="#" class="right-share"><i class="fa-solid fa-share-nodes"></i> 공유하기</a>
         </div>
     </div>
@@ -147,6 +147,26 @@
 
 
 <script th:inline="javascript">
+
+    // 장바구니 추가 버튼 클릭
+    $("#addcart").click(function () {
+
+        const courseId = $("#course-id").val();
+        const userId = $("#user-id").val();
+
+        $.ajax({
+            type: 'post',
+            url: '/cart/add',
+            data: {
+                userId : userId,
+                courseId : courseId
+            },
+            success: function () {
+                alert("장바구니에 담겼습니다.")
+            }
+        })
+    });
+
     // ======================================================
     // 네비게이션 관련
     // ======================================================

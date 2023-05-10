@@ -1,5 +1,7 @@
 package com.kh.learnovation.domain.payment.entity;
 
+import com.kh.learnovation.domain.course.entity.Course;
+import com.kh.learnovation.domain.user.entity.User;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -10,7 +12,7 @@ import java.sql.Timestamp;
 @Getter
 @DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "payments")
+@Table(name = "payment")
 public class Payment {
 
     @Id
@@ -18,14 +20,22 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 구매번호
 
-    @Column(name = "course_id", nullable = false)
-    private Long courseId; // 강의번호
+    @ManyToOne
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course; // 강의번호
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId; // 유저번호
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user; // 유저번호
 
     @Column(name = "payment_at")
     private Timestamp paymentAt;
 
-
+    @Builder
+    public Payment(Long id, Course course, User user, Timestamp paymentAt) {
+        this.id = id;
+        this.course = course;
+        this.user = user;
+        this.paymentAt = paymentAt;
+    }
 }
