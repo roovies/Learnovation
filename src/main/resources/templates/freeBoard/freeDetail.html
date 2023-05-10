@@ -37,18 +37,18 @@
                     <div class="freeBoard-nickname">
                         <span th:text="${freeBoard.nickname}"></span>
                     </div>
+                    <div class="freeBoard-heart">
+                        <img th:if="${result == 1}" th:src="@{/freeBoard/img/red-heart-logo.png}" th:data-freeboardid="${freeBoard.id}" alt="" >
+                        <img th:if="${result == 0}" th:src="@{/freeBoard/img/black-heart-logo.png}" th:data-freeboardid="${freeBoard.id}" alt="" >
+                        <span class="countLike" th:text="${countLike}" th:data-likes="${countLike}"></span>
+                    </div>
                     <div class="freeBoard-info-stats">
-                        <div class="freeBoard-heart">
-                            <img th:if="${result == 1}" th:src="@{/freeBoard/img/red-heart-logo.png}" th:data-freeboardid="${freeBoard.id}" alt="" >
-                            <img th:if="${result == 0}" th:src="@{/freeBoard/img/black-heart-logo.png}" th:data-freeboardid="${freeBoard.id}" alt="" >
-                            <span class="countLike" th:text="${countLike}" th:data-likes="${countLike}"></span>
-                        </div>
-                        <div class="freeBoard-subject">
-                            <span id="time" class="timeDiff" th:text="${freeBoard.freeBoardCreatedTime}"></span>
-                        </div>
                         <div class="freeBoard-hit">
                             <i class="far fa-eye"></i>
                             <span class="countHits" th:text="${freeBoard.freeBoardHits}"></span>
+                        </div>
+                        <div class="freeBoard-subject">
+                            <span id="time" class="timeDiff" th:text="${freeBoard.freeBoardCreatedTime}"></span>
                         </div>
                         <div class="freeBoard-report">
                             <i class="fas fa-exclamation-triangle" th:onclick="openReportModal()"></i>
@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        </div>
+    </div>
     </div>
     <div class="freeBoard-detail-title" id="freeBoardTitle" th:data-freeboardno="${freeBoard.id}">
         <p th:text="${freeBoard.freeBoardTitle}"></p>
@@ -171,7 +171,17 @@
         document.getElementById("reportModal").style.display = "none";
         document.querySelector("button").disabled = true;
         if(reportContent != "" && curUserNo != null){
-            alert(`신고가 접수되었습니다`)
+            $.ajax({
+                data : {reportContent : reportContent, reportReason : reportReason, curUserNo:curUserNo, freeBoardNo:freeBoardNo },
+                type : "GET",
+                url : "/report/write",
+                success : function(data){
+                    alert(`신고가 접수되었습니다`);
+                },error : function(data){
+                    console.log(data);
+                    alert("신고 실패")
+                }
+            })
         }else{
             alert("로그인 해주세요...")
         }
@@ -211,9 +221,9 @@
             return '방금 전';
         }
     }
-        const timeElem = document.getElementById('time');
-        const datetime = timeElem.innerText;
-        timeElem.innerText = getTimeDiffString(datetime);
+    const timeElem = document.getElementById('time');
+    const datetime = timeElem.innerText;
+    timeElem.innerText = getTimeDiffString(datetime);
     // 종아요
     $('.freeBoard-heart').each(function() {
         let likes = parseInt($(this).data('likes')); // 현재 좋아요 개수

@@ -1,5 +1,6 @@
 package com.kh.learnovation.domain.freeboard.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kh.learnovation.domain.freeboard.dto.FreeBoardDTO;
 import com.kh.learnovation.domain.user.entity.User;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -31,6 +33,7 @@ public class FreeBoardEntity {
     private String freeBoardContents;
 
     @Column(name="created_at")
+    @CreationTimestamp
     private Timestamp createdAt;
 
     @Column(name="updated_at")
@@ -45,14 +48,15 @@ public class FreeBoardEntity {
     @Column
     private int status; // 1 or 0
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "freeBoardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<LikeEntity> likes = new ArrayList<>();
-
+    @JsonIgnore
     @OneToMany(mappedBy = "freeBoardEntity", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CommentEntity> commentEntityList = new ArrayList<>();
 

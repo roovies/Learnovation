@@ -2,11 +2,9 @@ package com.kh.learnovation.domain.freeboard.controlller;
 
 
 import com.google.gson.JsonObject;
-import com.kh.learnovation.domain.admin.entity.Admin;
 import com.kh.learnovation.domain.freeboard.dto.CommentDTO;
 import com.kh.learnovation.domain.freeboard.dto.FreeBoardDTO;
 import com.kh.learnovation.domain.freeboard.service.*;
-import com.kh.learnovation.domain.notice.dto.NoticeDTO;
 import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -176,7 +174,7 @@ public class FreeBoardController {
         Long countLike = freeBoardService.countLikesByFreeBoardId(id);
         FreeBoardDTO freeBoardDTO = freeBoardService.findById(id);
         /* 댓글 목록 가져오기 */
-        List<CommentDTO> commentDTOList = commentService.findAll(id);
+//        List<CommentDTO> commentDTOList = commentService.findAll(id);
 //        int result = likeService.likeCheck(id);
         Optional<UserDTO> optionalUserDTO =userService.getCurrentUser();
         if(optionalUserDTO.isEmpty()) {
@@ -188,7 +186,7 @@ public class FreeBoardController {
 //        model.addAttribute("result", result);
         model.addAttribute("result", result);
         model.addAttribute("countLike", countLike);
-        model.addAttribute("commentDTOList", commentDTOList);
+//        model.addAttribute("commentDTOList", commentDTOList);
         model.addAttribute("freeBoard", freeBoardDTO);
         model.addAttribute("keyword", searchKeyword);
         model.addAttribute("page", pageable.getPageNumber());
@@ -304,7 +302,7 @@ public class FreeBoardController {
         String subject = freeBoardContents.replaceAll("<[^>]*>?", "");
         UserDTO userDTO=userService.getCurrentUser().get();
         FreeBoardDTO OriginalFreeBoardDTO = freeBoardService.findById(Long.parseLong(freeBoardId));
-        FreeBoardDTO freeBoardDTO = FreeBoardDTO.builder().freeBoardTitle(freeBoardTitle).freeBoardContents(freeBoardContents)
+        FreeBoardDTO freeBoardDTO = FreeBoardDTO.builder().id(Long.parseLong(freeBoardId)).freeBoardTitle(freeBoardTitle).freeBoardContents(freeBoardContents)
                 .userId(userDTO.getId()).nickname(userDTO.getNickname()).subject(subject).freeBoardCreatedTime(OriginalFreeBoardDTO.getFreeBoardUpdatedTime()).build();
          freeBoardDTO = freeBoardService.update(freeBoardDTO);
          System.out.println(freeBoardDTO);
