@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채용 목록</title>
+    <link rel="stylesheet" href="/jobposting/css/JobPostingList.css">
+    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/nav.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+<nav th:replace="~{common/nav.html :: nav}"></nav>
+<div class="main-body">
+    <div class="jobposting-container">
+        <h2>🔍 채용정보</h2>
+        <table class="jobposting-controller">
+            <tr>
+                <td>지역</td>
+                <td>
+                    <input type="checkbox" name="region" value="11000">서울
+                    <input type="checkbox" name="region" value="26000">부산
+                    <input type="checkbox" name="region" value="27000">대구
+                    <input type="checkbox" name="region" value="28000">인천
+                    <input type="checkbox" name="region" value="29000">광주
+                    <input type="checkbox" name="region" value="30000">대전
+                    <input type="checkbox" name="region" value="31000">울산
+                    <input type="checkbox" name="region" value="36110">세종
+                    <input type="checkbox" name="region" value="41000">경기
+                    <input type="checkbox" name="region" value="42000">강원
+                    <input type="checkbox" name="region" value="43000">충북
+                    <input type="checkbox" name="region" value="44000">충남
+                    <input type="checkbox" name="region" value="45000">전북
+                    <input type="checkbox" name="region" value="46000">전남
+                    <input type="checkbox" name="region" value="47000">경북
+                    <input type="checkbox" name="region" value="48000">경남
+                    <input type="checkbox" name="region" value="50000">제주
+                </td>
+            </tr>
+            <tr>
+                <td>직종</td>
+                <td>
+                    <input type="checkbox" name="occupation" value="024">소프트웨어
+                    <input type="checkbox" name="occupation" value="026">정보보안·정보통신
+                </td>
+            </tr>
+            <tr>
+                <td>급여</td>
+                <td>
+                    <input type="radio" id="salary-all" name="salTp" value="null">무관
+                    <input type="radio" id="salary-year" name="salTp" value="Y">연봉
+                    <input type="text" name="minPay" readonly>만원 ~
+                    <input type="text" name="maxPay" readonly>만원
+                </td>
+            </tr>
+            <tr>
+                <td>경력</td>
+                <td>
+                    <input type="radio" name="career" value="Z">무관
+                    <input type="radio" name="career" value="N">신입
+                    <input type="radio" name="career" value="E">경력
+                    <input type="text" name="minCareerM" readonly>개월 ~
+                    <input type="text" name="maxCareerM" readonly>개월
+                </td>
+            </tr>
+            <tr>
+                <td>사원 수</td>
+                <td>
+                    <input type="radio" id="workerCtn-all" name="workerCnt" value="null">무관
+                    <input type="radio" id="workerCtn-100" name="workerCnt" value="W100">100인 이상
+                </td>
+            </tr>
+        </table>
+        <div class="jobposting-list-btn">
+            <button class="jobposting-search-btn">검색하기</button>
+            <button class="jobposting-initialize-btn">초기화</button>
+        </div>
+        <th:block th:if="${error == 'N'}">
+            <table class="jobposting-list">
+                <tr>
+                    <th>회사명</th>
+                    <th>근무지역</th>
+                    <th>공고명</th>
+                    <th>기준</th>
+                    <th>급여</th>
+                    <th>경력</th>
+                    <th>등록일</th>
+                    <th>마감일</th>
+                </tr>
+                <tr th:each="job : ${jobList}">
+                    <td th:text="${job.company}"></td>
+                    <td th:text="${job.region}"></td>
+<!--                    <td th:text="${job.title}"></td>-->
+                    <td><a th:href="@{/jobposting/detail(wantedAuthNo=${job.wantedAuthNo})}">[[${job.title}]]</a></td>
+                    <td th:if="${job.salTpNm == '연봉'}"><span class="salary-year" th:text="${job.salTpNm}"></span></td>
+                    <td th:if="${job.salTpNm == '월급'}"><span class="salary-month" th:text="${job.salTpNm}"></span></td>
+                    <td th:utext="${job.sal}"></td>
+                    <td th:text="${job.career}"></td>
+                    <td th:text="${job.regDt}"></td>
+                    <td th:text="${job.closeDt}"></td>
+                </tr>
+            </table>
+            <div class="jobposting-navi">
+                <!-- << 화살표 -->
+                <a th:if="${paging.getCurrentPage() == 1}" href="#">&laquo;</a>
+                <a th:if="${paging.getCurrentPage() != 1}" th:href="@{${url}(startPage=1)}">&laquo;</a>
+
+                <!-- 가운 데 번호 네비( 최대 10개) -->
+                <th:block th:each="i : ${#numbers.sequence(paging.startNavi, paging.endNavi)}">
+                    <a th:href="@{${url}(region=${req.getRegion()}, startPage=${i}, occupation=${req.getOccupation()}, salTp=${req.getSalTp()}, minPay=${req.minPay}, maxPay=${req.maxPay}, career=${req.career}, minCareerM=${req.minCareerM}, maxCareerM=${req.maxCareerM}, workerCnt=${req.workerCnt})}" th:text="${i}"></a>
+                </th:block>
+
+                <!-- >> 화살표 -->
+                <a th:if="${paging.getCurrentPage() == paging.getTotalNaviCount()}" href="#">&raquo;</a>
+                <a th:if="${paging.getCurrentPage() != paging.getTotalNaviCount()}" th:href="@{${url}(region=${req.getRegion()}, startPage=${paging.getTotalNaviCount()}, occupation=${req.getOccupation()}, salTp=${req.getSalTp()}, minPay=${req.minPay}, maxPay=${req.maxPay}, career=${req.career}, minCareerM=${req.minCareerM}, maxCareerM=${req.maxCareerM}, workerCnt=${req.workerCnt})}">&raquo;</a>
+            </div>
+        </th:block>
+        <th:block th:if="${error == 'Y'}">
+            <h3 id="alter-msg">해당 조건의 공고가 존재하지 않습니다. 😰</h3>
+        </th:block>
+    </div>
+</div>
+<script th:inline="javascript">
+    const regionTags = document.querySelectorAll('[name=region]');
+    let req = [[${req}]];
+    console.log(req);
+    //지역 체크박스
+    if (req['region'] != null){
+        let words = req['region'].split('|');
+        for (let i = 0; i<words.length-1; i++){
+            if(words.includes(regionTags[i].value)){
+                regionTags[i].checked = true;
+            }
+        }
+    }
+
+    //직종 체크박스
+    if (req['occupation'] == '024'){
+        document.querySelector("[value='024']").checked = true;
+    } else if (req['occupation'] == '026'){
+        document.querySelector("[value='026']").checked = true;
+    } else{
+        document.querySelector("[value='024']").checked = true;
+        document.querySelector("[value='026']").checked = true;
+    }
+
+
+    //급여 체크박스
+    if(req['salTp'] == 'null'){
+        document.querySelector("#salary-all").checked = true;
+    } else if (req['salTp'] == 'Y'){
+        document.querySelector("#salary-year").checked = true;
+        document.querySelector("[name=minPay]").value = req['minPay'];
+        document.querySelector("[name=maxPay]").value = req['maxPay'];
+    } else{
+        document.querySelector("#salary-all").checked = false;
+        document.querySelector("#salary-year").checked = false;
+    }
+
+    // 경력 체크박스
+    if (req['career'] == 'Z'){
+        document.querySelector('[value=Z]').checked = true;
+    } else if(req['career'] == 'N'){
+        document.querySelector('[value=N]').checked = true;
+    } else if (req['career'] == 'E'){
+        document.querySelector('[value=E]').checked = true;
+        document.querySelector('[name=minCareerM]').value = req['minCareerM'];
+        document.querySelector('[name=maxCareerM]').value = req['maxCareerM'];
+    }
+
+    // 사원 수 체크박스
+    if(req['workerCnt'] == 'null'){
+        document.querySelector("#workerCtn-all").checked = true;
+    } else if(req['workerCnt'] == 'W100'){
+        document.querySelector("#workerCtn-100").checked = true;
+    }
+</script>
+<script src="/jobposting/js/JobPostingList.js" th:inline="javascript"></script>
+<script src="/common/js/nav.js"></script>
+</body>
+</html>

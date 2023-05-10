@@ -43,6 +43,7 @@ dependencies {
 	implementation 'org.apache.httpcomponents:httpcore:4.4.15'
 	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket' // Web Socket
+	implementation group: 'org.jdom', name: 'jdom2', version: '2.0.6.1' //XML 핸들링
 	compileOnly 'org.projectlombok:lombok'
 
 	// 3. querydsl dependencies 추가

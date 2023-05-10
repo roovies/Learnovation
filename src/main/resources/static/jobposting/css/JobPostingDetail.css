@@ -1,0 +1,75 @@
+@font-face {
+    font-family: 'GowunBatang-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+    margin: 0;
+    font-family: 'GowunBatang-Regular';
+}
+
+
+/* 여기부터 */
+
+.main-body{
+    background-color: #f4f4f4;
+}
+
+.jobposting-container{
+    width: 1100px;
+    height: 100%;
+    margin: 0 auto;
+    background-color: white;
+    box-shadow: 0px 0px 5px rgba(106, 106, 106, 0.33);
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+}
+.jobposting-container h2{
+    margin: 50px 0px 20px 100px;
+}
+
+.jobposting-detail{
+    width: 80%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0px 0px 2px #686868;
+    color: #686868;
+    font-size: 85%;
+    align-self: center;
+}
+.jobposting-detail tr:not(tr:last-child) td {
+    border-bottom: 1px dashed #686868;
+}
+.jobposting-detail tr td:nth-child(1) {
+    width: 15%;
+    text-align: center;
+    background-color: #fafafa;
+    font-weight: bold;
+}
+.jobposting-detail tr td:nth-child(2) {
+    width: 35%;
+    padding: 20px 10px 20px 10px;
+}
+.jobposting-detail tr td:nth-child(3) {
+    width: 15%;
+    text-align: center;
+    background-color: #fafafa;
+    font-weight: bold;
+}
+.jobposting-detail tr td:nth-child(4) {
+    width: 35%;
+    padding: 20px 10px 20px 10px;
+}
+
+#redirectBtn{
+    width: 200px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    font-size: 100%;
+    cursor: pointer;
+    align-self: center;
+    margin-top: 50px;
+}

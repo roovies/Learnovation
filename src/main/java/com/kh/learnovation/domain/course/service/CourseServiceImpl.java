@@ -275,88 +275,90 @@ public class CourseServiceImpl implements CourseService {
                         .where(course.id.eq(id))
                         .fetchOne()
                         );
+        if(foundCourse.isPresent()){
+            // 2. course_chapters + course_lessons + course_videos 테이블 join
+            QCourseChapter chapter = QCourseChapter.courseChapter;
+            QCourseLesson lesson = QCourseLesson.courseLesson;
+            QCourseVideo video = QCourseVideo.courseVideo;
+            List<CourseChapter> foundChapters = jqf
+                    .selectFrom(chapter)
+                    .distinct()
+                    .innerJoin(chapter.lessons, lesson)
+                    .innerJoin(lesson.video, video)
+                    .where(chapter.course.id.eq(id))
+                    .fetch();
+            // 3. 총 강의 개수 구하기
+            long totalLessonCount = jqf
+                    .selectFrom(chapter)
+                    .innerJoin(chapter.lessons, lesson)
+                    .innerJoin(lesson.video, video)
+                    .where(chapter.course.id.eq(id))
+                    .fetchCount();
+            // 4. 총 강의 시간 구하기
+            long totalVideoTime = jqf
+                    .select(video.videoTime.sum())
+                    .from(chapter)
+                    .join(chapter.lessons, lesson)
+                    .join(lesson.video, video)
+                    .where(chapter.course.id.eq(id))
+                    .fetchOne();
 
-        // 2. course_chapters + course_lessons + course_videos 테이블 join
-        QCourseChapter chapter = QCourseChapter.courseChapter;
-        QCourseLesson lesson = QCourseLesson.courseLesson;
-        QCourseVideo video = QCourseVideo.courseVideo;
-        List<CourseChapter> foundChapters = jqf
-                .selectFrom(chapter)
-                .distinct()
-                .innerJoin(chapter.lessons, lesson)
-                .innerJoin(lesson.video, video)
-                .where(chapter.course.id.eq(id))
-                .fetch();
-        // 3. 총 강의 개수 구하기
-        long totalLessonCount = jqf
-                .selectFrom(chapter)
-                .innerJoin(chapter.lessons, lesson)
-                .innerJoin(lesson.video, video)
-                .where(chapter.course.id.eq(id))
-                .fetchCount();
-        // 4. 총 강의 시간 구하기
-        long totalVideoTime = jqf
-                .select(video.videoTime.sum())
-                .from(chapter)
-                .join(chapter.lessons, lesson)
-                .join(lesson.video, video)
-                .where(chapter.course.id.eq(id))
-                .fetchOne();
-
-        // 4. List<CourseChapter> -> List<CourseChapterDTO>로 변환
-        List<CourseChapterDTO> chapterDtos = foundChapters.stream()
-                .map(chapterOne -> {
-                    // List<CourseLesson> -> List<CourseLessonDTO>로 변환
-                    List<CourseLessonDTO> lessonDtos = chapterOne.getLessons().stream()
-                            .map(lessonOne -> {
-                                CourseLessonDTO lessonDto = CourseLessonDTO.builder()
-                                        .id(lessonOne.getId())
-                                        .chapterId(lessonOne.getCourseChapter().getId())
-                                        .title(lessonOne.getTitle())
-                                        .lessonOrder(lessonOne.getLessonOrder())
-                                        // CourseVideo -> CourseVideoDTO로 변환
-                                        .courseVideoDTO(CourseVideoDTO.builder()
-                                                .id(lessonOne.getVideo().getId())
-                                                .originalVideoName(lessonOne.getVideo().getOriginalVideoName())
-                                                .savedVideoName(lessonOne.getVideo().getSavedVideoName())
-                                                .savedPath(lessonOne.getVideo().getSavedPath())
-                                                .videoSize(lessonOne.getVideo().getVideoSize())
-                                                .videoTime(convertTimeToString(lessonOne.getVideo().getVideoTime()))
-                                                .createdAt(lessonOne.getVideo().getCreatedAt())
-                                                .build())
-                                        .build();
-                                return lessonDto;
-                            })
-                            .collect(Collectors.toList());
+            // 4. List<CourseChapter> -> List<CourseChapterDTO>로 변환
+            List<CourseChapterDTO> chapterDtos = foundChapters.stream()
+                    .map(chapterOne -> {
+                        // List<CourseLesson> -> List<CourseLessonDTO>로 변환
+                        List<CourseLessonDTO> lessonDtos = chapterOne.getLessons().stream()
+                                .map(lessonOne -> {
+                                    CourseLessonDTO lessonDto = CourseLessonDTO.builder()
+                                            .id(lessonOne.getId())
+                                            .chapterId(lessonOne.getCourseChapter().getId())
+                                            .title(lessonOne.getTitle())
+                                            .lessonOrder(lessonOne.getLessonOrder())
+                                            // CourseVideo -> CourseVideoDTO로 변환
+                                            .courseVideoDTO(CourseVideoDTO.builder()
+                                                    .id(lessonOne.getVideo().getId())
+                                                    .originalVideoName(lessonOne.getVideo().getOriginalVideoName())
+                                                    .savedVideoName(lessonOne.getVideo().getSavedVideoName())
+                                                    .savedPath(lessonOne.getVideo().getSavedPath())
+                                                    .videoSize(lessonOne.getVideo().getVideoSize())
+                                                    .videoTime(convertTimeToString(lessonOne.getVideo().getVideoTime()))
+                                                    .createdAt(lessonOne.getVideo().getCreatedAt())
+                                                    .build())
+                                            .build();
+                                    return lessonDto;
+                                })
+                                .collect(Collectors.toList());
 
 
-                    CourseChapterDTO chapterDto = CourseChapterDTO.builder()
-                            .id(chapterOne.getId())
-                            .courseId(chapterOne.getCourse().getId())
-                            .title(chapterOne.getTitle())
-                            .chapterOrder(chapterOne.getChapterOrder())
-                            .lessons(lessonDtos)
-                            .build();
-                    return chapterDto;
-                })
-                .collect(Collectors.toList());
+                        CourseChapterDTO chapterDto = CourseChapterDTO.builder()
+                                .id(chapterOne.getId())
+                                .courseId(chapterOne.getCourse().getId())
+                                .title(chapterOne.getTitle())
+                                .chapterOrder(chapterOne.getChapterOrder())
+                                .lessons(lessonDtos)
+                                .build();
+                        return chapterDto;
+                    })
+                    .collect(Collectors.toList());
 
-        // 5. CourseDetail DTO에 found한 정보들 저장
-        CourseDetailDTO detailDto = CourseDetailDTO.builder()
-                .id(foundCourse.get().getId())
-                .category(foundCourse.get().getCourseCategory().getName())
-                .level(foundCourse.get().getLevel())
-                .title(foundCourse.get().getTitle())
-                .nickname(foundCourse.get().getUser().getNickname())
-                .price(foundCourse.get().getPrice())
-                .content(foundCourse.get().getContent())
-                .savedPath(foundCourse.get().getCourseImage().getSavedPath())
-                .savedImageName(foundCourse.get().getCourseImage().getSavedImageName())
-                .chapters(chapterDtos)
-                .build();
-        detailDto.setTotalLessonCount(totalLessonCount);
-        detailDto.setTotalVideoTime(convertTimeToString((int)totalVideoTime));
-        return detailDto;
+            // 5. CourseDetail DTO에 found한 정보들 저장
+            CourseDetailDTO detailDto = CourseDetailDTO.builder()
+                    .id(foundCourse.get().getId())
+                    .category(foundCourse.get().getCourseCategory().getName())
+                    .level(foundCourse.get().getLevel())
+                    .title(foundCourse.get().getTitle())
+                    .nickname(foundCourse.get().getUser().getNickname())
+                    .price(foundCourse.get().getPrice())
+                    .content(foundCourse.get().getContent())
+                    .savedPath(foundCourse.get().getCourseImage().getSavedPath())
+                    .savedImageName(foundCourse.get().getCourseImage().getSavedImageName())
+                    .chapters(chapterDtos)
+                    .build();
+            detailDto.setTotalLessonCount(totalLessonCount);
+            detailDto.setTotalVideoTime(convertTimeToString((int)totalVideoTime));
+            return detailDto;
+        }
+        return null;
     }
 
     @Override
