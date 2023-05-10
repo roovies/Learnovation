@@ -160,7 +160,7 @@ a:hover{
     color: #38d39f;
 }
 
-.btn{
+.log{
     display: block;
     width: 100%;
     height: 50px;
@@ -177,7 +177,7 @@ a:hover{
     cursor: pointer;
     transition: .5s;
 }
-.btn:hover{
+.log:hover{
     background-position: right;
 }
 

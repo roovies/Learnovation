@@ -10,10 +10,26 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
 
+    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/nav.css">
+
+
     <link rel="stylesheet" href="/css/user/sign.css">
 
+
+
 </head>
+
 <body>
+<nav th:replace="~{common/nav.html :: nav}"></nav>
+<main>
+<section>
+
+
+
 <!--
   <div class="container">
     <form action="/user/join" method="POST">
@@ -55,7 +71,7 @@
     <div class="email">
       <label for="email">Email</label>
       <input id="email" type="text" placeholder="이메일 형식으로 입력해 주세요.">
-      <button id="checkEmail">중복확인</button>
+      <button id="checkEmail" onclick="checkDuplicateEmail()">중복확인</button>
       <div id="emailError" class="error"></div>
     </div>
 
@@ -98,7 +114,30 @@
 
 
   </div>
+<script>
+    function checkDuplicateEmail() {
+        // Ajax 요청을 통해 서버로 중복 이메일 체크 요청을 보낸 후, 결과에 따라 처리합니다.
+        // 여기에서는 가정상 alert 메시지로 결과를 표시하고 있습니다. 실제로는 서버 응답을 받아 적절한 동작을 수행해야 합니다.
+        // 아래의 코드는 가정상의 예시이므로 실제 서버와의 통신 로직은 개발 환경에 맞게 수정되어야 합니다.
+        let email = $("#email").val();
+        let data = {
+            "email": email
+        }
+        console.log("email:"+email);
+        $.ajax({
+            type: 'POST',
+            data: JSON.stringify(data),
+            url: '/mailck',
+            dataType: 'JSON',
+            contentType: "application/json",
+            success:function (data){
+                console.log("data:"+data["data"]);
+                alert(data["data"]);
 
+            }
+        })
+    }
+</script>
 <script th:inline="javascript"  sec:authorize-expr="isAuthenticated()">
   /*<![CDATA[*/
   window.onload = function () {
@@ -122,11 +161,17 @@
   });
 
   // 중복 이메일 체크 함수
-  function checkDuplicateEmail(email) {
+  function checkDuplicateEmail() {
     // Ajax 요청을 통해 서버로 중복 이메일 체크 요청을 보낸 후, 결과에 따라 처리합니다.
     // 여기에서는 가정상 alert 메시지로 결과를 표시하고 있습니다. 실제로는 서버 응답을 받아 적절한 동작을 수행해야 합니다.
     // 아래의 코드는 가정상의 예시이므로 실제 서버와의 통신 로직은 개발 환경에 맞게 수정되어야 합니다.
-
+      let email = $("#email").val();
+    $.ajax({
+        type :'POST',
+        data : email ,
+        url : '/mailck',
+        dataType : 'JSON'
+    })
     // 가정상의 서버 응답 결과
     var isDuplicate = true; // 중복된 이메일인 경우: true, 중복되지 않은 이메일인 경우: false
 
@@ -142,5 +187,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="/js/user.js"></script>
   <script src="/js/sign.js"></script>
+</section>
+
+</main>
+<script src="/common/js/nav.js"></script>
 </body>
 </html>

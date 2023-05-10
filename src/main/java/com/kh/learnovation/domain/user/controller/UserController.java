@@ -9,6 +9,10 @@ import com.kh.learnovation.domain.notice.service.NoticeService;
 import com.kh.learnovation.domain.user.dto.UserDTO;
 import com.kh.learnovation.domain.user.entity.User;
 import com.kh.learnovation.domain.user.service.UserService;
+import com.kh.learnovation.domain.user.service.UserServiceImpl;
+import groovy.util.logging.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -48,6 +52,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
@@ -55,8 +60,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 // 그냥 주소가 / 이면 index.jsp 허용
 // static이하에 있는 /js/**, /css/**, /image/**
 
+@Slf4j
 @Controller
 public class UserController {
+
+	private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -243,22 +251,42 @@ public class UserController {
 		}
 	}
 
-	/*//비밀번호 찾기
-	@PostMapping("findPwLogic")
-	@ResponseBody
-	public String findPw(@ModelAttribute UserDTO userDTO, Model model) {
+	//비밀번호 찾기
+	@PostMapping("/auth/findPwLogic")
+	public String findPw(@ModelAttribute UserDTO userDTO, Model model , RedirectAttributes redirectAttributes) {
 		String email = userDTO.getEmail();
 		String name = userDTO.getName();
 		String phoneNumber = userDTO.getPhoneNumber();
-		UserDTO findUserDto = userService.findPw(email, name, phoneNumber);
+		Optional<User> findUserDto = userService.findPw(email, name, phoneNumber);
+		System.out.println("findUserDto::"+findUserDto);
 		if (findUserDto != null) {
-			model.addAttribute("id", findUserDto.getEmail());
+			findUserDto.get().getEmail();
+			System.out.println("email:"+findUserDto.get().getEmail());
+			model.addAttribute("email", findUserDto.get().getEmail());
+			model.addAttribute("id", findUserDto.get().getId());
 			return "user/changePw";
 		} else {
 			model.addAttribute("id", "일치하는 회원정보가 없습니다.");
-			return "user/loginForm";
+			redirectAttributes.addAttribute("status" , false);
+			return "redirect:/auth/findPw";
 		}
-	}*/
+	}
+
+	@PostMapping("/auth/resultPw/{id}")
+	public String resultPw(UserDTO userDTO , @PathVariable Long id){
+		User user = new User();
+		Long userId = userDTO.getId();
+		String userPw = userDTO.getPassword();
+		user.setId(id);
+		user.setPassword(userDTO.getPassword());
+		logger.info("userId ={}", id);
+		logger.info("userPw ={}", userPw);
+
+		userService.회원수정2(user);
+
+		return "redirect:/auth/loginForm";
+	}
+
 
 
 	@GetMapping("/auth/kakao/callback")

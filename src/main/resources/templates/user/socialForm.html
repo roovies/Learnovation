@@ -49,8 +49,16 @@
 
   <link rel="stylesheet" href="/css/user/login.css">
   <script src="/js/login.js"></script>
+
+  <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/common/css/nav.css">
+
 </head>
 <body>
+<nav th:replace="~{common/nav.html :: nav}"></nav>
 <img class="wave" src="https://raw.githubusercontent.com/sefyudem/Responsive-Login-Form/master/img/wave.png">
 <div class="container">
   <div class="img">
@@ -92,6 +100,6 @@
     </form>
   </div>
 </div>
-
+<script src="/common/js/nav.js"></script>
 </body>
 </html>

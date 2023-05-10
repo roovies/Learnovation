@@ -4,7 +4,7 @@
     font-size: 11px;
 }
 
-html {
+main {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -12,7 +12,7 @@ html {
     padding-bottom: 20px;
 }
 
-body {
+section {
     width: 45%;
     border: 1px solid black;
 }
@@ -132,4 +132,12 @@ button{
     height: 20px;
     color:red;
     font-weight: 700;
+}
+
+#only {
+    display: flex;
+    align-items: center;
+}
+#only > input{
+    width: 30%;
 }

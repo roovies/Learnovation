@@ -43,7 +43,7 @@ let index = {
 			email: $("#email").val(),
 			password: $("#password").val(),
 			name: $("#name").val(),
-			nickname: $("#3").val(),
+			nickname: $("#nickname").val(),
 			phoneNumber: $("#phoneNumber").val()
 		};
 		
