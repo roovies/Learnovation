@@ -1,0 +1,85 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#title-area {
+    margin-bottom: 20px;
+}
+#title-area span {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+#main-container {
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+/* === === === === === 목록 스타일 === === === === === */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 20px;
+}
+.item {
+    background-color: snow;
+    padding: 20px;
+    border: 1px solid black;
+}
+/* === === === === === === === === === === === === */
+
+.course-img {
+    width: 200px;
+    height: 130px;
+}
+
+.btn-area {
+    float: right;
+    margin-top: 20px;
+}
+
+.course-title, .cLevel, .cPrice {
+    font-size: 20px;
+    background-color: snow;
+    border: 0;
+    text-align: center;
+}
+
+.course-title {
+    width: 400px;
+}
+.cLevel {
+    width: 100px;
+}
+.cPrice {
+    width: 100px;
+}
+
+.delete-btn {
+    float: right;
+}
+
+.pay-btn {
+    cursor: pointer;
+    width: 200px;
+    height: 80px;
+    font-size: 30px;
+    border-radius: 10px ;
+    border: 1px solid;
+    color: white;
+    border-color: rgb(88, 193, 121);
+    background-color: rgb(88, 193, 121);
+}
+
+.delete-btn {
+    cursor: pointer;
+    width: auto;
+    height: 40px;
+    border-radius: 10px ;
+    border: 1px solid;
+    color: white;
+    border-color: rgb(88, 193, 121);
+    background-color: rgb(88, 193, 121);
+}

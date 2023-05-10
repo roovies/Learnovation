@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>내 장바구니</title>
+    <link rel="stylesheet" th:href="@{/css/payment/cartList.css}">
+    <link rel="stylesheet" href="../.././static/css/payment/cartList.css">
+
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <!-- iamport.payment.js -->
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+
+    <!--    네비게이션 추가 코드-->
+    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/nav.css">
+</head>
+<body>
+        <!--    네비게이션 추가 코드-->
+        <nav th:replace="~{common/nav.html :: nav}"></nav>
+        <input type="hidden" th:value="${totalPrice}" id="totalPrice">
+
+        <div id="main-container">
+
+            <div id="title-area">
+                <span>내 장바구니</span>
+            </div>
+            <div th:each="cart : ${cartList}">
+                <input type="hidden" th:value="${cart.cartPk.user.email}" id="email">
+                <input type="hidden" th:value="${cart.cartPk.user.name}" id="name">
+                <input type="hidden" th:value="${cart.cartPk.user.phoneNumber}" id="phone">
+                <input type="hidden" th:value="${cart.cartPk.course.title}">
+                <input type="hidden" th:value="${cart.cartPk.course.price}">
+
+                <div class="container">
+                    <div class="item" id="course-item">
+                        <img th:src="@{/course/upload/thumbnails/} + ${cart.cartPk.course.getCourseImage().getSavedPath()} + @{/} + ${cart.cartPk.course.getCourseImage().getSavedImageName()}" class="course-img" id="thumbnails" alt="강의 섬네일">
+                            <input class="course-title" th:value="${cart.cartPk.course.title}" th:data-courseid="${cart.cartPk.course.id}" readonly>
+                        <th:block th:if="${cart.cartPk.course.level} == '1'">
+                            <input class="cLevel" type="text" value="입문자용" readonly>
+                        </th:block>
+                        <th:block th:if="${cart.cartPk.course.level} == '2'">
+                            <input class="cLevel" type="text" value="초급자용" readonly>
+                        </th:block>
+                        <th:block th:if="${cart.cartPk.course.level} == '3'">
+                            <input class="cLevel" type="text" value="중급이상" readonly>
+                        </th:block>
+                        <input class="cPrice" th:value="${cart.cartPk.course.price} + '원'" readonly>
+                        <button type="button" class="delete-btn" th:data-price="${cart.cartPk.course.price}" th:data-courseid="${cart.cartPk.course.id}" onclick="deleteOne(this)">개별삭제</button>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-area">
+                <button type="button" class="pay-btn" th:onclick="pay()">결제하기</button>
+            </div>
+        </div>
+
+
+<script>
+    function pay() {
+        let totalPrice = document.querySelector("#totalPrice").value;
+        let name = document.querySelector("#name").value;
+        let email = document.querySelector("#email").value;
+        let phone = document.querySelector("#phone").value;
+        let courseIds = document.querySelectorAll(".course-title");
+        let userNo = document.getElementById("groupName").dataset.id;
+        IMP.init('imp11062418');
+        IMP.request_pay({
+            pg: "kakaopay.TC0ONETIME",
+            pay_method: "card",
+            merchant_uid: 'merchant_' + new Date().getTime(),
+            name: "일괄구매",
+            amount: totalPrice,
+            buyer_email: email,
+            buyer_name: name,
+            buyer_tel: phone
+        }, function(rsp) {
+            console.log(rsp);
+            // 결제 검증
+            $.ajax({
+                type: "POST",
+                url : "/verifyIamport/" + rsp.imp_uid
+            }).done(function(data) {
+                console.log(data);
+                // rsp.paid_amount와 result.response.amount(서버 검증) 비교 후 로직 실행
+                if(rsp.paid_amount == data.response.amount) {
+                    alert("결제 및 검증완료");
+                    for(let i = 0; i < courseIds.length; i++) {
+                        let courseId = courseIds[i].dataset.courseid;
+                        $.ajax({
+                            type: 'post',
+                            url: '/payment/pay',
+                            contentType : 'application/json',
+                            data : JSON.stringify({
+                                "courseId" : courseId,
+                                "buyerId" : userNo
+                            }),
+                            success: function () {
+                                $.ajax({
+                                    type: 'get',
+                                    url: '/cart/remove',
+                                    data: {
+                                        userNo : userNo,
+                                        courseNo : courseId
+                                    }
+                                })
+                            }
+                        })
+                    }
+                }
+                else {
+                    alert("인증에 실패하였습니다. 에러 내용 : " + rsp.error_msg);
+                }
+            });
+        });
+    }
+
+    function deleteOne(btn) {
+        let courseNo = btn.dataset.courseid;
+        let container = btn.parentElement;
+        let userNo = document.getElementById("groupName").dataset.id;
+        let price = btn.dataset.price;
+        $.ajax({
+            type: 'get',
+            url: '/cart/remove',
+            data: {
+                userNo : userNo,
+                courseNo : courseNo
+            },
+            success: function (data) {
+                if(data == "success") {
+                    container.remove();
+                    let totalPrice = document.querySelector("#totalPrice");
+                    totalPrice.value = totalPrice.value-price;
+                }
+            }
+        })
+
+    }
+
+
+
+</script>
+
+<!--    네비게이션 추가 코드-->
+<script src="/common/js/nav.js"></script>
+</body>
+</html>

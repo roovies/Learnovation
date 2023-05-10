@@ -7,13 +7,23 @@ p {
     margin: 0 auto;
 }
 
+.title {
+    margin-top: 20px;
+}
+.title span{
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+}
+
 #title-area {
     width: 60%;
     margin: 0 auto;
+    margin-top: 20px;
 }
+
 #title-area #title {
     border: 0;
-    font-size: 100pxc;
     width: auto;
 }
 #title-area #created-at{
@@ -25,13 +35,15 @@ p {
     width: auto;
 }
 
-#question-area {
-    border: 1px solid black;
+hr.hr-1 {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 
 #content-area {
     width: 60%;
-    height: 1000px;
+    height: 300px;
     /*border: 0;*/
     margin: 0 auto;
 }
@@ -39,10 +51,12 @@ p {
 #content-area p{
     margin: 0 auto;
     margin-top: 20px;
+    border: 0;
 }
 
 #btn-area {
     float: right;
+    margin-top: 20px;
 }
 
 #delete-form {

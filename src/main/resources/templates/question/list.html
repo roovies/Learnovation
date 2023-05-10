@@ -21,7 +21,7 @@
     <div id="container">
 
         <div id="maintitle">
-            <p>질문 게시판</p>
+            <a href="/question/list">질문 게시판</a>
         </div>
 <!--        검색 영역-->
         <div id="search-area">
@@ -60,10 +60,17 @@
                 <a th:href="@{'/question/list?page=' + ${pageNum}}">[[${pageNum}]]</a>
             </span>
         </div>
-            <a href="/question/registView" id="question-regist">글쓰기</a>
-        </div>
+        <th:block th:if="${#authentication.principal != 'anonymousUser'}">
+            <button id="question-regist" th:onclick="goregist()">게시글 작성</button>
+        </th:block>
+    </div>
 
-        <!--    네비게이션 추가 코드-->
-        <script src="/common/js/nav.js"></script>
+    <script>
+        function goregist() {
+            location.href = "/question/registView";
+        }
+    </script>
+    <!--    네비게이션 추가 코드-->
+    <script src="/common/js/nav.js"></script>
 </body>
 </html>

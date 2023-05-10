@@ -7,9 +7,17 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
     <!-- iamport.payment.js -->
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+
+    <!--    네비게이션 추가 코드-->
+    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/nav.css">
 </head>
 <body>
-
+<!--    네비게이션 추가 코드-->
+<nav th:replace="~{common/nav.html :: nav}"></nav>
 
     <div>
         <input type="hidden" name="payNo" value="1">
@@ -72,12 +80,14 @@
                     url : "/payment/pay",
                     contentType : 'application/json',
                     data : JSON.stringify({
+                        "payNo" : payNo,
                         "courseId" : courseId,
                         "buyerId" : buyerId
                     }),
                     success : function (response) {
+                        console.log(response)
                         if(response === "true") {
-                            location.href="";
+                            location.href="/course/list";
                         }
                         else {
                             alert("서버측 오류가 발생했습니다.");
@@ -92,5 +102,8 @@
       });
     }
   </script>
+
+<!--    네비게이션 추가 코드-->
+<script src="/common/js/nav.js"></script>
 </body>
 </html>

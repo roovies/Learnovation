@@ -12,19 +12,29 @@
     <link rel="stylesheet" th:href="@{/css/admin/userList.css}">
     <link rel="stylesheet" href="../../static/css/admin/userList.css">
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    <!--    네비게이션 추가 코드-->
+<!--    <script src="https://kit.fontawesome.com/f5db63554f.js" crossorigin="anonymous"></script>-->
+<!--    <link rel="preconnect" href="https://fonts.googleapis.com">-->
+<!--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">-->
+<!--    <link rel="stylesheet" href="/common/css/nav.css">-->
 </head>
 <body>
+<!--    네비게이션 추가 코드-->
+<!--<nav th:replace="~{common/nav.html :: nav}"></nav>-->
+
     <div class="side-nav">
         <header>Learnnovation</header>
         <ul>
             <a href="#" class="active">
                 <li class="nav-li">
-                    <span class="menu">🙋‍♂️ 회원관리</span>
+                    <span class="menu" onclick="goUserList()">🙋‍♂️ 회원관리</span>
                 </li>
             </a>
             <a href="#">
                 <li class="nav-li">
-                    <span class="menu">게시판 관리(드롭다운ㄱㄱ)</span>
+                    <span class="menu">게시판 관리</span>
                 </li>
             </a>
             <a href="#">
@@ -60,7 +70,7 @@
             <div id="title">회원목록</div>
 
             <form action="/admin/search" method="get" id="search-area">
-                <input type="text" id="search-value" name="keyword" placeholder="회원 ^이름^ 검색">
+                <input type="text" id="search-value" name="keyword" placeholder="회원 이름 검색">
                 <button type="submit" id="search-btn">검색</button>
             </form>
 
@@ -135,6 +145,13 @@
             }
             return confirm("정말로 삭제하시겠습니까?");
         }
+
+        function goUserList() {
+            location.href = "/admin/userList";
+        }
     </script>
+
+<!--    네비게이션 추가 코드-->
+<!--<script src="/common/js/nav.js"></script>-->
 </body>
 </html>

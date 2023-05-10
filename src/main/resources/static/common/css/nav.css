@@ -402,7 +402,7 @@ nav a:hover{
         }
         .nav-course-box{
             margin-top: 10px;
-            display: flex;
+            display: none;
         }
             .nav-course-thumbnail{
                 width: 100px;

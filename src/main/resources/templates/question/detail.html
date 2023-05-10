@@ -19,13 +19,16 @@
 <nav th:replace="~{common/nav.html :: nav}"></nav>
 
     <div id="container">
+        <div class="title">
+            <span>질문 게시글 조회</span>
+        </div>
+
         <div id="title-area">
-            <br>
-            제목 : <p type="text" id="title" name="title" th:text="${question.title}" readonly>제목입니다.</p> <br>
+            제목 : <p type="text" id="title" name="title" th:text="${question.title}" readonly>제목입니다.</p>
             작성날짜 : <p type="text" id="created-at" name="createdAt" th:text="${#dates.format(question.createdAt, 'yyyy-MM-dd HH:mm:ss')}" readonly>2023-05-08</p>
             조회수 : <p type="text" id="view-count" name="viewCount" th:text="${question.viewCount}" readonly>123</p>
         </div>
-        <br>
+        <hr class="hr-1">
 
 <!--        질문 내용-->
         <div id="question-area">
@@ -34,11 +37,15 @@
 
 <!--        수정 삭제 목록으로 버튼-->
         <div id="btn-area">
-            <form id="delete-form" th:action="@{'/question/delete/' +${question.id}}" method="post">
-                <input type="hidden" name="_method" value="delete" />
-                <button class="delete-btn">게시글 삭제하기</button>
-            </form>
-            <button type="button" class="update-btn" th:id="${question.id}" th:onclick="gomodify(this.getAttribute('id'))">게시글 수정하기</button>
+            <th:block th:if="${#authentication.principal != 'anonymousUser'}">
+                <th:block th:if="${#authentication.principal.id == question.userId}">
+                    <form id="delete-form" th:action="@{'/question/delete/' +${question.id}}" method="post">
+                        <input type="hidden" name="_method" value="delete" />
+                        <button class="delete-btn">게시글 삭제하기</button>
+                    </form>
+                    <button type="button" class="update-btn" th:id="${question.id}" th:onclick="gomodify(this.getAttribute('id'))">게시글 수정하기</button>
+                </th:block>
+            </th:block>
             <button type="button" class="golist-btn" th:onclick="golist()">질문 목록으로 돌아가기</button>
         </div>
     </div>

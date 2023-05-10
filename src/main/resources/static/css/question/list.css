@@ -4,9 +4,13 @@
     margin-top: 20px;
 }
 
-#maintitle p{
+#maintitle a{
     text-align: center;
     font-size: 30px;
+}
+#maintitle a:link, a:visited {
+    color: black;
+    text-decoration: none;
 }
 
 #search-area {
@@ -19,14 +23,14 @@
     border-bottom-left-radius: 7px;
     /*margin-top: 5px;*/
     width: 222px;
-    height: 36px;
+    height: 32.4px;
     font-size: 15px;
     outline: none;
 }
 #course-search-btn {
     border: 1px solid gray;
     width: 50px;
-    height: 36px;
+    height: 40px;
     border-bottom-right-radius: 7px;
     border-top-right-radius: 7px;
     margin-left: -4px;
@@ -80,7 +84,14 @@ table.type10 .even {
 
 #question-regist {
     float: right;
-    /*margin-right: 340px;*/
+    width: 80px;
+    height: 40px;
+    border: 1px solid;
+    border-radius: 10px ;
+    color: white;
+    border-color: rgb(88, 193, 121);
+    background-color: rgb(88, 193, 121);
+    cursor: pointer;
 }
 
 #questionTitle {
