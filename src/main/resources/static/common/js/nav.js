@@ -397,6 +397,53 @@ if(document.getElementById('userIconBox') != null){
     }
 }
 
+if(document.getElementById('groupChatInputContent') != null){
+    document.getElementById('groupChatInputContent').addEventListener('keyup', function (e){
+        e.preventDefault();
+        e.stopPropagation();
+        if(e.keyCode == 13){
+            let content = document.getElementById('groupChatInputContent').value;
+            let userNo = document.getElementById('groupName').dataset.id;
+            let groupNo = e.target.parentElement.parentElement.dataset.meetingno;
+            if(content.trim() != ""){
+                $.ajax({
+                    data : {userNo : userNo, groupNo : groupNo, content : content},
+                    url : "/meeting/chat/insert",
+                    type : "POST",
+                    success : function (data){
+                        if(data == "success"){
+                            getChatRoomList(groupNo, userNo);
+                            document.getElementById('groupChatInputContent').value = "";
+                            $.ajax({
+                                data : {meetingNo : groupNo},
+                                url : "/meeting/member/list",
+                                type : "GET",
+                                success : function (data){
+                                    let mList = JSON.parse(data);
+                                    for(let i = 0; i < mList.length; i++){
+                                        if(mList[i].meetingMemberPk.user.id != userNo){
+                                            alarm.send(`{type: "chat", feeder: "${mList[i].meetingMemberPk.user.id}", meetingNo : "${groupNo}"}`);
+                                        }
+                                    }
+                                },
+                                error : function (data){
+
+                                }
+                            })
+
+                        }
+                    },
+                    error : function (data){
+
+                    }
+                })
+            }else{
+                alert("공백 ㄴ");
+            }
+        }
+    })
+}
+
 if(document.getElementById('groupRoomBtn') != null){
     document.getElementById('groupRoomBtn').addEventListener('click', function (e){
         e.preventDefault();
@@ -404,37 +451,41 @@ if(document.getElementById('groupRoomBtn') != null){
         let content = document.getElementById('groupChatInputContent').value;
         let userNo = document.getElementById('groupName').dataset.id;
         let groupNo = e.target.parentElement.parentElement.dataset.meetingno;
-        $.ajax({
-            data : {userNo : userNo, groupNo : groupNo, content : content},
-            url : "/meeting/chat/insert",
-            type : "POST",
-            success : function (data){
-                if(data == "success"){
-                    getChatRoomList(groupNo, userNo);
-                    document.getElementById('groupChatInputContent').value = "";
-                    $.ajax({
-                        data : {meetingNo : groupNo},
-                        url : "/meeting/member/list",
-                        type : "GET",
-                        success : function (data){
-                            let mList = JSON.parse(data);
-                            for(let i = 0; i < mList.length; i++){
-                                if(mList[i].meetingMemberPk.user.id != userNo){
-                                    alarm.send(`{type: "chat", feeder: "${mList[i].meetingMemberPk.user.id}", meetingNo : "${groupNo}"}`);
+        if(content.trim() != ""){
+            $.ajax({
+                data : {userNo : userNo, groupNo : groupNo, content : content},
+                url : "/meeting/chat/insert",
+                type : "POST",
+                success : function (data){
+                    if(data == "success"){
+                        getChatRoomList(groupNo, userNo);
+                        document.getElementById('groupChatInputContent').value = "";
+                        $.ajax({
+                            data : {meetingNo : groupNo},
+                            url : "/meeting/member/list",
+                            type : "GET",
+                            success : function (data){
+                                let mList = JSON.parse(data);
+                                for(let i = 0; i < mList.length; i++){
+                                    if(mList[i].meetingMemberPk.user.id != userNo){
+                                        alarm.send(`{type: "chat", feeder: "${mList[i].meetingMemberPk.user.id}", meetingNo : "${groupNo}"}`);
+                                    }
                                 }
-                            }
-                        },
-                        error : function (data){
+                            },
+                            error : function (data){
 
-                        }
-                    })
+                            }
+                        })
+
+                    }
+                },
+                error : function (data){
 
                 }
-            },
-            error : function (data){
-
-            }
-        })
+            })
+        }else{
+            alert("공백 ㄴ");
+        }
     })
 }
 
