@@ -2,12 +2,12 @@
 <img src="https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/9b52ef5f-260c-441c-bc95-0cb8833e6230">
 
 # 목차
-* [프로젝트 소개](https://github.com/2211SpringCloudWebApp/PerfumePalette#-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%86%8C%EA%B0%9C)
-* [개발 기간](https://github.com/2211SpringCloudWebApp/PerfumePalette#-%EA%B0%9C%EB%B0%9C-%EA%B8%B0%EA%B0%84)
-* [멤버 구성](https://github.com/2211SpringCloudWebApp/PerfumePalette#-%EB%A9%A4%EB%B2%84-%EA%B5%AC%EC%84%B1)
-* [개발 환경](https://github.com/2211SpringCloudWebApp/PerfumePalette#-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD)
-* [기술 스택](https://github.com/2211SpringCloudWebApp/PerfumePalette#-%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)
-* [주요 기능 및 상세](https://github.com/2211SpringCloudWebApp/PerfumePalette#%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EB%B0%8F-%EC%83%81%EC%84%B8)
+* [프로젝트 소개](https://github.com/2211SpringCloudWebApp/Learnovation#-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%86%8C%EA%B0%9C)
+* [개발 기간](https://github.com/2211SpringCloudWebApp/Learnovation#-%EA%B0%9C%EB%B0%9C-%EA%B8%B0%EA%B0%84)
+* [멤버 구성](https://github.com/2211SpringCloudWebApp/Learnovation#-%EB%A9%A4%EB%B2%84-%EA%B5%AC%EC%84%B1)
+* [개발 환경](https://github.com/2211SpringCloudWebApp/Learnovation#-%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD)
+* [기술 스택](https://github.com/2211SpringCloudWebApp/Learnovation#-%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)
+* [주요 기능 및 상세](https://github.com/2211SpringCloudWebApp/Learnovation#%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EB%B0%8F-%EC%83%81%EC%84%B8)
   * 회원관리
   * 온라인 강의
   * 상품 결제
@@ -20,7 +20,7 @@
   * 공지사항
   * 자유게시판
   * 질문게시판
-* [실행화면](https://github.com/2211SpringCloudWebApp/PerfumePalette#-%EC%8B%A4%ED%96%89%ED%99%94%EB%A9%B4)
+* [실행화면](https://github.com/2211SpringCloudWebApp/Learnovation#-%EC%8B%A4%ED%96%89%ED%99%94%EB%A9%B4)
 
 # 💝 프로젝트 소개
 
