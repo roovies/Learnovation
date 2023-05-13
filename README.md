@@ -124,7 +124,6 @@ Learnovation은 IT 기술 분야에 관심이 있는 사람들을 위한 종합 
 |기능|내용|
 |------|---|
 |질문게시판|회원들이 질문 할 때 이용하는 게시판이다. 글 작성, 수정, 삭제가 가능하다. 글 작성과 수정을 할 때는 에디터 api를 사용하여 글을 꾸밀 수 있다.|
-|댓글|댓글과 대댓글 작성, 수정, 삭제 가능하고 여러명이 작성 가능하다.(Ajax 활용)|
 |페이징|한 페이지당 10개의 게시물을 보여준다.|
 
 ## 13. 공지사항
@@ -138,55 +137,62 @@ Learnovation은 IT 기술 분야에 관심이 있는 사람들을 위한 종합 
 
 # 📹 실행화면
 ## 1. 메인화면
-![메인](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/ec3966d0-ea3f-4db1-adc1-6acfb5a43346)
-![메인2](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/1d474d27-110e-4126-a8a2-ed1cb58c6ad9)
-![메인3](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/85079ba0-7635-4aa1-b5ff-13003e8b8ccd)
+![메인1](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/53ea2606-421c-4df5-bb4e-a47d1ef6a729)
+![메인2](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/277be1b9-f447-4668-a290-0e626bc82ea9)
+![메인3](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/52af6e6b-3b4b-4b36-888c-2ef787bf2995)
 
 ## 2. 회원관리
-![mbti](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/271208a7-c6d7-431e-a28a-f9a818d3690c)
-![MBTI2 1](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/6eb9146b-f589-4465-a383-ba5cb8d5bd13)
+![회원가입](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/59478c7c-3f26-474f-92c3-979799d448fc)
+![비밀번호 찾기](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/6acd0294-2ee0-43d3-a5b5-dba77d7ec94c)
+![로그인](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/6662c9ba-75cd-4657-9e79-7eaadb466ada)
 
 ## 3. 온라인 강의
-![상품 리스트](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/901d7233-a2e1-4f3d-b081-df0767926398)
-![비교함](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/ca5607a0-156f-49ff-a392-bf8186e05aff)
-![상품 상세](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/9e40778d-cd75-4c74-a1d4-150cd9d78e76)
-![상품 상세_후기](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/44640c4e-cd80-4578-b8fc-f65c7d35937b)
-![상품 상세_문의](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/f7de7d2a-2a3a-4bda-b3f9-ff6c1c8cba5e)
-![상품상세_sns](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/79fd0ff6-0751-46d5-8af1-a97418df8c11)
+![강의 등록](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/2e45c933-4f35-40a2-ac87-99c86242b70f)
+![강의 목ㄱ록](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/ed4792e0-05ae-4fd1-9cdc-0c9d7e9cff1c)
+![구매전](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/cfe6d671-7e6a-43ee-8fd7-2bc1743bf227)
+![구매후](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/19523b3b-43f9-4101-8f08-074ad580ba7b)
 
-## 4. 강의 구매
-![상품 주문](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/94f9852a-5693-4326-b36b-1028b27a5338)
-![image](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/3d0cd7fa-d0ef-42c1-9cda-f6a2b8fc435a)
+## 4. 수강 후기
+![제목 없음](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/7e00b789-a08a-47a3-b4e7-c83b64536e99)
 
-## 5. 직업 정보 탐색
-![찜 리스트](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/48788482-37dc-4509-92c9-75a43a7d53be)
-![장바구니 리스트](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/d6c52874-5647-4647-a279-4e174971548e)
+## 5. 결제
+![결제 장면](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/07c9fde5-f2b7-4fca-89f4-422830aa0e35)
+![장바구니](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/56fa6038-2c46-43d2-b00d-610cfc7afe70)
 
-## 6. 채용공고 확인
-![알림](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/a9d9c175-a89f-43d1-b466-6d83ee94a707)
+## 6. 직업 정보
+![리스트](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/f0c28c0b-c9e7-47a0-8fa4-eb95ad2e2cab)
+![상세](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/d8661703-4dc9-459a-9bc6-9abcc35f9475)
 
-## 7. 알림
-![1ㄷ1채팅](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/f64885be-1def-49f9-bbc1-d89370b27e85)
+## 7. 채용 정보
+![리스트](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/48e87873-dc58-4515-9a08-8cfee22f8496)
+![상세](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/5491c31c-d4b0-4b3c-8c77-cc7101cc4521)
 
-## 8. 자동응답 챗봇
-![문의 작성](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/4c1726da-4684-47fe-a13d-5697a3be28c8)
-![문의 수정](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/5501d14a-21ca-4cfa-b1b1-1d3301470aee)
-![문의 게시판 리스트](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/8cec6339-6af6-45bb-a9a2-a5e4bcb67416)
-![문의 상세](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/ccfb2f38-a8ce-4cd5-82de-f50d22d20e2c)
+## 8. 알림
+![제목 없음](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/3c74f196-2a6e-478e-9db1-1a15f0365a74)
 
-## 9. 매칭게시판
-![리뷰 등록](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/5a9e2e25-f7f1-4160-93a9-e350fa2bc02d)
-![리뷰 수정](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/b273265c-ea8e-4dc3-986b-22dfcafaa45c)
-![리뷰 리스트](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/d0e27430-dd5e-4084-a1a9-0ae0dde0a458)
-![리뷰 상세](https://github.com/2211SpringCloudWebApp/PerfumePalette/assets/119032790/1a1ecb1f-2861-47b4-9b58-8cdca5b24ac4)
+## 9. 챗봇
+![실시간](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/2b955c1f-68be-4461-9229-4edc13d7a332)
+![패턴 분석](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/768cc98d-29f6-4ebc-9122-eea631ae529c)
 
-## 10. 그룹
+## 10. 매칭게시판
+![작성](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/f26d93a5-358b-4dca-8cb3-227352785b76)
+![상세](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/8faa82ac-9574-493d-b8ed-d82c1d5d1065)
+![리스트](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/56b4fa85-ab8f-4636-9906-a5c3ff6779f6)
 
-## 11. 자유게시판
+## 11. 그룹 채팅
+![리스트](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/a1be827d-496a-46f5-b112-97961ea38285)
+![채팅](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/2fd22f52-1dd6-48bc-a3d7-2c9334dc5142)
 
 ## 12. 질문게시판
+![글 쓰기](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/a72a66f3-bf8c-4842-8676-744f93df8702)
+![상세](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/f4484f8e-2423-4766-ab59-5a6778c631d2)
+![리스트](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/e2f73b49-49fc-4055-8d5b-3eb7c3d6951a)
 
-## 13. 공지사항
+## 13. 자유게시판
+![작성](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/a5f16c36-31e5-4613-a992-63912b7f4de9)
+![상세](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/78b95648-b8e5-4e83-87ce-d2c294a44b77)
+![신고](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/d970e802-ed3d-48ff-b39f-0ae3a429849a)
+![페이지](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/5b6e6baf-9fe9-48b2-8cc9-900754dd7eba)
 
 
 
