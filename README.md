@@ -33,7 +33,7 @@ Learnovation은 IT 기술 분야에 관심이 있는 사람들을 위한 종합 
 ```
 
 # 👪 멤버 구성
-![member](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032722/a3342e9a-df26-4d42-a463-cfbecd6f099b)
+![member](https://github.com/2211SpringCloudWebApp/Learnovation/assets/119032680/c786b014-f362-4717-998a-ac8dd33fadcb)
 
 # 💻 개발 환경
 <img src="https://img.shields.io/badge/intellij IDEA-000000?style=for-the-badge&logo=intellij IDEA&logoColor=white"> <img src="https://img.shields.io/badge/Visual Studio Code-007ACC?style=for-the-badge&logo=Visual Studio Code&logoColor=white"> <img src="https://img.shields.io/badge/apache tomcat-F8DC75?style=for-the-badge&logo=apachetomcat&logoColor=white"> <img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white"> <img src="https://img.shields.io/badge/JPA-ECD53F?style=for-the-badge&logo=JPA&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
